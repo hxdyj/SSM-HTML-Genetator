@@ -1,0 +1,1 @@
+连接数据库,自动生成 typeorm mysql 的表类 以及 CRUD.
