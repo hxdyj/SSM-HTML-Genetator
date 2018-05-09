@@ -6,5 +6,6 @@ module.exports = {
 		database: 'history'
 	},
 	basePath: __dirname,
+	serviceRequireBasePath: '../entity/',
 	outputDir: '/generate-output/'
 };

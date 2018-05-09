@@ -41,12 +41,12 @@ module.exports = {
 	writeLineToFile(line, pathFileName, isReWrite) {
 		if (isReWrite)
 			fs.writeFileSync(
-				__dirname + config.outputDir + pathFileName,
+				config.basePath + config.outputDir + pathFileName,
 				line + '\n'
 			);
 		else
 			fs.appendFileSync(
-				__dirname + config.outputDir + pathFileName,
+				config.basePath + config.outputDir + pathFileName,
 				line + '\n'
 			);
 	}
