@@ -7,5 +7,9 @@ module.exports = {
 	},
 	basePath: __dirname,
 	serviceRequireBasePath: '../entity/',
-	outputDir: '/generate-output/'
+	outputDir: '/generate-output/',
+	ssm: {
+		packegeName: 'com.culture.controller'
+	},
+	html: {}
 };
