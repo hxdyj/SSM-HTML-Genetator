@@ -1,6 +1,6 @@
 let FieldComment = {
 	//field comment types:
-	cn_name: '', //table china name
+	cn_name: '', //field china name
 	login_id: '', //true|false
 	pass: '', //true|false
 	permission: { 0: 'student', 1: 'teacher' }, //data only for example
@@ -11,3 +11,13 @@ let FieldComment = {
 		show: '' //if show this feild while add or update form
 	}
 };
+
+let TableComment = {
+	cn_name: '', //table china name
+	permission: [0, 1] //data only for example
+};
+console.log(
+	JSON.stringify({
+		cn_name: '用户'
+	})
+);

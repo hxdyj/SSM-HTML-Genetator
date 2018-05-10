@@ -36,6 +36,23 @@ module.exports = {
 				desc[0],
 				item => item.COLUMN_NAME
 			);
+
+			let commentMap = new Map();
+			_.forEach(desc[0], item => {
+				if (!item.COLUMN_COMMENT) item.COLUMN_COMMENT = '{}';
+				let commentObj = JSON.parse(item.COLUMN_COMMENT);
+				commentMap.set(item.COLUMN_NAME, commentObj);
+			});
+
+			tablesDesc[className].commentMap = commentMap;
+
+			let tableCommentStr = (await connect.query(
+				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
+					config.connect.database
+				}' AND table_name='${tableName}'`
+			))[0][0].table_comment;
+			if (!tableCommentStr) tableCommentStr = '{}';
+			tablesDesc[className].tableComment = JSON.parse(tableCommentStr);
 		}
 		return tablesDesc;
 	},
