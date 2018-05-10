@@ -8,10 +8,13 @@ function generating() {
 	mysql_utils.conn().then(async mysql => {
 		file_utils.init(); //初始化
 		file_utils.cleanOutputDir(config.basePath + config.outputDir); //清理输出目录
-		//执行生成route文件
+		//执行生成 route 文件
 		let tablesDesc = await mysql_utils.getTablesDesc(mysql);
 		require('./src/genetation/routes').writeToFiles(tablesDesc);
+		//生成ssm controller 文件
 		require('./src/genetation/ssm_controller').writeToFiles(tablesDesc);
+
+		//生成前端模板
 		let HtmlGenerate = require('./src/genetation/html_deal');
 		HtmlGenerate.login_register_resetpass();
 		HtmlGenerate.template();
