@@ -10,7 +10,11 @@ function generating() {
 		file_utils.cleanOutputDir(config.basePath + config.outputDir); //清理输出目录
 		//执行生成route文件
 		let tablesDesc = await mysql_utils.getTablesDesc(mysql);
-		require('./src/genetation/routes').writeRoutesToFiles(tablesDesc);
+		require('./src/genetation/routes').writeToFiles(tablesDesc);
+		require('./src/genetation/ssm_controller').writeToFiles(tablesDesc);
+		let HtmlGenerate = require('./src/genetation/html_deal');
+		HtmlGenerate.login_register_resetpass();
+		HtmlGenerate.template();
 		mysql.end();
 		console.log(clc.green('end mysql.'));
 	});

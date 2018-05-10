@@ -8,7 +8,9 @@ module.exports = {
 		console.log(clc.blue('output dir is exist:', isExist));
 		if (!isExist) {
 			fs.mkdirSync(path);
-			fs.mkdirSync(path + '/route/');
+			_.forIn(config.generateDirs, (value, key) => {
+				fs.mkdirSync(path + value);
+			});
 		}
 	},
 	/**

@@ -1,11 +1,11 @@
 module.exports = {
-	writeToRoutes(tableName, line, isReWrite) {
-		let fileName = 'route/' + tableName + '.route.js';
+	writeToFile(tableName, line, isReWrite) {
+		let fileName = config.generateDirs.route + tableName + '.route.js';
 		file_utils.writeLineToFile(line, fileName, isReWrite);
 	},
-	writeRoutesToFiles(tablesDesc) {
+	writeToFiles(tablesDesc) {
 		_.forEach(tablesDesc, (val, index) => {
-			this.writeToRoutes(
+			this.writeToFile(
 				index,
 				`const Test = require("${
 					config.serviceRequireBasePath
@@ -13,9 +13,9 @@ module.exports = {
 				true
 			);
 
-			this.writeToRoutes(index, `class ${index}Service {`);
+			this.writeToFile(index, `class ${index}Service {`);
 
-			this.writeToRoutes(
+			this.writeToFile(
 				index,
 				`\tstatic getInstance(mysqlConnect) {
 		if (!${index}Service.instance) {
@@ -26,7 +26,7 @@ module.exports = {
 	}`
 			);
 
-			this.writeToRoutes(
+			this.writeToFile(
 				index,
 				`
 	add(${index.toLowerCase()}){
@@ -37,7 +37,7 @@ module.exports = {
 	}`
 			);
 
-			this.writeToRoutes(
+			this.writeToFile(
 				index,
 				`
 	getById(id){
@@ -46,7 +46,7 @@ module.exports = {
 	}`
 			);
 
-			this.writeToRoutes(
+			this.writeToFile(
 				index,
 				`
 	delById(id){
@@ -55,8 +55,8 @@ module.exports = {
 	}`
 			);
 
-			this.writeToRoutes(index, `}`);
-			this.writeToRoutes(index, `module.exports = ${index}Service`);
+			this.writeToFile(index, `}`);
+			this.writeToFile(index, `module.exports = ${index}Service`);
 		});
 	}
 };
