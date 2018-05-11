@@ -9,7 +9,6 @@ module.exports = {
 		file_utils.writeLineToFile(line, fileName, isReWrite);
 	},
 	writeToFiles(tablesDesc) {
-		let a = file_utils.readFile(__dirname + '/src/index.html', 'utf-8');
 		this.writeToFile(`hahaha`, true);
 	}
 };
