@@ -15,8 +15,8 @@ function generating() {
 
 		//生成前端模板
 		let HtmlGenerate = require('./src/genetation/html_deal');
-		HtmlGenerate.login_register_resetpass();
-		HtmlGenerate.template();
+		HtmlGenerate.login_register_resetpass(tablesDesc);
+		HtmlGenerate.template(tablesDesc);
 		mysql.end();
 		console.log(clc.green('end mysql.'));
 	});

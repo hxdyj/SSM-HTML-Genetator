@@ -68,6 +68,7 @@ module.exports = {
 	writeToFile(tableName, line, isReWrite) {
 		let fileName =
 			config.generateDirs.ssm_controller + tableName + 'Controller.java';
+		debugger;
 		file_utils.writeLineToFile(line, fileName, isReWrite);
 	},
 	writeToFiles(tablesDesc) {

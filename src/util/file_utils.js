@@ -13,6 +13,9 @@ module.exports = {
 			});
 		}
 	},
+	readFile(name) {
+		return fs.readFileSync(name, 'utf-8');
+	},
 	/**
 	 * @description
 	 * 清空文件夹
