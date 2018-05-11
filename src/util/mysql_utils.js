@@ -41,11 +41,32 @@ module.exports = {
 			_.forEach(desc[0], item => {
 				if (!item.COLUMN_COMMENT) item.COLUMN_COMMENT = '{}';
 				let commentObj = JSON.parse(item.COLUMN_COMMENT);
+				//use it while field java_type exit,otherwise read mysql type and transform to java type
+				if (!commentObj.java_type) {
+					// TODO:date type  --> remain to back
+					switch (item.DATA_TYPE) {
+						case 'int':
+							commentObj.java_type = 'Integer';
+							break;
+						case 'varchar':
+							commentObj.java_type = 'String';
+							break;
+						case 'text':
+							commentObj.java_type = 'String';
+							break;
+						default:
+							commentObj.java_type = 'String';
+							break;
+					}
+				}
+				if (!commentObj.not_in_param) {
+					commentObj.not_in_param = [];
+				}
 				commentMap.set(item.COLUMN_NAME, commentObj);
 			});
 
 			tablesDesc[className].commentMap = commentMap;
-
+			//获取表的注释
 			let tableCommentStr = (await connect.query(
 				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
 					config.connect.database

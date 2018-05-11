@@ -8,9 +8,8 @@ function generating() {
 	mysql_utils.conn().then(async mysql => {
 		file_utils.init(); //初始化
 		file_utils.cleanOutputDir(config.basePath + config.outputDir); //清理输出目录
-		//执行生成 route 文件
+		//获取所有表及其详细信息
 		let tablesDesc = await mysql_utils.getTablesDesc(mysql);
-		require('./src/genetation/routes').writeToFiles(tablesDesc);
 		//生成ssm controller 文件
 		require('./src/genetation/ssm_controller').writeToFiles(tablesDesc);
 

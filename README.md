@@ -11,7 +11,6 @@ index.suffix
 
 ## Components:
 
-*   header
 *   topMenu
 *   leftMenu
 *   bread

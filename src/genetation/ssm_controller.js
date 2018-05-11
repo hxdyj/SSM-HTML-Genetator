@@ -1,3 +1,69 @@
+const RULE = require('../../Mysql_Field_Design_Rule');
+//生成方法的参数 ---> (Integer id,String title)
+function fieldsCommentMapToJavaParamsStr(commentMap, method) {
+	let result = '';
+	let isUpload = false;
+	commentMap.forEach(function(val, key) {
+		//if this method not in val.not_in_param, append it.
+		if (!_.includes(val.not_in_param, method)) {
+			let type = val.java_type;
+			if (type == RULE.field.java_type.upload.key) {
+				type = RULE.field.java_type.upload.value;
+				isUpload = true;
+			}
+			result += `${type} ${key},`;
+		}
+	});
+	return `(${result.substring(0, result.length - 1)}${
+		isUpload
+			? ', HttpServletRequest request)throws IllegalStateException, IOException'
+			: ')'
+	}`;
+}
+
+// tid--->Tid   while o.setFile(path) use this function.
+function firstWordUpper(word) {
+	return word.substring(0, 1).toUpperCase() + word.substring(1, word.length);
+}
+//生成方法的内容 ---> Chat o = new Chat();o.setFile(path);
+function fieldsCommentMapToMethodContent(
+	commentMap,
+	method,
+	tableName,
+	mapper
+) {
+	let first = `
+		${tableName} o = new ${tableName}();
+	`;
+	isUpload = false;
+	let middle = '';
+	commentMap.forEach(function(val, key) {
+		//if this method not in val.not_in_param, append it.
+		if (!_.includes(val.not_in_param, method)) {
+			let lineStr = '';
+			let type = val.java_type;
+			let fieldIsUpload = type == RULE.field.java_type.upload.key;
+			if (fieldIsUpload) {
+				isUpload = true;
+			}
+			lineStr = `
+		o.set${firstWordUpper(key)}(${fieldIsUpload ? 'path' : key})`;
+			middle += lineStr;
+		}
+	});
+	if (isUpload) {
+		first += `
+		String path = "";
+		if(file!=null){path = UploadUtils.upload(request, file, "/pic");}
+		`;
+	}
+
+	let footer = `
+		${mapper}.insert(o);
+
+		return "success";`;
+	return first + middle + footer;
+}
 module.exports = {
 	writeToFile(tableName, line, isReWrite) {
 		let fileName =
@@ -9,6 +75,7 @@ module.exports = {
 			//index-->tableName
 			/* ----------- forEach Start ----------- */
 			let lowerIndex = index.toLowerCase();
+			let mapper = lowerIndex + 'Mapper';
 			//write globle and package name
 			this.writeToFile(index, `package ${config.ssm.packegeName};`, true);
 			this.writeToFile(
@@ -43,25 +110,71 @@ import com.cultral.model.${index}Example.Criteria;
 @Controller
 public class ${index}Controller {
 	@Autowired
-	private ${index}Mapper ${lowerIndex}Mapper = null;
+	private ${index}Mapper ${mapper} = null;
 			`
 			);
 
-			//write rest interface
+			//write rest interface of static param function
 			this.writeToFile(
 				index,
 				`
 	@ResponseBody
 	@RequestMapping("${lowerIndex}/get/id.do")
 	public String getbyid(Integer id){
-		return JSON.toJSONString(${lowerIndex}Mapper.selectByPrimaryKey(id));
+
+		return JSON.toJSONString(${mapper}.selectByPrimaryKey(id));
+	}
+
+	@ResponseBody
+	@RequestMapping("${lowerIndex}/get/all.do")
+	public String getbyid(Integer id){
+
+		return JSON.toJSONString(${mapper}.selectByExample(null));
 	}
 
 	@ResponseBody
 	@RequestMapping("${lowerIndex}/del.do")
 	public String del(Integer id){
-		 ${lowerIndex}Mapper.deleteByPrimaryKey(id);
+
+		 ${mapper}.deleteByPrimaryKey(id);
+
 		return "success";
+	}`
+			);
+			//write add function
+			this.writeToFile(
+				index,
+				`
+	@ResponseBody
+	@RequestMapping(value="${lowerIndex}/add.do",method = RequestMethod.POST)
+	public String add${fieldsCommentMapToJavaParamsStr(
+		val.commentMap,
+		RULE.field.not_in_param.add
+	)}{
+		${fieldsCommentMapToMethodContent(
+			val.commentMap,
+			RULE.field.not_in_param.add,
+			index,
+			mapper
+		)}
+	}`
+			);
+			//write edit function
+			this.writeToFile(
+				index,
+				`
+	@ResponseBody
+	@RequestMapping(value="${lowerIndex}/edit.do",method = RequestMethod.POST)
+	public String edit${fieldsCommentMapToJavaParamsStr(
+		val.commentMap,
+		RULE.field.not_in_param.edit
+	)}{
+		${fieldsCommentMapToMethodContent(
+			val.commentMap,
+			RULE.field.not_in_param.edit,
+			index,
+			mapper
+		)}
 	}
 			`
 			);

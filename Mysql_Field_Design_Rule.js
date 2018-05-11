@@ -3,7 +3,8 @@ let FieldComment = {
 	cn_name: '', //field china name
 	login_id: '', //true|false
 	pass: '', //true|false
-	java_type: '', //Integer|String|MultipartFile
+	not_in_param: ['------> see bottom field not_in_param data   <----------'], //define this field in ssm controller which method param not in.
+	java_type: '------> see bottom field java_type.upload data  <----------', //upload | ...--->upload can define here. in () can omit,
 	permission: { 0: 'student', 1: 'teacher' }, //data only for example
 	foreign: '', //foreign table name
 	html_temp: {
@@ -19,6 +20,22 @@ let TableComment = {
 };
 console.log(
 	JSON.stringify({
-		cn_name: '用户'
+		java_type: 'upload'
 	})
 );
+
+module.exports = {
+	field: {
+		java_type: {
+			upload: {
+				key: 'upload',
+				value: 'MultipartFile'
+			}
+		},
+		not_in_param: {
+			add: 'add',
+			edit: 'edit',
+			query: 'query'
+		}
+	}
+};
