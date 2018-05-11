@@ -7,6 +7,7 @@ let FieldComment = {
 	java_type: '------> see bottom field java_type.upload data  <----------', //upload | ...--->upload can define here. in () can omit,
 	permission: { 0: 'student', 1: 'teacher' }, //data only for example
 	foreign: '', //foreign table name
+	global_field: '', //avatar|username
 	html_temp: {
 		//genetate html template vars
 		field_type: '', //avatar|datetime|username
@@ -17,11 +18,12 @@ let FieldComment = {
 
 let TableComment = {
 	cn_name: '', //table china name
+	global_table: '', //user
 	permission: [0, 1] //data only for example
 };
 console.log(
 	JSON.stringify({
-		java_type: 'upload'
+		globle_field: 'username'
 	})
 );
 

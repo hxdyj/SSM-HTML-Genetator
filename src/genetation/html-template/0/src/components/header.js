@@ -1,13 +1,13 @@
-Vue.component("g-header", {
+Vue.component('g-header', {
 	data: function() {
 		return {
 			count: 0
 		};
 	},
 	mounted: function() {
-		$(".g-header-user").popup({
-			on: "click",
-			position: "bottom right"
+		$('.g-header-user').popup({
+			on: 'click',
+			position: 'bottom right'
 		});
 	},
 	template: `
@@ -32,7 +32,7 @@ Vue.component("g-header", {
 				<span class="g-header-username">Elliot<span>
 			</a>
 			<div class="ui popup bottom left transition hidden g-header-userinfo-actions">
-				
+
 				<img class="ui avatar image" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1760172527,1473711532&fm=27&gp=0.jpg">
 				<div class="g-header-action-username">
 					<h3 class="ui header">Elliot</h3>
@@ -45,10 +45,10 @@ Vue.component("g-header", {
 						<button class="ui button" data-tooltip="退出登录"  data-position="bottom center"><i class="sign out alternate icon"></i></button>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
-	
+
   </div>
 </div>
 <div class="ui bottom attached segment">
