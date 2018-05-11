@@ -16,6 +16,7 @@ module.exports = {
 		packegeName: 'com.culture.controller'
 	},
 	html: {
+		html_title: 'XX系统',
 		is_jsp: false, //is generator file suffix to jsp
 		login_register_resetpass_temp_id: 0, //0|1|2...   login and register and resetpass page generate template
 		is_verify_login: false, //是否在多次输入密码错误后出现图片验证码

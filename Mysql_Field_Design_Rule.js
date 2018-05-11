@@ -9,6 +9,7 @@ let FieldComment = {
 	foreign: '', //foreign table name
 	html_temp: {
 		//genetate html template vars
+		field_type: '', //avatar|datetime
 		check: '', //is need to check while form submit
 		show: '' //if show this feild while add or update form
 	}

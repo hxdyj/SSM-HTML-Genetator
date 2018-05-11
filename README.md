@@ -11,8 +11,9 @@ index.suffix
 
 ## Components:
 
-*   topMenu
+*   header
 *   leftMenu
 *   bread
+*   display
 *   modal
 *   list //have page and search function [note:genetating need recognize img or file or option type and permisson etc.]

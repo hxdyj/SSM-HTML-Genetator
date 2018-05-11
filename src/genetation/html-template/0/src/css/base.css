@@ -1,0 +1,43 @@
+.g-header-title {
+	color: white !important;
+}
+
+.g-header-search .transparent {
+	/* background: white !important; */
+}
+.g-header-search input {
+	color: white !important;
+	font-size: 1.15rem !important;
+}
+
+.g-header-search .search.icon {
+}
+
+.g-header-username {
+	font-size: 1.05rem !important;
+	position: relative;
+	top: 0.21rem;
+}
+
+.g-header-userinfo-actions {
+	width: 20rem !important;
+	top: 3.8rem !important;
+}
+
+.g-header-userinfo-actions .avatar {
+	width: 6rem !important;
+	height: 6rem !important;
+	margin-left: 4.6rem;
+}
+
+.g-header-action-username {
+	margin-top: 1rem;
+	text-align: center;
+	width: 100%;
+}
+
+.g-header-action-menus {
+	width: 100%;
+	margin-top: 1rem;
+	text-align: center;
+}

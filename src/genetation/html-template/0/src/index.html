@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/base.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <g-header></g-header>
+    </div>
+</body>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/lodash.min.js"></script>
+<script src="./js/semantic.min.js"></script>
+<script src="./js/moment.min.js"></script>
+<script src="./js/Uri.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/config.js"></script>
+<script src="./components/header.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+</script>
+
+</html>
