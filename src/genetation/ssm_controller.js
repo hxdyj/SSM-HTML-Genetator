@@ -3,7 +3,7 @@ const RULE = require('../../Mysql_Field_Design_Rule');
 function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 	let result = '';
 	let isUpload = false;
-	commentMap.forEach(function(val, key) {
+	commentMap.forEach(function (val, key) {
 		//if this method not in val.not_in_param, append it.
 		if (!_.includes(val.not_in_param, method)) {
 			let type = val.java_type;
@@ -18,7 +18,7 @@ function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 		isUpload
 			? ', HttpServletRequest request)throws IllegalStateException, IOException'
 			: ')'
-	}`;
+		}`;
 }
 
 // tid--->Tid   while o.setFile(path) use this function.
@@ -37,7 +37,7 @@ function fieldsCommentMapToMethodContent(
 	`;
 	isUpload = false;
 	let middle = '';
-	commentMap.forEach(function(val, key) {
+	commentMap.forEach(function (val, key) {
 		//if this method not in val.not_in_param, append it.
 		if (!_.includes(val.not_in_param, method)) {
 			let lineStr = '';
@@ -68,11 +68,10 @@ module.exports = {
 	writeToFile(tableName, line, isReWrite) {
 		let fileName =
 			config.generateDirs.ssm_controller + tableName + 'Controller.java';
-		debugger;
 		file_utils.writeLineToFile(line, fileName, isReWrite);
 	},
-	writeToFiles(tablesDesc) {
-		_.forEach(tablesDesc, (val, index) => {
+	writeToFiles(commonData) {
+		_.forEach(commonData.tablesDesc, (val, index) => {
 			//index-->tableName
 			/* ----------- forEach Start ----------- */
 			let lowerIndex = index.toLowerCase();
@@ -149,15 +148,15 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="${lowerIndex}/add.do",method = RequestMethod.POST)
 	public String add${fieldsCommentMapToJavaParamsStr(
-		val.commentMap,
-		RULE.field.not_in_param.add
-	)}{
+					val.commentMap,
+					RULE.field.not_in_param.add
+				)}{
 		${fieldsCommentMapToMethodContent(
-			val.commentMap,
-			RULE.field.not_in_param.add,
-			index,
-			mapper
-		)}
+					val.commentMap,
+					RULE.field.not_in_param.add,
+					index,
+					mapper
+				)}
 	}`
 			);
 			//write edit function
@@ -167,15 +166,15 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="${lowerIndex}/edit.do",method = RequestMethod.POST)
 	public String edit${fieldsCommentMapToJavaParamsStr(
-		val.commentMap,
-		RULE.field.not_in_param.edit
-	)}{
+					val.commentMap,
+					RULE.field.not_in_param.edit
+				)}{
 		${fieldsCommentMapToMethodContent(
-			val.commentMap,
-			RULE.field.not_in_param.edit,
-			index,
-			mapper
-		)}
+					val.commentMap,
+					RULE.field.not_in_param.edit,
+					index,
+					mapper
+				)}
 	}
 			`
 			);

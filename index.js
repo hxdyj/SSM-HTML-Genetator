@@ -9,14 +9,14 @@ function generating() {
 		file_utils.init(); //初始化
 		file_utils.cleanOutputDir(config.basePath + config.outputDir); //清理输出目录
 		//获取所有表及其详细信息
-		let tablesDesc = await mysql_utils.getTablesDesc(mysql);
+		let commonData = await mysql_utils.getTablesDesc(mysql);
 		//生成ssm controller 文件
-		require('./src/genetation/ssm_controller').writeToFiles(tablesDesc);
+		require('./src/genetation/ssm_controller').writeToFiles(commonData);
 
 		//生成前端模板
 		let HtmlGenerate = require('./src/genetation/html_deal');
-		HtmlGenerate.login_register_resetpass(tablesDesc);
-		HtmlGenerate.template(tablesDesc);
+		HtmlGenerate.login_register_resetpass(commonData);
+		HtmlGenerate.template(commonData);
 		mysql.end();
 		console.log(clc.green('end mysql.'));
 	});

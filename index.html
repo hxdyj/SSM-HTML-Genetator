@@ -1,701 +1,289 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-	<base href="<%=basePath%>">
+    <!-- Standard Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-	<title>Group</title>
+    <!-- Site Properties -->
+    <title>Login Example - Semantic</title>
+    <link rel="stylesheet" type="text/css" href="./bower_components/semantic/dist/semantic.min.css">
+    <script src="./bower_components/jquery/dist/jquery.min.js"></script>
 
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
+    <script src="./js/config.js"></script>
+    <script src="./bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="./bower_components/semantic/dist/semantic.min.js"></script>
+    <script src="./bower_components/vue/dist/vue.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
+    <style type="text/css">
+        · body>.grid {
+            height: 100%;
+        }
+
+        .image {
+            margin-top: -100px;
+        }
+
+        .column {
+            max-width: 450px;
+        }
+    </style>
 
 </head>
 
-<body>
-	<div id="app">
-		<!-- 头部按钮栏 -->
-		<div class="ui menu blue inverted" style="border-radius:0px">
-			<a class="item" :class="{'active':menu==0}" @click="changeMenu(0)">All Group</a>
-			<a class="item" :class="{'active':menu==1}" @click="changeMenu(1)">My Group</a>
-			<a class="item" :class="{'active':menu==2}" @click="changeMenu(2)">My Create</a>
-			<div class="right menu">
-				<a class="item" @click="openGroup()">
-					<i class="plus icon"></i>Add Group</a>
-				<a class="item" :class="{'active':menu==4}" @click="changeMenu(4)">Wait deal </a>
-				<a class="item" :class="{'active':menu==5}" @click="changeMenu(5)">Invite me </a>
-				<a class="item" :class="{'active':menu==6}" @click="changeMenu(6)">My apply </a>
-				<a class="item">Signed with {{userInfo.name}} </a>
-			</div>
-		</div>
-		<!-- 所有组的视图 选中 all group | my group | my create时显示  -->
-		<div style="display:flex;flex-wrap:wrap;margin:10px;" v-show="menu<3">
-			<div class="ui card" v-for="item in list" style="margin:10px">
-				<div class="content">
-					<div class="header" style="position:relative">{{item.name}}
-						<span style="position:absolute;right:0">
-							<a @click="delGroup(item.id)" v-show="userInfo.id==item.creator&&menu!=0">
-								<i class="trash alternate outline icon"></i>
-							</a>
-							<a @click="openGroup(true,item)" v-show="userInfo.id==item.creator&&menu!=0">
-								<i class="edit icon"></i>
-							</a>
-							<a @click="exitGroup(item)" v-show="userInfo.id!=item.creator&&menu!=0&&isInMembers(item.id)">
-								<i class="sign out alternate icon"></i>
-							</a>
-							<a @click="changeMenu(8,item)" v-show="menu!=0&&(isInMembers(item.id)||userInfo.id==item.creator)">
-								<i class="comment alternate icon"></i>
-							</a>
-						</span>
-					</div>
-				</div>
-				<div class="content">
-					<h4 class="ui header">
-						<a>{{item.creator|userIdToName}}</a> created at {{item.createtime}}
-					</h4>
-					<div class="ui small feed">
-						<div class="event">
-							<div class="content">
-								<div class="summary">{{item.content}}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="extra content" style="display:flex;justify-content:space-between;align-items:center">
+<body style="background: #5AB9E0 !important;">
 
-					<a @click="openMembers(item)">
-						<i class="users icon"></i> {{item.id|teamIdToCount}} Members </a>
-					<button class="ui blue button" v-show="userInfo.id!=item.creator&&menu==0&&!isInMembers(item.id)&&!isApplying(item.id)" @click="applyJoin(item.id)">Join</button>
-					<button class="ui button" v-show="userInfo.id!=item.creator&&menu==0&&isApplying(item.id)">Applying</button>
-					<button class="ui blue button" v-show="userInfo.id==item.creator&&menu!=0" @click="openInvite(item)">Invite</button>
-				</div>
-			</div>
+    <div id="app" style="padding:30px;">
+        <div style="display: flex;justify-content: center;flex-direction: column;align-items: center">
 
-		</div>
-		<!-- 别人申请加入我创建的组的时候处理视图 -->
-		<div v-show="menu==4" style="padding: 20px">
-			<h2>Deal user apply to join group</h2>
-			<table class="ui basic table">
-				<thead>
-					<tr>
-						<th class="center aligned">Name</th>
-						<th class="center aligned">Group</th>
-						<th class="center aligned">Option</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in mygroupapplys">
-						<td class="center aligned">{{item.uid|userIdToName}}</td>
-						<td class="center aligned">{{item.tid|teamIdToName}}</td>
-						<td class="center aligned">
-							<div class="ui buttons">
-								<button class="ui blue button" @click="okJoin(item)">Yes</button>
-								<div class="or"></div>
-								<button class="ui button" @click="noJoin(item)">No</button>
-							</div>
-						</td>
-					</tr>
+            <h2 class="ui header">Subtitle Management</h2>
+            <div class="ui search">
+                <div class="ui icon input">
+                    <input class="prompt" v-model="searchStr" type="text" placeholder="subtitle content search...">
+                    <span @click="search()" style="position: relative;left:-30px;top:10px">
+                        <i class="search icon"></i>
+                    </span>
+                </div>
+            </div>
 
-				</tbody>
-			</table>
-		</div>
-		<!-- 我申请加入别人的组的视图 -->
-		<div v-show="menu==6" style="padding: 20px">
-			<h2>Apply for join group</h2>
-			<table class="ui basic table">
-				<thead>
-					<tr>
-						<th class="center aligned">Group</th>
-						<th class="center aligned">Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in myapplys">
-						<td class="center aligned">{{item.tid|teamIdToName}}</td>
-						<td class="center aligned">
-							<button class="ui button">
-								Applying
-							</button>
-						</td>
-					</tr>
+        </div>
+        <div style="display: flex;justify-content: flex-end">
+            <button class="ui olive right button" @click="addModal()" style="margin-top:10px">
+                Add Subtitle
+            </button>
+        </div>
 
-				</tbody>
-			</table>
-		</div>
-		<!-- 别人邀请我加入的视图 -->
-		<div v-show="menu==5" style="padding: 20px">
-			<h2>Invite for join group</h2>
-			<table class="ui basic table">
-				<thead>
-					<tr>
-						<th class="center aligned">Name</th>
-						<th class="center aligned">Group</th>
-						<th class="center aligned">Option</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in invitemes">
-						<td class="center aligned">{{item.uid|userIdToName}}</td>
-						<td class="center aligned">{{item.tid|teamIdToName}}</td>
-						<td class="center aligned">
-							<div class="ui buttons">
-								<button class="ui blue button" @click="okJoin(item)">Yes</button>
-								<div class="or"></div>
-								<button class="ui button" @click="noJoin(item)">No</button>
-							</div>
-						</td>
-					</tr>
+        <table class="ui blue table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PlayId</th>
+                    <th>Content</th>
+                    <th>Time</th>
+                    <th>Language</th>
+                    <th>ContentId</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list">
+                    <td>{{item.id}}</td>
+                    <td>{{item.playId}}</td>
+                    <td>{{item.content}}</td>
+                    <td>{{item.time}}</td>
+                    <td>{{item.language}}</td>
+                    <td>{{item.contentId}}</td>
+                    <td>
+                        <div class="ui small basic icon buttons">
+                            <button class="ui button">
+                                <i class="edit icon" @click="edit(item)"></i>
+                            </button>
+                            <button class="ui button">
+                                <i class="trash icon" @click="del(item.id)"></i>
+                            </button>
 
-				</tbody>
-			</table>
-		</div>
-		<!-- 小组进行交流的视图 -->
-		<div v-show="menu==8" style="padding: 20px">
-			<h2>Communication In
-				<a>{{chatGroup.id|teamIdToName}}</a> Group
-			</h2>
-			<div class="ui feed">
-				<div class="event" style="margin: 20px 0;" v-for="item in chats">
-					<div style="margin-right: 20px;">
-						<a class="ui image label">
-							<img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1073951520,1163719426&fm=27&gp=0.jpg"> {{item.uid|userIdToName}}
-						</a>
-					</div>
-					<div class="content">
-						<div class="summary">
+                        </div>
+                    </td>
+                </tr>
 
-							{{item.content}}
+            </tbody>
+        </table>
+        <div style="display: flex;justify-content: center">
 
-							<a :href="server+'pic/'+item.file" v-show="item.file" :download="item.file">
-								<i class="file alternate outline icon"></i>
-							</a>
-							<div class="date">
-								{{item.sendtime|time}}
-							</div>
-							<a @click="delChat(item.id)" style="margin-left: 10px" v-show="item.uid==userInfo.id">
-								<i class="trash alternate outline icon"></i>
-							</a>
-						</div>
+            <div class="ui small basic icon buttons">
+                <button class="ui button" @click="changePage(1)">First</button>
+                <button class="ui button" @click="changePage(app.page-1)">Pre</button>
+                <button class="ui button" disabled>{{app.page}}/{{app.users.length}}</button>
+                <button class="ui button" @click="changePage(app.page+1)">Next</button>
+                <button class="ui button" @click="changePage(app.users.length)">End</button>
+            </div>
+        </div>
+        <div class="ui modal user" style="padding:30px">
+            <h3>Edit Subtitle</h3>
+            <div class="ui form">
+                <div class="field">
+                    <label>PlayId</label>
+                    <input type="text" name="first-name" v-model="up.playId" placeholder="PlayId">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="up.content" placeholder="Content">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="up.time" placeholder="Time">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="up.language" placeholder="Language">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="up.contentId" placeholder="ContentId">
+                </div>
+                <button class="ui button" @click="update()">Edit</button>
+            </div>
+        </div>
+        <div class="ui modal add" style="padding:30px">
+            <h3>Add Subtitle</h3>
+            <div class="ui form">
+                <div class="field">
+                    <label>PlayId</label>
+                    <input type="text" name="first-name" v-model="add.playId" placeholder="PlayId">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="add.content" placeholder="Content">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="add.time" placeholder="Time">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="add.language" placeholder="Language">
+                </div>
+                <div class="field">
+                    <label></label>
+                    <input type="text" name="first-name" v-model="add.contentId" placeholder="ContentId">
+                </div>
 
+                <button class="ui button" @click="addSubmit()">Add</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                username: null,
+                password: null,
+                all: [],
+                users: [],
+                list: [],
+                page: 1,
+                searchStr: '',
+                up: {
+                    id: -1,
+                    playId: '',
+                    content: '',
+                    time: '',
+                    language: '',
+                    contentId: '',
+                },
+                add: {
+                    playId: '',
+                    content: '',
+                    time: '',
+                    language: '',
+                    contentId: '',
+                }
+            },
+            methods: {
+                getUsers() {
+                    fetch(server + 'sub/all.do').then(resp => {
+                        resp.json().then(data => {
+                            app.all = data
+                            app.users = _.chunk(data, 10)
+                            app.list = app.users[app.page - 1]
+                            console.log(data)
+                        })
+                    })
+                },
+                changePage(page) {
+                    if (page > 0 && page < app.users.length + 1) {
+                        app.page = page
+                        app.list = app.users[app.page - 1]
+                    }
+                },
+                del(id) {
+                    let data = new FormData()
+                    data.append('id', id)
+                    fetch(server + 'sub/del.do', {
+                        method: 'POST',
+                        body: data
+                    }).then(resp => {
 
-					</div>
+                        app.getUsers()
+                        alert("delete success")
+                    })
+                },
+                search() {
+                    if (app.searchStr) {
+                        let tmp = _.filter(app.all, item => item.content.search(app.searchStr) != -1)
+                        app.users = _.chunk(tmp, 10)
+                        app.list = app.users[app.page - 1]
+                    } else {
+                        app.users = _.chunk(app.all, 10)
+                        app.list = app.users[app.page - 1]
+                    }
+                },
+                edit(item) {
+                    app.up = {
+                        id: item.id,
+                        playId: item.playId,
+                        content: item.content,
+                        time: item.time,
+                        language: item.language,
+                        contentId: item.contentId,
+                    }
 
-				</div>
+                    $('.ui.modal.user').modal('show')
+                },
+                addModal() {
+                    app.add =
+                        {
+                            playId: '',
+                            content: '',
+                            time: '',
+                            language: '',
+                            contentId: '',
+                        }
+                    $('.ui.modal.add').modal('show')
+                },
+                addSubmit() {
+                    let data = new FormData()
+                    data.append('playId', app.add.playId)
+                    data.append('content', app.add.content)
+                    data.append('time', app.add.time)
+                    data.append('language', app.add.language)
+                    data.append('contentId', app.add.contentId)
+                    fetch(server + 'sub/add.do', {
+                        method: 'POST', body: data
+                    }).then(resp => {
+                        resp.text().then(data => {
+                            app.getUsers()
+                            $('.ui.modal.add').modal('hide')
+                            alert("add success")
+                        })
+                    })
+                },
+                update() {
+                    let data = new FormData()
+                    data.append('id', app.up.id)
+                    data.append('playId', app.add.playId)
+                    data.append('content', app.add.content)
+                    data.append('time', app.add.time)
+                    data.append('language', app.add.language)
+                    data.append('contentId', app.add.contentId)
+                    fetch(server + 'sub/update.do', {
+                        method: 'POST'
+                        , body: data
+                    }).then(resp => {
+                        resp.text().then(data => {
+                            app.getUsers()
+                            $('.ui.modal.user').modal('hide')
+                            alert("edit success")
+                        })
+                    })
+                }
+            }
+        })
 
-			</div>
-			<hr>
-			<h3>Add Your Comment</h3>
-			<div class="ui form">
-				<div class="field">
-					<input id="file" type="file"></input>
-				</div>
-				<div class="field">
-					<textarea v-model="model.chat.content" placeholder="write you comment..."></textarea>
-				</div>
-				<div class="field">
-					<button class="ui primary button" @click="addChat()">
-						Submit
-					</button>
-				</div>
-			</div>
-
-		</div>
-		<!-- 添加和修改组的弹框视图 -->
-		<div class="ui modal group" style="padding:30px">
-
-			<h3>
-				<span v-show="action==0">Add</span>
-				<span v-show="action==1">Edit</span> Group</h3>
-			<div class="ui form">
-				<div class="field">
-					<label>Name</label>
-					<input type="text" name="first-name" v-model="model.group.name" placeholder="Group Name">
-				</div>
-				<div class="field">
-					<label>Describe</label>
-					<input type="text" name="last-name" v-model="model.group.content" placeholder="Group Describe">
-				</div>
-				<div class="field">
-					<label>See Type</label>
-					<select class="ui fluid dropdown" v-model="model.group.seelevel">
-						<option value="1" selected>Public</option>
-						<option value="0">Private</option>
-					</select>
-				</div>
-
-				<button class="ui button" @click="action==0?addGroup():updateGroup()">Submit</button>
-			</div>
-		</div>
-		<!-- 邀请别人加入组的弹框视图 -->
-		<div class="ui modal invite" style="padding:30px">
-			<h3>Invite People</h3>
-			<div class="ui form">
-				<div class="field">
-					<label>People</label>
-					<select class="ui fluid search dropdown invite" multiple="">
-						<option :value="item.id" v-for="item in users">{{item.name}}</option>
-					</select>
-				</div>
-
-
-				<button class="ui button" style="margin-top:100px" @click="invite()">Submit</button>
-			</div>
-		</div>
-		<!-- 查看组成员的弹窗视图 -->
-		<div class="ui modal members" style="padding:30px">
-			<h3>Group Peoples</h3>
-			<table class="ui basic table">
-				<thead>
-					<tr>
-						<th class="center aligned">Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in currentgroupmems">
-						<td class="center aligned">{{item|userIdToName}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	</div>
-
-	</div>
-
-	<script src="./js/jquery.min.js"></script>
-	<script src="./js/lodash.min.js"></script>
-	<script src="./js/semantic.min.js"></script>
-	<script src="./js/moment.min.js"></script>
-	<script src="./js/Uri.js"></script>
-	<script src="./js/vue.min.js"></script>
-	<script src="./js/config.js"></script>
-	<script>
-
-		var uri = new Uri(location.href)
-		var app = new Vue({
-			el: '#app',
-			data: {
-				menu: 0, //当前选中的菜单
-				server: G.server,//接口请求的公共部分
-				userInfo: {},//用户信息
-				allTeams: [],//所有的组
-				seeTeams: [],//所有可见组
-				list: [],//当前组展示数据
-				users: [],//所有用户
-				chatGroup: { //当前进行交流的组
-					id: -1
-				},
-				chats: [],//当前组的所有评论
-				currentgroupmems: [],//当前组的所有成员
-				tid: null,//组的id
-				invitemes: [],//所有邀请我进入组的数据
-				myapplys: [],//所有我请求加入的组
-				mygroupapplys: [],
-				action: 0,//0 add group,1 edit group
-				joins: [],//Jointeam表的数据
-				teamMap: new Map(),//组映射
-				creatorMap: new Map(),//组映射
-				groupCountMap: new Map(),//组的数量映射
-				joinAcceptMap: new Map(),//已加入组的映射
-				model: {
-					group: {
-						id: null,
-						name: null,
-						content: null,
-						seelevel: 1
-					},
-					chat: {
-						content: null,
-					}
-				},
-				notShowUsers: []
-			},
-			filters: {
-				userIdToName(id) {//通过ID找到用户姓名
-					return app.creatorMap.get(id)
-				},
-				teamIdToCount(id) {//通过组ID找到组成员数量
-					return app.joinAcceptMap.get(id).length + 1
-				},
-				teamIdToName(id) {//通过组ID获取组名字
-					try {
-						return app.teamMap.get(id).name
-					} catch{
-						return ''
-					}
-
-				},
-				time(time) {//评论以后的时间处理
-					try {
-						return moment(parseInt(time)).fromNow();
-					} catch{
-						return ''
-					}
-
-				},
-
-			},
-			mounted: function () {
-				this.initData(true)
-			},
-			methods: {
-
-				initVar() {//初始化变量
-					app.model = {
-						group: {
-							id: null,
-							name: null,
-							content: null,
-							seelevel: 1
-						},
-						chat: {
-							content: null,
-						}
-					}
-				},
-				isInMembers(tid) {//判断是否是组成员
-					return _.includes(app.joinAcceptMap.get(tid), app.userInfo.id)
-				},
-				isApplying(tid) {//判断当前用户是否在申请加入组
-					return _.includes(
-						_.map(_.filter(app.joins, item => item.uid == app.userInfo.id && item.tid == tid && item.accept == 0 && item.invite == 1), mitem => mitem.uid),
-						app.userInfo.id)
-				},
-				changeMenu(menu, obj) {//改变菜单
-					app.menu = menu
-					if (menu == 0) {
-						app.list = app.allTeams
-					}
-
-					if (menu == 1) {
-						var myjoin = _.map(_.filter(app.joins, item => item.uid == app.userInfo.id && item.accept == 1), item => item.tid)
-						app.list = _.filter(app.allTeams, item => _.includes(myjoin, item.id) || item.creator == app.userInfo.id)
-					}
-					if (menu == 2) {
-						app.list = _.filter(app.allTeams, item => item.creator == app.userInfo.id)
-					}
-					if (menu == 5) {
-
-						this.getAllJoinTeam().then(() => {
-							app.invitemes = _.filter(app.joins, item => item.uid == app.userInfo.id && item.accept == 0 && item.invite == 0)
-						})
-					}
-					if (menu == 6) {
-
-						this.getAllJoinTeam().then(() => {
-							app.myapplys = _.filter(app.joins, item => item.uid == app.userInfo.id && item.accept == 0 && item.invite == 1)
-						})
-					}
-					if (menu == 4) {
-						this.getAllJoinTeam().then(() => {
-							var mycreate = _.map(_.filter(app.allTeams, item => item.creator == app.userInfo.id), item => item.id)
-							app.mygroupapplys = _.filter(app.joins, item => _.includes(mycreate, item.tid) && item.accept == 0 && item.invite == 1)
-						})
-					}
-					if (menu == 8) {
-						app.chatGroup = obj
-						app.getChat()
-					}
-				},
-				getChat() {//获取组交流的数据
-					var data = new FormData()
-					data.append('tid', app.chatGroup.id)
-					fetch(G.server + 'chat/tid.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						resp.json().then(chats => {
-							app.chats = chats
-							console.log('chats:', chats)
-						})
-
-					})
-				},
-				addChat() {//添加组交流评论   ---    这里添加银行结算
-					var data = new FormData()
-					data.append('tid', app.chatGroup.id)
-					data.append('uid', app.userInfo.id)
-					data.append('file', document.getElementById('file').files[0])
-					data.append('content', app.model.chat.content)
-					data.append('sendtime', new Date().getTime())
-
-					fetch(G.server + 'chat/add.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.getChat()
-						alert('add comment success.')
-
-
-					})
-				},
-				delChat(id) {//删除我的某条评论 ---    这里添加银行结算
-					var data = new FormData()
-					data.append('id', id)
-					fetch(G.server + 'chat/del.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.getChat()
-					})
-				},
-				applyJoin(tid) {//当前用户申请加入组   ---    这里添加银行结算
-					var data = new FormData()
-					data.append('tid', tid)
-					data.append('uid', app.userInfo.id)
-					data.append('invite', 1)
-					data.append('accept', 0)
-					fetch(G.server + 'jointeam/add.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-					})
-				},
-
-				okJoin(obj) {//组创建者或者被邀请者同意加入组---    这里添加银行结算
-					var data = new FormData()
-					data.append('id', obj.id)
-					data.append('tid', obj.tid)
-					data.append('uid', obj.uid)
-					data.append('invite', obj.invite)
-					data.append('accept', 1)
-					fetch(G.server + 'jointeam/update.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-						setTimeout(() => {
-							$('.ui.dropdown').dropdown()
-						})
-					})
-				},
-				noJoin(obj) {//拒绝加入组  ---    这里添加银行结算
-					var data = new FormData()
-					data.append('id', obj.id)
-					fetch(G.server + 'jointeam/del.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-					})
-				},
-				exitGroup(obj) {//退出某个已加入的组    ---    这里添加银行结算
-					var data = new FormData()
-					data.append('tid', obj.id)
-					data.append('uid', app.userInfo.id)
-					data.append('accept', 1)
-					fetch(G.server + 'jointeam/delbysearch.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-						setTimeout(() => {
-							app.changeMenu(app.menu)
-						}, 400);
-					})
-
-				},
-				openGroup(edit, item) {//打开添加或者编辑组的弹窗
-					if (edit) {
-						app.action = 1
-						app.model.group = {
-							id: item.id,
-							name: item.name,
-							content: item.content,
-							seelevel: item.seelevel
-						}
-					} else {
-						app.action = 0
-					}
-					$('.ui.modal.group').modal('show')
-
-				},
-				openMembers(obj) {//打开查看组成员列表的弹窗
-
-					app.currentgroupmems = [obj.creator, ...app.joinAcceptMap.get(obj.id)]
-
-					$('.ui.modal.members').modal('show')
-				},
-				openInvite(obj) {//打开邀请其他成员加入组的弹窗
-					app.tid = obj.id
-					$('.ui.modal.invite').modal('show')
-					var data = new FormData()
-					data.append('tid', app.tid)
-					fetch(G.server + 'jointeam/injoinusersbytid.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						resp.json().then(joins => {
-							var users = _.map(joins, item => item.uid)
-
-							users.push(obj.creator)
-							app.notShowUsers = users
-							setTimeout(() => {
-
-								$('.ui.dropdown').dropdown()
-							})
-
-						})
-					})
-
-
-				},
-				invite() {//邀请加入     ---    这里添加银行结算
-					var values = $('.ui.dropdown.invite').dropdown('get value')
-					values = _.filter(values, item => !_.includes(app.notShowUsers, parseInt(item)))
-					var promises = []
-					_.forEach(values, item => {
-						var data = new FormData()
-						data.append('tid', app.tid)
-						data.append('uid', item)
-						data.append('invite', 0)
-						data.append('accept', 0)
-						var addPromise = fetch(G.server + 'jointeam/add.do', {
-							method: 'POST',
-							body: data
-						})
-						promises.push(addPromise)
-
-					})
-					Promise.all(promises).then(() => {
-						app.initData()
-						$('.ui.modal.invite').modal('hide')
-						alert('Invite success， please wait for agree. if people already in group, he will not be invited.')
-					})
-				},
-				initData(isfirst) {//初始化所有数据
-					this.getUserInfo()
-					this.getAllGroup().then(() => {
-						this.getAllJoinTeam().then(() => {
-							if (isfirst) app.changeMenu(0)
-							else app.changeMenu(app.menu)
-						})
-					})
-					this.getAllUser()
-					this.initVar()
-
-				},
-				delGroup(id) {//删除组     ---    这里添加银行结算
-					var data = new FormData()
-					data.append('id', id)
-					fetch(G.server + 'team/del.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-						alert('delete succuss.')
-					})
-				},
-				addGroup() {//添加组    ---    这里添加银行结算
-
-					var data = new FormData()
-					data.append('creator', app.userInfo.id)
-					data.append('content', app.model.group.content)
-					data.append('name', app.model.group.name)
-					data.append('seelevel', app.model.group.seelevel)
-					data.append('createtime', new Date().toDateString().substring(4, 15))
-
-					fetch(G.server + 'team/add.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-						$('.ui.modal.group').modal('hide')
-						alert('add success.')
-
-
-					})
-				},
-				updateGroup() {//更新组     ---    这里添加银行结算
-
-					var data = new FormData()
-					data.append('id', app.model.group.id)
-					data.append('creator', app.userInfo.id)
-					data.append('content', app.model.group.content)
-					data.append('name', app.model.group.name)
-					data.append('seelevel', app.model.group.seelevel)
-
-					fetch(G.server + 'team/update.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						app.initData()
-						$('.ui.modal.group').modal('hide')
-						alert('edit success.')
-
-					})
-				},
-				getUserInfo() {//获取当前用户信息   -----   这里和学校数据库对接
-					var uid = uri.getQueryParamValue('uid')
-					var data = new FormData()
-					data.append('id', uid)
-					fetch(G.server + 'user/id.do', {
-						method: 'POST',
-						body: data
-					}).then(resp => {
-						resp.text().then(userInfo => {
-
-							if (userInfo != 'null') {
-								app.userInfo = JSON.parse(userInfo)
-
-							} else {
-								alert('get user data failed.')
-							}
-						})
-					})
-				},
-				getAllGroup() {//获取所有组
-					return fetch(G.server + 'team/all.do').then(resp => {
-						resp.json().then(teams => {
-							app.allTeams = teams
-							var map = new Map()
-							app.seeTeams = _.filter(teams, item => {
-								map.set(item.id, item)
-								return item.seelevel == 1
-							})
-							app.teamMap = map
-
-							console.log('allteams', teams)
-						})
-					})
-				},
-				getAllUser() {//获取所有用户
-					fetch(G.server + 'user/all.do').then(resp => {
-						resp.json().then(users => {
-							app.users = users
-							var map = new Map()
-							_.forEach(users, item => {
-								map.set(item.id, item.name)
-							})
-							app.creatorMap = map
-							console.log('users', users)
-						})
-					})
-				}, getAllJoinTeam() {//获取所有jointeam
-					return fetch(G.server + 'jointeam/all.do').then(resp => {
-						resp.json().then(joins => {
-							app.joins = joins
-							var map = new Map()
-							var joinAcceptMap = new Map()
-							_.forEach(app.allTeams, item => {
-								map.set(item.id, _.map(_.filter(joins, joinitem => joinitem.tid == item.id), mitem => mitem.uid))
-								joinAcceptMap.set(item.id, _.map(_.filter(joins, joinitem => joinitem.tid == item.id && joinitem.accept == 1), mitem => mitem.uid))
-							})
-							app.groupCountMap = map
-							app.joinAcceptMap = joinAcceptMap
-							console.log('joins', joins, map)
-						})
-					})
-				}
-
-			}
-		})
-	</script>
-
+        app.getUsers()
+    </script>
 </body>
 
 </html>

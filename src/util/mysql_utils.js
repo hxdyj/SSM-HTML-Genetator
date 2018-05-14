@@ -25,8 +25,7 @@ module.exports = {
 	async getTablesDesc(connect) {
 		let tables = await this.getAllTablesOfDatabase(connect);
 		let tablesDesc = {};
-		let G_Table_Map = new Map();
-		let G_Feild_Map = new Map();
+		let G = {};
 		for (let item of tables[0]) {
 			let tableName = item[tables[1][0].name];
 			let desc = await connect.query(
@@ -71,24 +70,21 @@ module.exports = {
 			//获取表的注释
 			let tableCommentStr = (await connect.query(
 				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
-					config.connect.database
+				config.connect.database
 				}' AND table_name='${tableName}'`
 			))[0][0].table_comment;
 			if (!tableCommentStr) tableCommentStr = '{}';
 			tablesDesc[className].tableComment = JSON.parse(tableCommentStr);
 
-			if (tablesDesc[className].tableComment.global_table) {
-				G_Table_Map.set(
-					tablesDesc[className].tableComment.global_table,
-					className
-				);
+			if (tablesDesc[className].tableComment.tabel_type) {
+				G[tablesDesc[className].tableComment.tabel_type] = className
 			}
 		}
-		tablesDesc['_Global_'] = {
-			field: G_Feild_Map,
-			table: G_Table_Map
+
+		return {
+			G: G,
+			tablesDesc: tablesDesc
 		};
-		return tablesDesc;
 	},
 	/**
 	 * @description

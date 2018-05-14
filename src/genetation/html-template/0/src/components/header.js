@@ -1,10 +1,10 @@
 Vue.component('g-header', {
-	data: function() {
+	data: function () {
 		return {
 			count: 0
 		};
 	},
-	mounted: function() {
+	mounted: function () {
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
