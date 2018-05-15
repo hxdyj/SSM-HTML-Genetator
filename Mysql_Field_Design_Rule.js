@@ -1,7 +1,7 @@
 
 console.log(
 	JSON.stringify({
-		globle_field: 'username'
+		not_in_param: ['add', 'edit']
 	})
 );
 

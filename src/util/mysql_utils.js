@@ -29,7 +29,7 @@ module.exports = {
 		for (let item of tables[0]) {
 			let tableName = item[tables[1][0].name];
 			let desc = await connect.query(
-				`select * from information_schema.columns where table_name='${tableName}'`
+				`select * from information_schema.columns where table_name='${tableName}' and table_schema='${config.connect.database}'`
 			); //获取表的结构
 			let className = this.getClassNameOfTableName(tableName);
 			tablesDesc[className] = desc[0];

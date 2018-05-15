@@ -36,6 +36,7 @@ function fieldsCommentMapToMethodContent(
 		${tableName} o = new ${tableName}();
 	`;
 	isUpload = false;
+	uploadKey = null;
 	let middle = '';
 	commentMap.forEach(function (val, key) {
 		//if this method not in val.not_in_param, append it.
@@ -45,16 +46,18 @@ function fieldsCommentMapToMethodContent(
 			let fieldIsUpload = type == RULE.field.java_type.upload.key;
 			if (fieldIsUpload) {
 				isUpload = true;
+				uploadKey = key
+
 			}
 			lineStr = `
-		o.set${firstWordUpper(key)}(${fieldIsUpload ? 'path' : key})`;
+		o.set${firstWordUpper(key)}(${fieldIsUpload ? 'path' : key});`;
 			middle += lineStr;
 		}
 	});
 	if (isUpload) {
 		first += `
 		String path = "";
-		if(file!=null){path = UploadUtils.upload(request, file, "/pic");}
+		if(${uploadKey}!=null){path = UploadUtils.upload(request, ${uploadKey}, "/pic");}
 		`;
 	}
 
@@ -127,7 +130,7 @@ public class ${index}Controller {
 
 	@ResponseBody
 	@RequestMapping("${lowerIndex}/get/all.do")
-	public String getbyid(Integer id){
+	public String getall(Integer id){
 
 		return JSON.toJSONString(${mapper}.selectByExample(null));
 	}
