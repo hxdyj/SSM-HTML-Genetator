@@ -20,12 +20,11 @@ module.exports = {
 
 	<!-- Site Properties -->
 	<title>Login Example - Semantic</title>
-	<link rel="stylesheet" type="text/css" href="./bower_components/semantic/dist/semantic.min.css">
-	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="./js/semantic.min.css">
+	<script src="./js/jquery.min.js"></script>
 	<script src="./js/config.js"></script>
-	<script src="./bower_components/semantic/dist/semantic.min.js"></script>
-	<script src="./bower_components/vue/dist/vue.min.js"></script>
+	<script src="./js/semantic.min.js"></script>
+	<script src="./js/vue.min.js"></script>
 
 	<style type="text/css">
 	body {
