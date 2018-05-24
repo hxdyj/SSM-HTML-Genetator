@@ -1,4 +1,10 @@
 
+function getLoginFormParams(commonData) {//获取在登录表单显示的字段
+	// let tabel = commonData.tabelsDesc[commonData.G.user]
+	// let params = new Map([...tabel.commentMap].filter(([k, v]) => v.login_form == 'user'))
+	// debugger
+
+}
 module.exports = {
 	writeToFile(line, isReWrite) {
 		let fileName =
@@ -58,8 +64,15 @@ module.exports = {
 		<div class="ui large form">
 		<div class="ui stacked segment">`, true);
 
+		getLoginFormParams(commonData)
 
-		debugger
+		// 	this.writeToFile(`
+		// 	<div class="field">
+		// 	<div class="ui left icon input">
+		// 		<i class="user icon"></i>
+		// 		<input type="text" v-model="username" name="text" placeholder="username">
+		// 	</div>
+		// </div>`)
 		/* -------  END ------- */
 	}
 };
