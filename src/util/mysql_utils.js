@@ -42,6 +42,7 @@ module.exports = {
 			_.forEach(desc[0], item => {
 				if (!item.COLUMN_COMMENT) item.COLUMN_COMMENT = '{}';
 				let commentObj = JSON.parse(item.COLUMN_COMMENT);
+				commentObj.feild_name = item.COLUMN_NAME
 				//use it while field java_type exit,otherwise read mysql type and transform to java type
 				if (!commentObj.java_type) {
 					// TODO:date type  --> remain to back
@@ -60,6 +61,7 @@ module.exports = {
 							break;
 					}
 				}
+
 				if (!commentObj.not_in_param) {
 					commentObj.not_in_param = [];
 				}

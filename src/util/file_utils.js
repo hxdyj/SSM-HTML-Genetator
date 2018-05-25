@@ -47,12 +47,12 @@ module.exports = {
 		if (isReWrite)
 			fs.writeFileSync(
 				config.basePath + config.outputDir + pathFileName,
-				line + '\n'
+				line
 			);
 		else
 			fs.appendFileSync(
 				config.basePath + config.outputDir + pathFileName,
-				line + '\n'
+				line
 			);
 	}
 };

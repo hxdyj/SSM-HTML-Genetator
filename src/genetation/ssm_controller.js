@@ -139,7 +139,7 @@ public class ${index}Controller {
 	@RequestMapping("${lowerIndex}/del.do")
 	public String del(Integer id){
 
-		 ${mapper}.deleteByPrimaryKey(id);
+		${mapper}.deleteByPrimaryKey(id);
 
 		return "success";
 	}`

@@ -1,5 +1,7 @@
 global.clc = require('cli-color');
 global._ = require('lodash'); //lodash引入
+global.shell = require('shelljs');
+global.execSh = require('exec-sh')
 global.config = require('./config'); //配置文件
 global.file_utils = require('./src/util/file_utils'); //文件相关操作
 const mysql_utils = require('./src/util/mysql_utils'); //数据库相关操作

@@ -1,9 +1,8 @@
 
 function getLoginFormParams(commonData) {//获取在登录表单显示的字段
-	// let tabel = commonData.tabelsDesc[commonData.G.user]
-	// let params = new Map([...tabel.commentMap].filter(([k, v]) => v.login_form == 'user'))
-	// debugger
-
+	let tabel = commonData.tablesDesc[commonData.G.user]
+	let params = new Map([...tabel.commentMap].filter(([k, v]) => v.login_form == 'user'))
+	return [...params.values()]
 }
 module.exports = {
 	writeToFile(line, isReWrite) {
@@ -25,8 +24,8 @@ module.exports = {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 	<!-- Site Properties -->
-	<title>Login Example - Semantic</title>
-	<link rel="stylesheet" type="text/css" href="./js/semantic.min.css">
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/config.js"></script>
 	<script src="./js/semantic.min.js"></script>
@@ -58,21 +57,73 @@ module.exports = {
 	<div class="column">
 		<h2 class="ui teal image header">
 		<div class="content" style="color: white">
-			Login System
+			登录
 		</div>
 		</h2>
 		<div class="ui large form">
-		<div class="ui stacked segment">`, true);
+			<div class="ui stacked segment">`, true);
 
-		getLoginFormParams(commonData)
+		let loginParams = getLoginFormParams(commonData)
+		_.forEach(loginParams, item => {
+			let data = {
+				icon: 'user',
+				vModel: 'feild.' + item.feild_name,
+				placeholder: item.cn_name || item.feild_name,
+			}
+			if (item.login_id) {
+				_.assign(data, {
+					icon: 'user',
+					placeholder: '用户名',
+				})
+			}
+			if (item.login_pass) {
+				_.assign(data, {
+					icon: 'lock',
+					placeholder: '密码',
+				})
+			}
+			this.writeToFile(`
+				<div class="field">
+					<div class="ui left icon input">
+						<i class="${data.icon} icon"></i>
+						<input type="text" v-model="${data.vModel}" name="text" placeholder="${data.placeholder}">
+					</div>
+				</div>`)
+		})
 
-		// 	this.writeToFile(`
-		// 	<div class="field">
-		// 	<div class="ui left icon input">
-		// 		<i class="user icon"></i>
-		// 		<input type="text" v-model="username" name="text" placeholder="username">
-		// 	</div>
-		// </div>`)
+
+		this.writeToFile(`
+					<div class="ui fluid large blue submit button" @click="login()">进入</div>
+				</div>
+
+				<div class="ui error message"></div>
+
+			</div>
+
+			<div class="ui message">
+				没有账号?
+				<a href="register.html">注册</a>
+			</div>
+		</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				feild:{`)
+		_.forEach(loginParams, item => {
+			this.writeToFile(`
+					${item.feild_name}:null,`)
+		})
+		this.writeToFile(`
+				},
+			},
+		})
+	</script>
+</body>
+
+</html>`)
+
 		/* -------  END ------- */
 	}
 };
