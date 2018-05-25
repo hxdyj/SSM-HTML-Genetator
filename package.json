@@ -12,6 +12,7 @@
   "devDependencies": {
     "browser-sync": "^2.24.4",
     "gulp": "^3.9.1",
+    "gulp-ruby-sass": "^3.0.0",
     "lodash": "^4.17.5",
     "node-dev": "^3.1.3"
   },

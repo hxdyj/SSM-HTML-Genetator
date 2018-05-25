@@ -115,6 +115,7 @@ module.exports = {
 			this.writeToFile(`
 					${item.feild_name}:null,`)
 		})
+
 		this.writeToFile(`
 				},
 			},
