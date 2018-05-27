@@ -1,9 +1,9 @@
 module.exports = {
 	connect: {
-		host: 'localhost',
-		user: 'root',
+		host: 'wingblog.top',
+		user: 'history',
 		password: '123456',
-		database: 'tbgooglemap'
+		database: 'history'
 	},
 	basePath: __dirname,
 	serviceRequireBasePath: '../entity/',
