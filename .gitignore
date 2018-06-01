@@ -1,8 +1,5 @@
 node_modules
 *output/
 *origin/
-<<<<<<< HEAD
 .DS_Store
-=======
 .sass-cache
->>>>>>> 2370aee1d1a73a46cc03e7c05516e0354d535f30
