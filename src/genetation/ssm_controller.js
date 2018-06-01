@@ -33,7 +33,7 @@ function fieldsCommentMapToMethodContent(
 	mapper
 ) {
 	let first = `
-		${tableName} o = new ${tableName}();
+		${tableName} o = ${method == RULE.field.not_in_param.edit ? `${mapper}.selectByPrimaryKey(id)` : `new ${tableName}()`};
 	`;
 	isUpload = false;
 	uploadKey = null;
@@ -62,7 +62,8 @@ function fieldsCommentMapToMethodContent(
 	}
 
 	let footer = `
-		${mapper}.insert(o);
+		${mapper}.${method == RULE.field.not_in_param.edit ? 'updateByPrimaryKey' : 'insert'}(o);
+
 
 		return "success";`;
 	return first + middle + footer;
