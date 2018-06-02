@@ -1,43 +1,116 @@
-.g-header-title {
-	color: white !important;
-}
+#app .index-content {
+  display: flex;
+  flex-basis: 1;
+  min-height: calc(100vh - 4rem);
+  background: #f7f5f5; }
+  #app .index-content .index-content-left {
+    width: 16.3rem;
+    flex-shrink: 0;
+    height: 100%;
+    background: #00b5ad; }
+  #app .index-content .index-content-right {
+    flex-grow: 7; }
 
-.g-header-search .transparent {
-	/* background: white !important; */
-}
-.g-header-search input {
-	color: white !important;
-	font-size: 1.15rem !important;
-}
+.g-header {
+  height: 4rem; }
+  .g-header .g-header-title {
+    color: white !important; }
+  .g-header .g-header-search input {
+    color: white !important;
+    font-size: 1.15rem !important; }
+  .g-header .g-header-search .g-header-username {
+    font-size: 1.05rem !important;
+    position: relative;
+    top: 0.21rem; }
+  .g-header .g-header-actions .g-header-userinfo-actions {
+    width: 20rem !important;
+    top: 3.8rem !important; }
+    .g-header .g-header-actions .g-header-userinfo-actions .avatar {
+      width: 6rem !important;
+      height: 6rem !important;
+      margin-left: 4.6rem; }
+  .g-header .g-header-actions .g-header-action-username {
+    margin-top: 1rem;
+    text-align: center;
+    width: 100%; }
+  .g-header .g-header-actions .g-header-action-menus {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center; }
 
-.g-header-search .search.icon {
-}
+.g-left-menu {
+  width: 100%;
+  height: 100%;
+  border-right: 0.05rem solid #005652b4; }
+  .g-left-menu .g-left-menu-contain {
+    min-height: calc(100vh - 4rem);
+    max-height: calc(100vh - 4rem); }
+    .g-left-menu .g-left-menu-contain .introduce {
+      overflow: hidden;
+      height: 10rem;
+      position: relative; }
+      .g-left-menu .g-left-menu-contain .introduce .bg {
+        background: url("../img/starry_sky.jpg");
+        background-size: cover;
+        filter: blur(0.6rem);
+        height: 100%; }
+      .g-left-menu .g-left-menu-contain .introduce .content {
+        position: absolute;
+        top: 0;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        line-height: 2rem;
+        font-size: 1.1rem;
+        font-weight: 100;
+        letter-spacing: 0.05rem;
+        padding: 1rem; }
+    .g-left-menu .g-left-menu-contain .items .item {
+      border-top: 0.05rem solid #005652b4;
+      height: 3.6rem;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #121212; }
+      .g-left-menu .g-left-menu-contain .items .item .icon {
+        margin-left: 10%;
+        font-size: 0.8rem;
+        position: relative;
+        top: -0.23rem; }
+      .g-left-menu .g-left-menu-contain .items .item .title {
+        margin-left: 0.2rem;
+        margin-right: 1rem;
+        font-size: 1rem;
+        font-weight: 500; }
+      .g-left-menu .g-left-menu-contain .items .item:hover {
+        background: #008983;
+        color: white; }
+      .g-left-menu .g-left-menu-contain .items .item.active {
+        background: #f7f5f5;
+        color: #141316; }
+      .g-left-menu .g-left-menu-contain .items .item:last-child {
+        border-bottom: 0.05rem solid #005652b4; }
 
-.g-header-username {
-	font-size: 1.05rem !important;
-	position: relative;
-	top: 0.21rem;
-}
+.g-breadcrumb {
+  height: 3rem;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem; }
 
-.g-header-userinfo-actions {
-	width: 20rem !important;
-	top: 3.8rem !important;
-}
-
-.g-header-userinfo-actions .avatar {
-	width: 6rem !important;
-	height: 6rem !important;
-	margin-left: 4.6rem;
-}
-
-.g-header-action-username {
-	margin-top: 1rem;
-	text-align: center;
-	width: 100%;
-}
-
-.g-header-action-menus {
-	width: 100%;
-	margin-top: 1rem;
-	text-align: center;
-}
+.g-table {
+  display: flex;
+  justify-content: center; }
+  .g-table .table-all {
+    margin-top: 4rem;
+    max-width: 90% !important;
+    min-width: 90% !important; }
+    .g-table .table-all .table-page {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center; }

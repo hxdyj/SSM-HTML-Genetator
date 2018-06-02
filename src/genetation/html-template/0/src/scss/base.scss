@@ -1,0 +1,170 @@
+$headerH: 4rem;
+
+//layout布局样式
+#app {
+	.index-content {
+		display: flex;
+		flex-basis: 1;
+		min-height: calc(100vh - #{$headerH});
+		background: #f7f5f5;
+		.index-content-left {
+			width: 16.3rem;
+			flex-shrink: 0;
+			height: 100%;
+			background: #00b5ad;
+		}
+		.index-content-right {
+			flex-grow: 7;
+		}
+	}
+}
+
+//header组件的样式
+.g-header {
+	height: $headerH;
+	.g-header-title {
+		color: white !important;
+	}
+
+	.g-header-search {
+		input {
+			color: white !important;
+			font-size: 1.15rem !important;
+		}
+		.transparent {
+			//background: white !important;
+		}
+
+		.search.icon {
+		}
+
+		.g-header-username {
+			font-size: 1.05rem !important;
+			position: relative;
+			top: 0.21rem;
+		}
+	}
+	.g-header-actions {
+		.g-header-userinfo-actions {
+			width: 20rem !important;
+			top: 3.8rem !important;
+			.avatar {
+				width: 6rem !important;
+				height: 6rem !important;
+				margin-left: 4.6rem;
+			}
+		}
+
+		.g-header-action-username {
+			margin-top: 1rem;
+			text-align: center;
+			width: 100%;
+		}
+
+		.g-header-action-menus {
+			width: 100%;
+			margin-top: 1rem;
+			text-align: center;
+		}
+	}
+}
+
+//左侧菜单页
+
+.g-left-menu {
+	width: 100%;
+	height: 100%;
+	border-right: 0.05rem solid #005652b4;
+	.g-left-menu-contain {
+		min-height: calc(100vh - #{$headerH});
+		max-height: calc(100vh - #{$headerH});
+		.introduce {
+			//background: lighten(#00978f, 1);
+			overflow: hidden;
+			height: 10rem;
+			position: relative;
+			.bg {
+				background: url('../img/starry_sky.jpg');
+				background-size: cover;
+				filter: blur(0.6rem);
+				height: 100%;
+			}
+			.content {
+				position: absolute;
+				top: 0;
+				box-sizing: border-box;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				color: white;
+				justify-content: center;
+				align-items: center;
+				line-height: 2rem;
+				font-size: 1.1rem;
+				font-weight: 100;
+				letter-spacing: 0.05rem;
+				padding: 1rem;
+			}
+		}
+		.items {
+			.item {
+				border-top: 0.05rem solid #005652b4;
+				//background: lighten(#005652, 15);
+				height: 3.6rem;
+				width: 100%;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				//color: #ffff21;
+				color: #121212;
+				.icon {
+					margin-left: 10%;
+					font-size: 0.8rem;
+					position: relative;
+					top: -0.23rem;
+				}
+				.title {
+					margin-left: 0.2rem;
+					margin-right: 1rem;
+					font-size: 1rem;
+					font-weight: 500;
+				}
+				&:hover {
+					background: lighten(#005652, 10);
+					color: white;
+				}
+
+				&.active {
+					background: #f7f5f5;
+					color: #141316;
+				}
+				&:last-child {
+					border-bottom: 0.05rem solid #005652b4;
+				}
+			}
+		}
+	}
+}
+//面包屑导航
+.g-breadcrumb {
+	height: 3rem;
+	background: white;
+	display: flex;
+	align-items: center;
+	padding-left: 2rem;
+}
+//全局table组件
+.g-table {
+	display: flex;
+	justify-content: center;
+	.table-all {
+		margin-top: 4rem;
+		max-width: 90% !important;
+		min-width: 90% !important;
+		.table-page {
+			margin-top: 2rem;
+			display: flex;
+			justify-content: center;
+		}
+	}
+}

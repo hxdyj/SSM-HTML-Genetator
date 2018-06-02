@@ -1,14 +1,28 @@
+let headerE = {
+	search: 'search',
+	input: 'input'
+}
 Vue.component('g-header', {
-	data: function () {
-		return {
-			count: 0
-		};
+	props: {
+		showSearch: {
+			default: true
+		}
 	},
-	mounted: function () {
+	data: function() {
+		return {
+			searchStr: ''
+		}
+	},
+	mounted: function() {
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
-		});
+		})
+	},
+	methods: {
+		search() {
+			this.$emit(headerE.search, this.searchStr)
+		}
 	},
 	template: `
 <div class="ui top attached teal inverted menu g-header">
@@ -18,14 +32,14 @@ Vue.component('g-header', {
 	<div class="item">
 		<div class="ui medium header g-header-title">Medium Header</div>
 	</div>
-	<div class="ui left aligned category search item g-header-search">
-	<div class="ui transparent icon input">
-	<input class="prompt" type="text" placeholder="Search ...">
-	<i class="search link icon"></i>
+	<div class="ui left aligned category search item g-header-search" v-show="showSearch">
+		<div class="ui transparent icon input">
+		<input class="prompt" type="text" v-model="searchStr" @input="search()" placeholder="Search ..." @keyup.enter="search()">
+		<i class="search link icon" @click="search()"></i>
 	</div>
 	<div class="results"></div>
   </div>
-  <div class="right menu">
+  <div class="right menu g-header-actions">
 		<div class="item">
 			<a class="ui label g-header-user teal inverted">
 				<img class="ui right spaced avatar image" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1760172527,1473711532&fm=27&gp=0.jpg">
@@ -55,4 +69,4 @@ Vue.component('g-header', {
   <p></p>
 </div>
   `
-});
+})
