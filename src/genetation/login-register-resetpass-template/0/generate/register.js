@@ -39,17 +39,17 @@ module.exports = {
 
 
 	<style type="text/css">
-	body>.grid {
-		height: 100%;
-	}
+		body>.grid {
+			height: 100%;
+		}
 
-	.image {
-		margin-top: -100px;
-	}
+		.image {
+			margin-top: -100px;
+		}
 
-	.column {
-		max-width: 450px;
-	}
+		.column {
+			max-width: 450px;
+		}
 	</style>
 
 </head>
@@ -60,7 +60,7 @@ module.exports = {
 		<div class="column">
 			<h2 class="ui teal image header">
 				<div class="content" style="color: white">
-					登录
+					注册
 				</div>
 			</h2>
 			<div class="ui large form">
@@ -91,13 +91,13 @@ module.exports = {
 							<i class="${data.icon} icon"></i>
 							<input type="text" v-model="${data.vModel}" name="text" placeholder="${
 				data.placeholder
-			}">
+				}">
 						</div>
 					</div>`)
 		})
 
 		this.writeToFile(`
-					<div class="ui fluid large blue submit button" @click="register()">进入</div>
+					<div class="ui fluid large blue submit button" @click="register()">确定</div>
 				</div>
 
 				<div class="ui error message"></div>
@@ -126,19 +126,19 @@ module.exports = {
 			methods: {
 				register() {
 					if (${_.join(
-						_.map(
-							loginParams,
-							item => '!this.feild.' + item.feild_name
-						),
-						'||'
-					)}) {
+				_.map(
+					loginParams,
+					item => '!this.feild.' + item.feild_name
+				),
+				'||'
+			)}) {
 						alert('${_.join(
-							_.map(
-								loginParams,
-								item => item.cn_name || item.feild_name
-							),
-							'和'
-						)}不能为空')
+				_.map(
+					loginParams,
+					item => item.cn_name || item.feild_name
+				),
+				'和'
+			)}不能为空')
 						return
 					}
 
@@ -150,7 +150,7 @@ module.exports = {
 						${item.feild_name}:app.feild.${item.feild_name}`
 			)},
 
-					}).then(data => {
+					},true).then(data => {
 						if (data==-1) {
 							alert("用户已存在")
 						} else {

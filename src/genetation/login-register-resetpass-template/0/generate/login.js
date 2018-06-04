@@ -37,17 +37,17 @@ module.exports = {
 	<script src="./js/gVerify.js"></script>`: ''}
 
 	<style type="text/css">
-	body>.grid {
-		height: 100%;
-	}
+		body>.grid {
+			height: 100%;
+		}
 
-	.image {
-		margin-top: -100px;
-	}
+		.image {
+			margin-top: -100px;
+		}
 
-	.column {
-		max-width: 450px;
-	}
+		.column {
+			max-width: 450px;
+		}
 	</style>
 
 </head>
@@ -142,8 +142,8 @@ module.exports = {
 						alert("验证码错误")
 						return
 					}
-
-					G.http('${commonData.G.user.toLowerCase()}/login.do', {
+					`: ''}
+					${`G.http('${commonData.G.user.toLowerCase()}/login.do', {
 ${_.join(_.map(loginParams, item => `\t\t\t\t\t\t${item.feild_name}:app.feild.${item.feild_name}`), ',\n')},
 					}).then(data => {
 						if (_.isEmpty(data)) {
@@ -153,8 +153,7 @@ ${_.join(_.map(loginParams, item => `\t\t\t\t\t\t${item.feild_name}:app.feild.${
 							location.href = 'index.html'
 						}
 					})
-					`: ''}
-				}
+				}`}
 			}`)
 		this.writeToFile(`
 		})
