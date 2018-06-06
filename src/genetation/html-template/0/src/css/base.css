@@ -114,3 +114,16 @@
       margin-top: 2rem;
       display: flex;
       justify-content: center; }
+
+.g-toast {
+  position: fixed;
+  top: 4rem;
+  height: 3rem;
+  background: rgba(18, 18, 18, 0.9);
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 16.3rem);
+  left: 16.3rem; }

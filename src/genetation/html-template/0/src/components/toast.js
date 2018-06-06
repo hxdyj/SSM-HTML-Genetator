@@ -11,9 +11,9 @@ Vue.component('g-toast', {
 		show(msg) {
 			this.msg = msg
 			this.isShow = true
-			/* setTimeout(() => {
-				this.isShow == false
-			}, 1500) */
+			setTimeout(() => {
+				this.isShow = false
+			}, 1000)
 		}
 	},
 	template: `

@@ -1,5 +1,5 @@
 $headerH: 4rem;
-
+$leftMenuWidth: 16.3rem;
 //layout布局样式
 #app {
 	.index-content {
@@ -8,7 +8,7 @@ $headerH: 4rem;
 		min-height: calc(100vh - #{$headerH});
 		background: #f7f5f5;
 		.index-content-left {
-			width: 16.3rem;
+			width: $leftMenuWidth;
 			flex-shrink: 0;
 			height: 100%;
 			background: #00b5ad;
@@ -167,4 +167,17 @@ $headerH: 4rem;
 			justify-content: center;
 		}
 	}
+}
+.g-toast {
+	position: fixed;
+	top: $headerH;
+	height: 3rem;
+	background: rgba(18, 18, 18, 0.9);
+	color: white;
+	font-size: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: calc(100% - #{$leftMenuWidth});
+	left: $leftMenuWidth;
 }
