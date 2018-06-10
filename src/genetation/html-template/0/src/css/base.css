@@ -12,7 +12,8 @@
     flex-grow: 7; }
 
 .g-header {
-  height: 4rem; }
+  height: 4rem;
+  margin-top: 0rem !important; }
   .g-header .g-header-title {
     color: white !important; }
   .g-header .g-header-search input {

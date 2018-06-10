@@ -22,6 +22,7 @@ $leftMenuWidth: 16.3rem;
 //header组件的样式
 .g-header {
 	height: $headerH;
+	margin-top: 0rem !important;
 	.g-header-title {
 		color: white !important;
 	}

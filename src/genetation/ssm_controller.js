@@ -152,11 +152,11 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="${lowerIndex}/add.do",method = RequestMethod.POST)
 	public String add${fieldsCommentMapToJavaParamsStr(
-					val.commentMap,
+					val._commentMap,
 					RULE.field.not_in_param.add
 				)}{
 		${fieldsCommentMapToMethodContent(
-					val.commentMap,
+					val._commentMap,
 					RULE.field.not_in_param.add,
 					index,
 					mapper
@@ -170,11 +170,11 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="${lowerIndex}/edit.do",method = RequestMethod.POST)
 	public String edit${fieldsCommentMapToJavaParamsStr(
-					val.commentMap,
+					val._commentMap,
 					RULE.field.not_in_param.edit
 				)}{
 		${fieldsCommentMapToMethodContent(
-					val.commentMap,
+					val._commentMap,
 					RULE.field.not_in_param.edit,
 					index,
 					mapper

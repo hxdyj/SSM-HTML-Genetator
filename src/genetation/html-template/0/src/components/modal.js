@@ -4,8 +4,10 @@ Vue.component('g-modal', {
 			require: true
 		}
 	},
-	data: function() {},
-	mounted: function() {},
+	data: function () {
+	},
+	mounted: function () {
+	},
 	methods: {
 		show() {
 			$(`.ui.modal.${this.name}`).modal('show')
@@ -15,6 +17,7 @@ Vue.component('g-modal', {
 		}
 	},
 	template: `
+	
 <div class="g-modal">
 	<div class="ui modal" :class="name">
 		<slot></slot>

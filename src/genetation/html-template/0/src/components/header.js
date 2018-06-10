@@ -8,12 +8,12 @@ Vue.component('g-header', {
 			default: true
 		}
 	},
-	data: function() {
+	data: function () {
 		return {
 			searchStr: ''
 		}
 	},
-	mounted: function() {
+	mounted: function () {
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
@@ -27,7 +27,7 @@ Vue.component('g-header', {
 	template: `
 <div class="ui top attached teal inverted menu g-header">
 	<div class="item">
-		<img src="../img/logo.png">
+		<img src="../img/logo.png" @click="()=>{location.href='index.html'}">
 	</div>
 	<div class="item">
 		<div class="ui medium header g-header-title">Medium Header</div>

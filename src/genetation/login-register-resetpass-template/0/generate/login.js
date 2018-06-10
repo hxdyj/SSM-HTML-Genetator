@@ -1,7 +1,7 @@
 
 function getLoginFormParams(commonData) {//获取在登录表单显示的字段
 	let tabel = commonData.tablesDesc[commonData.G.user]
-	let params = new Map([...tabel.commentMap].filter(([k, v]) => v.login_form == 'user'))
+	let params = new Map([...tabel._commentMap].filter(([k, v]) => v.login_form == 'user'))
 	return [...params.values()]
 }
 let isVerify = _.includes(config.html.is_verify_login, 'user')

@@ -1,8 +1,13 @@
 let leftMenyE = {}
 Vue.component('g-left-menu', {
-	props: {},
-	data: function() {},
-	mounted: function() {},
+	props: {
+		list: {
+			default: []
+		},
+		active: ''
+	},
+	data: function () { },
+	mounted: function () { },
 	methods: {},
 	template: `
 <div class="g-left-menu">
@@ -16,22 +21,10 @@ Vue.component('g-left-menu', {
 			</div>
 		</div>
 		<div class="items">
-			<div class="item active">
+			<div class="item" :class="{'active':active==item.name}" v-for="item in list" @click="()=>{location.href=item.href}">
 				<i class="lock icon"></i>
 				<span class="title">
-					商品管理
-				</span>
-			</div>
-			<div class="item">
-				<i class="lock icon"></i>
-				<span class="title">
-					用户管理
-				</span>
-			</div>
-			<div class="item">
-				<i class="lock icon"></i>
-				<span class="title">
-					权限管理
+					{{item.name}}管理
 				</span>
 			</div>
 		</div>

@@ -68,7 +68,7 @@ module.exports = {
 				commentMap.set(item.COLUMN_NAME, commentObj);
 			});
 
-			tablesDesc[className].commentMap = commentMap;
+			tablesDesc[className]._commentMap = commentMap;
 			//获取表的注释
 			let tableCommentStr = (await connect.query(
 				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
