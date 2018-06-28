@@ -1,20 +1,20 @@
-const fs = require('fs');
+const fs = require('fs')
 
 module.exports = {
 	init() {
-		let path = config.basePath + config.outputDir;
-		let isExist = fs.existsSync(path);
+		let path = config.basePath + config.outputDir
+		let isExist = fs.existsSync(path)
 
-		console.log(clc.blue('output dir is exist:', isExist));
+		console.log(clc.blue('output dir is exist:', isExist))
 		if (!isExist) {
-			fs.mkdirSync(path);
+			fs.mkdirSync(path)
 			_.forIn(config.generateDirs, (value, key) => {
-				fs.mkdirSync(path + value);
-			});
+				fs.mkdirSync(path + value)
+			})
 		}
 	},
 	readFile(name) {
-		return fs.readFileSync(name, 'utf-8');
+		return fs.readFileSync(name, 'utf-8')
 	},
 	/**
 	 * @description
@@ -23,17 +23,17 @@ module.exports = {
 	 * @param {any} dir
 	 */
 	cleanOutputDir(dir) {
-		let files = fs.readdirSync(dir);
+		let files = fs.readdirSync(dir)
 		_.forEach(files, file => {
-			let path = dir + '/' + file;
-			var stats = fs.statSync(path);
+			let path = dir + '/' + file
+			var stats = fs.statSync(path)
 			if (stats.isDirectory()) {
-				this.cleanOutputDir(path);
+				this.cleanOutputDir(path)
 			} else {
-				fs.unlinkSync(path);
-				console.log(clc.red('delete file:'), path);
+				fs.unlinkSync(path)
+				console.log(clc.red('delete file:'), path)
 			}
-		});
+		})
 	},
 
 	/* @description
@@ -43,16 +43,20 @@ module.exports = {
 	* @param {any} pathFileName
 	* @param {any} isReWrite  是否清空文件开始写
 	*/
-	writeLineToFile(line, pathFileName, isReWrite) {
+	writeLineToFile(line, pathFileName, isReWrite, isOwnPath = false) {
 		if (isReWrite)
 			fs.writeFileSync(
-				config.basePath + config.outputDir + pathFileName,
+				isOwnPath
+					? pathFileName
+					: config.basePath + config.outputDir + pathFileName,
 				line
-			);
+			)
 		else
 			fs.appendFileSync(
-				config.basePath + config.outputDir + pathFileName,
+				isOwnPath
+					? pathFileName
+					: config.basePath + config.outputDir + pathFileName,
 				line
-			);
+			)
 	}
-};
+}

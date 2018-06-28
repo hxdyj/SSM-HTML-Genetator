@@ -1,9 +1,9 @@
-
+// 用来往数据库添加备注的时候使用
 console.log(
 	JSON.stringify({
 		not_in_param: ['add', 'edit']
 	})
-);
+)
 
 module.exports = {
 	field: {
@@ -16,7 +16,7 @@ module.exports = {
 		not_in_param: {
 			add: 'add',
 			edit: 'edit',
-			query: 'query'
+			search: 'search'
 		}
 	}
-};
+}

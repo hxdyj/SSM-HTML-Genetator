@@ -1,4 +1,3 @@
-
 function getForm(obj) {
 	let result = new FormData()
 	_.forEach(obj, (val, key) => {
@@ -10,26 +9,43 @@ function getForm(obj) {
 	}
 }
 var G = {
-	http: (url, data, isText) => {
+	http: function(url, data, isText = false) {
 		return new Promise((res, rej) => {
-			fetch("http://localhost:8080/TbGroup/" + url, getForm(data)).then(resp => {
-				if (isText) {
-					resp.text().then(data => {
-						res(data)
+			if (arguments.length == 1) {
+				fetch('http://localhost:3000/' + url)
+					.then(resp => {
+						if (isText) {
+							resp.text().then(data => {
+								res(data)
+							})
+						} else {
+							resp.json().then(data => {
+								res(data)
+							})
+						}
 					})
-				} else {
-					resp.json().then(data => {
-						res(data)
+					.catch(err => {
+						rej()
+						alert('请求数据发生错误')
 					})
-				}
-
-			}).catch(err => {
-				alert('请求数据发生错误')
-			})
+			} else {
+				fetch('http://localhost:8080/TbGroup/' + url, getForm(data))
+					.then(resp => {
+						if (isText) {
+							resp.text().then(data => {
+								res(data)
+							})
+						} else {
+							resp.json().then(data => {
+								res(data)
+							})
+						}
+					})
+					.catch(err => {
+						rej()
+						alert('请求数据发生错误')
+					})
+			}
 		})
 	}
-};
-
-
-
-
+}

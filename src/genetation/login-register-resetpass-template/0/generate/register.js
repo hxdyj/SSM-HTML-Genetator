@@ -1,12 +1,22 @@
+let tabelObj = null
+
 function getLoginFormParams(commonData) {
 	//获取在登录表单显示的字段
-	let tabel = commonData.tablesDesc[commonData.G.user]
+	let func = _.filter(
+		commonData.tablesDesc,
+		item =>
+			item.tableComment.func &&
+			_.includes(item.tableComment.func, 'register')
+	)
+	let tabel = func[0]
+	tabelObj = func[0]
+
 	let params = new Map(
-		[...tabel._commentMap].filter(([k, v]) => v.login_form == 'user')
+		[...tabel._commentMap].filter(([k, v]) => v.login_form)
 	)
 	return [...params.values()]
 }
-let isVerify = _.includes(config.html.is_verify_login, 'user')
+
 module.exports = {
 	writeToFile(line, isReWrite) {
 		let fileName =
@@ -91,7 +101,7 @@ module.exports = {
 							<i class="${data.icon} icon"></i>
 							<input type="text" v-model="${data.vModel}" name="text" placeholder="${
 				data.placeholder
-				}">
+			}">
 						</div>
 					</div>`)
 		})
@@ -126,24 +136,24 @@ module.exports = {
 			methods: {
 				register() {
 					if (${_.join(
-				_.map(
-					loginParams,
-					item => '!this.feild.' + item.feild_name
-				),
-				'||'
-			)}) {
+						_.map(
+							loginParams,
+							item => '!this.feild.' + item.feild_name
+						),
+						'||'
+					)}) {
 						alert('${_.join(
-				_.map(
-					loginParams,
-					item => item.cn_name || item.feild_name
-				),
-				'和'
-			)}不能为空')
+							_.map(
+								loginParams,
+								item => item.cn_name || item.feild_name
+							),
+							'和'
+						)}不能为空')
 						return
 					}
 
 					${`
-					G.http('${commonData.G.user.toLowerCase()}/login.do', {
+					G.http('${tabelObj.tableComment._name}/login.do', {
 			${_.map(
 				loginParams,
 				item => `

@@ -1,19 +1,13 @@
 module.exports = {
 	writeToFile(line, isReWrite) {
 		let fileName =
-			config.generateDirs.html + 'index.' + config.html.file_suffix;
-		file_utils.writeLineToFile(line, fileName, isReWrite);
+			config.generateDirs.html + 'index.' + config.html.file_suffix
+		file_utils.writeLineToFile(line, fileName, isReWrite)
 	},
 	writeToFiles(commonData) {
-		console.log(clc.blue('start genetating web index html template....'));
-		let list_leftMenu = JSON.stringify(_.map(commonData.tablesDesc, (val, key) => {
-			let obj = {}
-			obj.name = val.tableComment.cn_name || key
-			obj.href = key.toLowerCase() + '.' + config.html.file_suffix
-			return obj
-		}))
-		debugger
-		this.writeToFile(`
+		console.log(clc.blue('start genetating web index html template....'))
+		this.writeToFile(
+			`
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,11 +22,11 @@ module.exports = {
 
 <body>
 	<div id="app">
-		
+
 		<g-modal :name="'add'" ref="addModel">
 			Test
 		</g-modal>
-	
+
 		<g-toast ref="toast"></g-toast>
 		<g-header></g-header>
 		<div class="index-content">
@@ -121,9 +115,17 @@ module.exports = {
 		el: '#app',
 		data: {
 			message: 'Hello Vue!',
-			list_leftMenu:${list_leftMenu}
+			list_leftMenu:[]
+		},
+		mounted(){
+			this.getMenus()
 		},
 		methods: {
+			getMenus(){
+				G.http('json/menu.json').then(resp=>{
+					this.list_leftMenu = resp
+				})
+			},
 			showAddModel() {
 				this.$refs.addModel.show()
 			},
@@ -138,6 +140,8 @@ module.exports = {
 </script>
 
 </html>
-		`, true);
+		`,
+			true
+		)
 	}
-};
+}

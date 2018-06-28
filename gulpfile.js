@@ -12,15 +12,14 @@ gulp.task('browser-sync', function() {
 	})
 })
 function compileSass() {
-	gulp
-		.src('src/genetation/html-template/0/src/scss/*.scss')
+	gulp.src('src/genetation/html-template/0/src/scss/*.scss')
 		.pipe(sass().on('error', sass.logError))
 		.pipe(gulp.dest('generate-output/html/css'))
 }
 gulp.task('compile', function() {
 	shelljs.exec('cnpm start')
 	compileSass()
-	var watcher = gulp.watch('src/genetation/**')
+	var watcher = gulp.watch('src/genetation/**/*.!(json)')
 	watcher.on('change', function(event) {
 		console.log('ReCompiled Temaplate....')
 		shelljs.exec('cnpm start')

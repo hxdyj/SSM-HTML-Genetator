@@ -1,20 +1,24 @@
 module.exports = {
-    writeToFile(name, line, isReWrite) {
-        let fileName =
-            config.generateDirs.html + `${name}.` + config.html.file_suffix;
-        file_utils.writeLineToFile(line, fileName, isReWrite);
-    },
-    writeToFiles(commonData) {
-        console.log(clc.blue('start genetating web module html template....'));
-        let list_leftMenu = JSON.stringify(_.map(commonData.tablesDesc, (val, key) => {
-            let obj = {}
-            obj.name = val.tableComment.cn_name || key
-            obj.href = key.toLowerCase() + '.' + config.html.file_suffix
-            return obj
-        }))
-        debugger
-        _.forEach(commonData.tablesDesc, (value, key, map) => {
-            this.writeToFile(key.toLowerCase(), `
+	writeToFile(name, line, isReWrite) {
+		let fileName =
+			config.generateDirs.html + `${name}.` + config.html.file_suffix
+		file_utils.writeLineToFile(line, fileName, isReWrite)
+	},
+	writeToFiles(commonData) {
+		console.log(clc.blue('start genetating web module html template....'))
+		let list_leftMenu = JSON.stringify(
+			_.map(commonData.tablesDesc, (val, key) => {
+				let obj = {}
+				obj.name = val.tableComment.cn_name || key
+				obj.href = key.toLowerCase() + '.' + config.html.file_suffix
+				return obj
+			})
+		)
+
+		_.forEach(commonData.tablesDesc, (value, key, map) => {
+			this.writeToFile(
+				key.toLowerCase(),
+				`
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,10 +40,12 @@ module.exports = {
         <g-header></g-header>
         <div class="index-content">
             <div class="index-content-left">
-                <g-left-menu :list="list_leftMenu" :active="'${value.tableComment.cn_name || key}'"></g-left-menu>
+                <g-left-menu :list="list_leftMenu" :active="'${value
+					.tableComment.cn_name || key}'"></g-left-menu>
             </div>
             <div class="index-content-right">
-                <g-breadcrumb :two="'${value.tableComment.cn_name || key.toLowerCase()}'"></g-breadcrumb>
+                <g-breadcrumb :two="'${value.tableComment.cn_name ||
+					key.toLowerCase()}'"></g-breadcrumb>
                 <div class="table-contain">
                     <div class="g-table">
                         <div class="table-all">
@@ -136,9 +142,10 @@ module.exports = {
     })
 </script>
 
-</html>            
-            `, true)
-        });
-
-    }
-};
+</html>
+            `,
+				true
+			)
+		})
+	}
+}
