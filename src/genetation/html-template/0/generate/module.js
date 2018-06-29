@@ -14,8 +14,43 @@ module.exports = {
 				return obj
 			})
 		)
-
 		_.forEach(commonData.tablesDesc, (value, key, map) => {
+			//获取可以在table展示的字段
+			let showFeild = _.filter(
+				[...value._commentMap.values()],
+				item =>
+					!(
+						item.front_not_show &&
+						_.includes(item.front_not_show, 'table')
+					)
+			)
+
+			let tableThs = _.join(
+				_.map(
+					showFeild,
+					item => `
+\t\t\t\t\t\t\t\t\t\t\t<th>${item.cn_name ||
+						G.util.firstWordUpper(item.feild_name)}</th>`
+				),
+				''
+			)
+			tableThs = '\t\t\t\t\t\t\t\t\t\t\t<th>编号</th>' + tableThs
+
+			let tableTds = _.join(
+				_.map(
+					showFeild,
+					item => `
+\t\t\t\t\t\t\t\t\t\t\t<td>{{item.${item.feild_name}}}</td>`
+				),
+				''
+			)
+			tableTds = '\t\t\t\t\t\t\t\t\t\t\t<td>{{$index}}</td>' + tableTds
+			/*
+				<td>John</td>
+				<td>Approved</td>
+				<td>None</td>
+
+			*/
 			this.writeToFile(
 				key.toLowerCase(),
 				`
@@ -63,40 +98,33 @@ module.exports = {
                                     </div>
                                 </div>
                             </div>
-                            <div class="ui bottom attached segment">
-                                <table class="ui very basic table">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Notes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>John</td>
-                                            <td>Approved</td>
-                                            <td>None</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jamie</td>
-                                            <td>Approved</td>
-                                            <td>Requires call</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jill</td>
-                                            <td>Denied</td>
-                                            <td>None</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+							<div class="ui bottom attached segment">
+								<div v-show="list.list.length!=0">
+									<table class="ui very basic table">
+										<thead>
+											<tr>
+												${tableThs}
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(item,$index) in list.list">
+												${tableTds}
+											</tr>
+
+										</tbody>
+									</table>
+								</div>
+								<div v-show="list.list.length==0" style="display:flex;justify-content:center;color:#5171F9">
+									<i class="info circle icon"></i>暂无数据
+								</div>
+
 
                             </div>
                             <div class="table-page">
                                 <div class="ui basic icon buttons">
                                     <button class="ui button">首页</button>
                                     <button class="ui button">上一页</button>
-                                    <button class="ui button" disable>0/0</button>
+                                    <button class="ui button" disable>{{list.lastPage==0?0:page+1}}/{{list.lastPage}}</button>
                                     <button class="ui button">下一页</button>
                                     <button class="ui button">尾页</button>
                                 </div>
@@ -126,9 +154,30 @@ module.exports = {
         el: '#app',
         data: {
             message: 'Hello Vue!',
-            list_leftMenu:${list_leftMenu}
-        },
+			list_leftMenu:[],
+			page:0,
+			list:{
+				list:[]
+			},
+		},
+		mounted(){
+			this.getMenus()
+			this.getModuleAll()
+		},
         methods: {
+			getMenus(){
+				G.http('json/menu.json').then(resp=>{
+					this.list_leftMenu = resp
+				})
+			},
+			getModuleAll(){
+				G.http('${value.tableComment._name}/search.do',{page:this.page}).then(resp=>{
+					this.list = resp.data
+					console.log('%c%s','color:#00A29A;font-weight:600','${
+						value.tableComment._name
+					}--LIST:',this.list)
+				})
+			},
             showAddModel() {
                 this.$refs.addModel.show()
             },

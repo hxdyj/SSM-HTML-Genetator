@@ -32,17 +32,18 @@ function firstWordUpper(word) {
 // Integer-->and[filedName]EqualTo([filedName]);  String-->and[filedName]Like("%"+[filedName]+"%");
 function fieldTypeGetSearchType(val) {
 	if (val.java_type == 'Integer') {
-		return `c.and${firstWordUpper(val.feild_name)}EqualTo(${firstWordUpper(
-			val.feild_name
-		)});
+		return `
+		if(${val.feild_name}!=null){
+			c.and${firstWordUpper(val.feild_name)}EqualTo(${val.feild_name});
+		}
 
 		`
 	}
 	if (val.java_type == 'String') {
-		return `c.and${firstWordUpper(val.feild_name)}Like("%"+${firstWordUpper(
-			val.feild_name
-		)}+"%");
-
+		return `
+		if(${val.feild_name}!=null){
+			c.and${firstWordUpper(val.feild_name)}Like("%"+${val.feild_name}+"%");
+		}
 		`
 	}
 
@@ -90,10 +91,17 @@ function fieldsCommentMapToMethodContent(
 			if (method == RULE.field.not_in_param.search) {
 				lineStr = fieldTypeGetSearchType(val)
 			} else {
-				lineStr = `
+				if (val.java_type != 'upload') {
+					lineStr = `
 		if(${key}!=null){
 			o.set${firstWordUpper(key)}(${key});
 		}`
+				} else {
+					lineStr = `
+		if(${key}!=null){
+			o.set${firstWordUpper(key)}(path);
+		}`
+				}
 			}
 			middle += lineStr
 		}
@@ -149,7 +157,11 @@ module.exports = {
 			/* -------------------------------------------------PACKAGE--------------------------------------------------------- */
 
 			//write globle and package name
-			this.writeToFile(index, `package ${config.ssm.packegeName};`, true)
+			this.writeToFile(
+				index,
+				`package ${config.ssm.packegeName}.controller;`,
+				true
+			)
 			this.writeToFile(
 				index,
 				`
@@ -161,9 +173,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import com.cultral.util.UploadUtils;
-import com.system.util.Result;
-import com.system.util.Util;
+import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import java.util.List;
+
 			`
 			)
 			/* -------------------------------------------------MODEL & EXAMPLE--------------------------------------------------------- */
@@ -172,10 +186,13 @@ import com.system.util.Util;
 			this.writeToFile(
 				index,
 				`
-import com.cultral.mapper.${index}Mapper;
-import com.cultral.model.${index};
-import com.cultral.model.${index}Example;
-import com.cultral.model.${index}Example.Criteria;
+import ${config.ssm.packegeName}.util.UploadUtils;
+import ${config.ssm.packegeName}.util.Result;
+import ${config.ssm.packegeName}.util.Util;
+import ${config.ssm.packegeName}.mapper.${index}Mapper;
+import ${config.ssm.packegeName}.model.${index};
+import ${config.ssm.packegeName}.model.${index}Example;
+import ${config.ssm.packegeName}.model.${index}Example.Criteria;
 			`
 			)
 			/* -------------------------------------------------TOP--------------------------------------------------------- */

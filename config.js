@@ -13,7 +13,7 @@ module.exports = {
 		html: '/html/'
 	},
 	ssm: {
-		packegeName: 'com.cultral.controller'
+		packegeName: 'com.system'
 	},
 	html: {
 		html_title: 'XX系统',

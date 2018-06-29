@@ -29,7 +29,7 @@ var G = {
 						alert('请求数据发生错误')
 					})
 			} else {
-				fetch('http://localhost:8080/TbGroup/' + url, getForm(data))
+				fetch('http://localhost:8080/System/' + url, getForm(data))
 					.then(resp => {
 						if (isText) {
 							resp.text().then(data => {
