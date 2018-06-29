@@ -22,7 +22,7 @@ module.exports = {
 
 <body>
 	<div id="app">
-
+		<g-loading ref="loading"></g-loading>
 		<g-modal :name="'add'" ref="addModel">
 			Test
 		</g-modal>
@@ -57,6 +57,8 @@ module.exports = {
 <script src="./components/leftMenu.js"></script>
 <script src="./components/breadcrumb.js"></script>
 <script src="./components/toast.js"></script>
+<script src="./components/loading.js"></script>
+
 <script>
 	var app = new Vue({
 		el: '#app',

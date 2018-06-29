@@ -67,7 +67,8 @@ module.exports = {
 </head>
 
 <body>
-    <div id="app">
+	<div id="app">
+		<g-loading ref="loading"></g-loading>
         <g-modal :name="'add'" ref="addModel">
             TEST111111
         </g-modal>
@@ -149,6 +150,7 @@ module.exports = {
 <script src="./components/leftMenu.js"></script>
 <script src="./components/breadcrumb.js"></script>
 <script src="./components/toast.js"></script>
+<script src="./components/loading.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -161,17 +163,22 @@ module.exports = {
 			},
 		},
 		mounted(){
-			this.getMenus()
-			this.getModuleAll()
+			this.$refs.loading.loading([
+				this.getMenus(),
+				this.getModuleAll(),
+			])
+
 		},
         methods: {
 			getMenus(){
-				G.http('json/menu.json').then(resp=>{
+				return G.http('json/menu.json').then(resp=>{
 					this.list_leftMenu = resp
 				})
 			},
 			getModuleAll(){
-				G.http('${value.tableComment._name}/search.do',{page:this.page}).then(resp=>{
+				return G.http('${
+					value.tableComment._name
+				}/search.do',{page:this.page}).then(resp=>{
 					this.list = resp.data
 					console.log('%c%s','color:#00A29A;font-weight:600','${
 						value.tableComment._name
