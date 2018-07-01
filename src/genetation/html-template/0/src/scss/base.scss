@@ -1,6 +1,8 @@
 $headerH: 4rem;
 $leftMenuWidth: 16.3rem;
 //layout布局样式
+
+
 #app {
 	.index-content {
 		display: flex;
@@ -90,7 +92,8 @@ $leftMenuWidth: 16.3rem;
 			height: 10rem;
 			position: relative;
 			.bg {
-				background: url('../img/starry_sky.jpg');
+				// background: url('../img/starry_sky.jpg');
+				background: url('../img/1.jpg');
 				background-size: cover;
 				filter: blur(0.6rem);
 				height: 100%;
@@ -175,6 +178,17 @@ $leftMenuWidth: 16.3rem;
 			justify-content: center;
 		}
 	}
+	.icon{
+		cursor: pointer;
+		color: #4987CC;
+		&:hover{
+			color: #515EF9;
+		}
+	}
+}
+
+.modal.ui{
+	padding: 1rem;
 }
 .g-toast {
 	position: fixed;

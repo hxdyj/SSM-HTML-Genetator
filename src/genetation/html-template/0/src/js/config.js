@@ -3,13 +3,14 @@ function getForm(obj) {
 	_.forEach(obj, (val, key) => {
 		result.append(key, val)
 	})
+
 	return {
 		method: 'POST',
 		body: result
 	}
 }
 var G = {
-	http: function(url, data, isText = false) {
+	http: function (url, data, isText = false) {
 		return new Promise((res, rej) => {
 			if (arguments.length == 1) {
 				fetch('http://localhost:3000/' + url)
@@ -25,7 +26,7 @@ var G = {
 						}
 					})
 					.catch(err => {
-						rej()
+						rej(err)
 						alert('请求数据发生错误')
 					})
 			} else {
@@ -42,7 +43,7 @@ var G = {
 						}
 					})
 					.catch(err => {
-						rej()
+						rej(err)
 						alert('请求数据发生错误')
 					})
 			}

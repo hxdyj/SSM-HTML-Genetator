@@ -1,18 +1,18 @@
 Vue.component('g-loading', {
 	props: {},
-	data: function() {
+	data: function () {
 		return {
 			isShow: false
 		}
 	},
-	mounted: function() {},
+	mounted: function () { },
 	methods: {
 		loading(promiseArr) {
 			this.isShow = true
-			if (!promiseArr instanceof Array) {
+			if (!(promiseArr instanceof Array)) {
 				promiseArr = [promiseArr]
 			}
-			Promise.all(promiseArr).then(() => {
+			return Promise.all(promiseArr).then(() => {
 				setTimeout(() => {
 					this.isShow = false
 				}, 500)

@@ -8,12 +8,12 @@ Vue.component('g-header', {
 			default: false
 		}
 	},
-	data: function() {
+	data: function () {
 		return {
 			searchStr: ''
 		}
 	},
-	mounted: function() {
+	mounted: function () {
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
@@ -27,10 +27,10 @@ Vue.component('g-header', {
 	template: `
 <div class="ui top attached teal inverted menu g-header">
 	<div class="item">
-		<img src="../img/logo.png" @click="()=>{location.href='index.html'}">
+		<img src="../img/300.jpg" @click="()=>{location.href='index.html'}">
 	</div>
 	<div class="item">
-		<div class="ui medium header g-header-title">Medium Header</div>
+		<div class="ui medium header g-header-title">人才市场档案管理系统</div>
 	</div>
 	<div class="ui left aligned category search item g-header-search" v-show="showSearch">
 		<div class="ui transparent icon input">

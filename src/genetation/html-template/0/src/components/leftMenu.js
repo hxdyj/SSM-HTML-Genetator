@@ -15,9 +15,7 @@ Vue.component('g-left-menu', {
 		<div class="introduce">
 			<div class="bg"></div>
 			<div class="content">
-				梦想开始的地方<br>
-
-				Let's Go
+				任劳任怨<br> 尽职尽责<br> 精益求精<br>
 			</div>
 		</div>
 		<div class="items">
