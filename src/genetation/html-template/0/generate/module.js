@@ -80,7 +80,7 @@ module.exports = {
 							return `
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
-					<g-upload :id="'${key}-g-upload-${item.feild_name}'"></g-upload>
+					<g-upload ref="${key + '_g_upload_ref_' + item.feild_name}" :id="'${key}-g-upload-${item.feild_name}'"></g-upload>
 				</div>
 
 							`
@@ -90,8 +90,8 @@ module.exports = {
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
 					<input type="text" v-model="addModel.${
-						item.feild_name
-					}" placeholder="${item.cn_name || item.feild_name}">
+							item.feild_name
+							}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
 					}
 				}),
@@ -133,7 +133,7 @@ module.exports = {
 					<label>${item.cn_name || item.feild_name}</label>
 					<input type="text" v-model="editModel.${
 						item.feild_name
-					}" placeholder="${item.cn_name || item.feild_name}">
+						}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
 				),
 				''
@@ -181,7 +181,7 @@ ${file_utils.fileTypeHtml()}
             </div>
             <div class="index-content-right">
                 <g-breadcrumb :two="'${value.tableComment.cn_name ||
-					key.toLowerCase()}'"></g-breadcrumb>
+				key.toLowerCase()}'"></g-breadcrumb>
                 <div class="table-contain">
                     <div class="g-table">
                         <div class="table-all">
@@ -303,13 +303,13 @@ ${file_utils.fileTypeHtml()}
 					}
 					this.list = resp.data
 					console.log('%c%s','color:#00A29A;font-weight:600','${
-						value.tableComment._name
-					}--LIST:',this.list)
+				value.tableComment._name
+				}--LIST:',this.list)
 				})
 			},
 			del(item){
 				this.$refs.loading.loading(G.http('${
-					value.tableComment._name
+				value.tableComment._name
 				}/del.do',{id:item.id}).then(resp=>{
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('删除成功')
@@ -320,7 +320,7 @@ ${file_utils.fileTypeHtml()}
 			},
 			add(){
 				this.$refs.loading.loading(G.http('${
-					value.tableComment._name
+				value.tableComment._name
 				}/add.do',this.addModel).then(resp=>{
 					this.$refs.addModel.hide()
 					this.addModel = {
@@ -336,7 +336,7 @@ ${file_utils.fileTypeHtml()}
 			},
 			edit(){
 				this.$refs.loading.loading(G.http('${
-					value.tableComment._name
+				value.tableComment._name
 				}/edit.do',this.editModel).then(resp=>{
 					this.$refs.editModel.hide()
 					this.editModel = {
