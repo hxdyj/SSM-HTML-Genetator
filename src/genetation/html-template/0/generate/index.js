@@ -8,6 +8,7 @@ module.exports = {
 		console.log(clc.blue('start genetating web index html template....'))
 		this.writeToFile(
 			`
+${file_utils.fileTypeHtml()}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,10 +24,6 @@ module.exports = {
 <body>
 	<div id="app">
 		<g-loading ref="loading"></g-loading>
-		<g-modal :name="'add'" ref="addModel">
-			Test
-		</g-modal>
-
 		<g-toast ref="toast"></g-toast>
 		<g-header></g-header>
 		<div class="index-content">
@@ -58,6 +55,7 @@ module.exports = {
 <script src="./components/breadcrumb.js"></script>
 <script src="./components/toast.js"></script>
 <script src="./components/loading.js"></script>
+<script src="./components/upload.js"></script>
 
 <script>
 	var app = new Vue({

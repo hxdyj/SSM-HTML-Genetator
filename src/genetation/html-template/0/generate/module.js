@@ -51,7 +51,8 @@ module.exports = {
 
 			//添加编号列
 			tableTds = '\t\t\t\t\t\t\t\t\t\t\t<td>{{$index}}</td>' + tableTds
-			tableTds += '\t\t\t\t\t\t\t\t\t\t\t<td><i @click="showEditModel(item)" class="edit alternate icon"></i><i @click="del(item)" class="trash alternate outline icon"></i></td>'
+			tableTds +=
+				'\t\t\t\t\t\t\t\t\t\t\t<td><i @click="showEditModel(item)" class="edit alternate icon"></i><i @click="del(item)" class="trash alternate outline icon"></i></td>'
 
 			//过滤添加弹框的字段
 			let addModal_showFeild = _.filter(
@@ -72,14 +73,28 @@ module.exports = {
 				''
 			)
 			let addModal_inputHtml = _.join(
-				_.map(
-					addModal_showFeild,
-					item => `
+				_.map(addModal_showFeild, item => {
+					debugger
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
-					<input type="text" v-model="addModel.${item.feild_name}" placeholder="${item.cn_name || item.feild_name}">
+					<g-upload :id="'${key}-g-upload-${item.feild_name}'"></g-upload>
+				</div>
+
+							`
+						}
+					} else {
+						return `
+				<div class="field">
+					<label>${item.cn_name || item.feild_name}</label>
+					<input type="text" v-model="addModel.${
+						item.feild_name
+					}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
-				),
+					}
+				}),
 				''
 			)
 
@@ -116,7 +131,9 @@ module.exports = {
 					item => `
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
-					<input type="text" v-model="editModel.${item.feild_name}" placeholder="${item.cn_name || item.feild_name}">
+					<input type="text" v-model="editModel.${
+						item.feild_name
+					}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
 				),
 				''
@@ -125,6 +142,7 @@ module.exports = {
 			this.writeToFile(
 				key.toLowerCase(),
 				`
+${file_utils.fileTypeHtml()}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -163,7 +181,7 @@ module.exports = {
             </div>
             <div class="index-content-right">
                 <g-breadcrumb :two="'${value.tableComment.cn_name ||
-				key.toLowerCase()}'"></g-breadcrumb>
+					key.toLowerCase()}'"></g-breadcrumb>
                 <div class="table-contain">
                     <div class="g-table">
                         <div class="table-all">
@@ -233,6 +251,7 @@ module.exports = {
 <script src="./components/breadcrumb.js"></script>
 <script src="./components/toast.js"></script>
 <script src="./components/loading.js"></script>
+<script src="./components/upload.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -276,9 +295,7 @@ module.exports = {
 					params['page'] = 1
 					params['id'] = this.seachStr
 				}
-				return G.http('${
-				value.tableComment._name
-				}/search.do',params).then(resp=>{
+				return G.http('${value.tableComment._name}/search.do',params).then(resp=>{
 					if(resp.data.lastPage<this.page&&resp.data.list.length==0&&this.page!=1){
 						this.page--
 						this.getModulePage()
@@ -286,12 +303,14 @@ module.exports = {
 					}
 					this.list = resp.data
 					console.log('%c%s','color:#00A29A;font-weight:600','${
-				value.tableComment._name
-				}--LIST:',this.list)
+						value.tableComment._name
+					}--LIST:',this.list)
 				})
 			},
 			del(item){
-				this.$refs.loading.loading(G.http('${value.tableComment._name}/del.do',{id:item.id}).then(resp=>{
+				this.$refs.loading.loading(G.http('${
+					value.tableComment._name
+				}/del.do',{id:item.id}).then(resp=>{
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('删除成功')
 					})
@@ -300,7 +319,9 @@ module.exports = {
 				}))
 			},
 			add(){
-				this.$refs.loading.loading(G.http('${value.tableComment._name}/add.do',this.addModel).then(resp=>{
+				this.$refs.loading.loading(G.http('${
+					value.tableComment._name
+				}/add.do',this.addModel).then(resp=>{
 					this.$refs.addModel.hide()
 					this.addModel = {
 						${addModal_vueModel}
@@ -308,24 +329,26 @@ module.exports = {
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('添加成功')
 					})
-					
+
 				}).catch(err=>{
 					this.$refs.toast.show('添加失败')
 				}))
 			},
 			edit(){
-				this.$refs.loading.loading(G.http('${value.tableComment._name}/edit.do',this.editModel).then(resp=>{
+				this.$refs.loading.loading(G.http('${
+					value.tableComment._name
+				}/edit.do',this.editModel).then(resp=>{
 					this.$refs.editModel.hide()
 					this.editModel = {
 						${editModal_vueModel}
 						id:''
 					}
-					
+
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('修改成功')
 					})
-					
-					
+
+
 				}).catch(err=>{
 					this.$refs.toast.show('修改失败')
 				}))
@@ -344,16 +367,16 @@ module.exports = {
 				if(page<1||(page==1 && this.page==1)){
 					this.$refs.toast.show('已到首页')
 				}
-				
+
 				if(page>this.list.lastPage||(page==this.list.lastPage && this.page==this.list.lastPage)){
 					this.$refs.toast.show('已到尾页')
 				}
-		
+
 				if(page>=1&&page<=this.list.lastPage){
 					this.page=page
 					this.$refs.loading.loading(this.getModulePage())
 				}
-				
+
 			},
             toast() {
                 this.$refs.toast.show('Hahaha')

@@ -35,6 +35,7 @@ module.exports = {
 			this.writeToFile(
 				loginTableObj.tableComment._name,
 				`
+${file_utils.fileTypeHtml()}
 <!DOCTYPE html>
 <html>
 
@@ -142,7 +143,9 @@ body>.grid {
 
 		<div class="ui message">
 			没有账号?
-			<a href="${loginTableObj.tableComment._name}_register.html">注册</a>
+			<a href="${loginTableObj.tableComment._name}_register.${
+					config.html.file_suffix
+				}">注册</a>
 		</div>
 	</div>
 </div>
@@ -216,7 +219,7 @@ var app = new Vue({
 					)}错误")
 				} else {
 					localStorage.setItem('userInfo', JSON.stringify(data[0]))
-					location.href = 'index.html'
+					location.href = 'index.${config.html.file_suffix}'
 				}
 			})
 		}`}

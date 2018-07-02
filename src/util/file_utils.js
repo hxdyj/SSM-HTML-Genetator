@@ -13,6 +13,14 @@ module.exports = {
 			})
 		}
 	},
+	fileTypeHtml() {
+		//判断是不是jsp
+		if (config.html.file_suffix == 'jsp') {
+			return '<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>'
+		} else {
+			return ''
+		}
+	},
 	readFile(name) {
 		return fs.readFileSync(name, 'utf-8')
 	},

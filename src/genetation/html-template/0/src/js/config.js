@@ -10,7 +10,7 @@ function getForm(obj) {
 	}
 }
 var G = {
-	http: function (url, data, isText = false) {
+	http: function(url, data, isText = false) {
 		return new Promise((res, rej) => {
 			if (arguments.length == 1) {
 				fetch('http://localhost:3000/' + url)

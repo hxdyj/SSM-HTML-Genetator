@@ -32,6 +32,7 @@ module.exports = {
 			this.writeToFile(
 				registerTableObj.tableComment._name,
 				`
+${file_utils.fileTypeHtml()}
 <!DOCTYPE html>
 <html>
 
@@ -123,7 +124,9 @@ body>.grid {
 
 		<div class="ui message">
 			已有账号?
-			<a href="${registerTableObj.tableComment._name}_login.html">登录</a>
+			<a href="${registerTableObj.tableComment._name}_login.${
+					config.html.file_suffix
+				}">登录</a>
 		</div>
 	</div>
 </div>
@@ -181,7 +184,9 @@ var app = new Vue({
 			},true).then(data => {
 				if (data==1) {
 					alert("注册成功")
-					location.href = '${registerTableObj.tableComment._name}_login.html'
+					location.href = '${registerTableObj.tableComment._name}_login.${
+				config.html.file_suffix
+			}'
 				} else {
 					alert("注册失败，用户已存在")
 				}

@@ -2,7 +2,6 @@ $headerH: 4rem;
 $leftMenuWidth: 16.3rem;
 //layout布局样式
 
-
 #app {
 	.index-content {
 		display: flex;
@@ -178,16 +177,16 @@ $leftMenuWidth: 16.3rem;
 			justify-content: center;
 		}
 	}
-	.icon{
+	.icon {
 		cursor: pointer;
-		color: #4987CC;
-		&:hover{
-			color: #515EF9;
+		color: #4987cc;
+		&:hover {
+			color: #515ef9;
 		}
 	}
 }
 
-.modal.ui{
+.modal.ui {
 	padding: 1rem;
 }
 .g-toast {
@@ -215,4 +214,32 @@ $leftMenuWidth: 16.3rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.g-upload {
+	width: 100%;
+	height: 8rem;
+	border: 0.1rem dashed #ccc;
+	border-radius: 0.8rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	.upload {
+		color: #497ec4;
+		font-size: 3rem;
+	}
+
+	.upload-input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		cursor: pointer;
+	}
 }
