@@ -25,16 +25,12 @@ function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 	}`
 }
 
-// tid--->Tid   while o.setFile(path) use this function.
-function firstWordUpper(word) {
-	return word.substring(0, 1).toUpperCase() + word.substring(1, word.length)
-}
 // Integer-->and[filedName]EqualTo([filedName]);  String-->and[filedName]Like("%"+[filedName]+"%");
 function fieldTypeGetSearchType(val) {
 	if (val.java_type == 'Integer') {
 		return `
 		if(${val.feild_name}!=null){
-			c.and${firstWordUpper(val.feild_name)}EqualTo(${val.feild_name});
+			c.and${G.util.firstWordUpper(val.feild_name)}EqualTo(${val.feild_name});
 		}
 
 		`
@@ -42,7 +38,7 @@ function fieldTypeGetSearchType(val) {
 	if (val.java_type == 'String') {
 		return `
 		if(${val.feild_name}!=null){
-			c.and${firstWordUpper(val.feild_name)}Like("%"+${val.feild_name}+"%");
+			c.and${G.util.firstWordUpper(val.feild_name)}Like("%"+${val.feild_name}+"%");
 		}
 		`
 	}
@@ -94,12 +90,12 @@ function fieldsCommentMapToMethodContent(
 				if (val.java_type != 'upload') {
 					lineStr = `
 		if(${key}!=null){
-			o.set${firstWordUpper(key)}(${key});
+			o.set${G.util.firstWordUpper(key)}(${key});
 		}`
 				} else {
 					lineStr = `
 		if(${key}!=null){
-			o.set${firstWordUpper(key)}(path);
+			o.set${G.util.firstWordUpper(key)}(path);
 		}`
 				}
 			}
@@ -318,9 +314,9 @@ public class ${index}Controller {
 					_.map(
 						loginParams,
 						item =>
-							`c.and${firstWordUpper(item.feild_name)}EqualTo(${
+							`c.and${G.util.firstWordUpper(
 								item.feild_name
-							});`
+							)}EqualTo(${item.feild_name});`
 					),
 					'\n\t\t'
 				)
@@ -363,7 +359,7 @@ public class ${index}Controller {
 					_.map(
 						registerParams,
 						item =>
-							`o.set${firstWordUpper(item.feild_name)}(${
+							`o.set${G.util.firstWordUpper(item.feild_name)}(${
 								item.feild_name
 							});`
 					),
@@ -377,7 +373,7 @@ public class ${index}Controller {
 	public String register(${funcParams}){
 		${index}Example e = new ${index}Example();
 		Criteria c = e.createCriteria();
-		c.and${firstWordUpper(registerUniqueObj.feild_name)}EqualTo(${
+		c.and${G.util.firstWordUpper(registerUniqueObj.feild_name)}EqualTo(${
 						registerUniqueObj.feild_name
 					});
 		List<${index}> list = ${mapper}.selectByExample(e);

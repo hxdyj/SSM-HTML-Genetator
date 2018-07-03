@@ -1,20 +1,3 @@
-function getRegisterTables(commonData) {
-	//获取在注册表单显示的字段
-	let func = _.filter(
-		commonData.tablesDesc,
-		item =>
-			item.tableComment.func &&
-			_.includes(item.tableComment.func, 'register')
-	)
-	return func
-}
-function getRegisterFormParams(table) {
-	let params = new Map(
-		[...table._commentMap].filter(([k, v]) => v.register_form)
-	)
-	return [...params.values()]
-}
-
 module.exports = {
 	writeToFile(name, line, isReWrite) {
 		let fileName =
@@ -25,10 +8,18 @@ module.exports = {
 	},
 	writeToFiles(commonData) {
 		//获取所有有注册的表
-		let register_tables = getRegisterTables(commonData)
+		let register_tables = G.util.getHasSomeCommentTable(
+			commonData,
+			'func',
+			'register'
+		)
 		_.forEach(register_tables, registerTableObj => {
 			/* -------  Start ------- */
-			let registerParams = getRegisterFormParams(registerTableObj)
+			let registerParams = G.util.getTableHasSomeCommentFeild(
+				registerTableObj,
+				'register_form'
+			)
+
 			this.writeToFile(
 				registerTableObj.tableComment._name,
 				`

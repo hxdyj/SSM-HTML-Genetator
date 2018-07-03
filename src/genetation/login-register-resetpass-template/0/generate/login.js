@@ -1,21 +1,3 @@
-function getLoginTables(commonData) {
-	//获取在登录表单显示的字段
-	let func = _.filter(
-		commonData.tablesDesc,
-		item =>
-			item.tableComment.func &&
-			_.includes(item.tableComment.func, 'login')
-	)
-	return func
-}
-function getLoginFormParams(table) {
-	let params = new Map(
-		[...table._commentMap].filter(([k, v]) => v.login_form)
-	)
-	let isVerify = _.includes(table.tableComment.func, 'loginVerify')
-	return [[...params.values()], isVerify]
-}
-
 module.exports = {
 	writeToFile(name, line, isReWrite) {
 		let fileName =
@@ -26,12 +8,22 @@ module.exports = {
 	},
 	writeToFiles(commonData) {
 		//获取所有有登录的表
-		let login_tables = getLoginTables(commonData)
+		let login_tables = G.util.getHasSomeCommentTable(
+			commonData,
+			'func',
+			'login'
+		)
 		_.forEach(login_tables, loginTableObj => {
 			/* -------  Start ------- */
-			let tmpLoginFormparams = getLoginFormParams(loginTableObj)
-			let loginParams = tmpLoginFormparams[0]
-			let isVerify = tmpLoginFormparams[1]
+			let loginParams = G.util.getTableHasSomeCommentFeild(
+				loginTableObj,
+				'login_form'
+			)
+			let isVerify = G.util.getTableFeildHasSomeVal(
+				loginTableObj,
+				'func',
+				'loginVerify'
+			)
 			this.writeToFile(
 				loginTableObj.tableComment._name,
 				`
