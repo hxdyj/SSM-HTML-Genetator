@@ -1,11 +1,19 @@
 module.exports = {
-	writeToFile(line, isReWrite) {
+	writeToFile(name, line, isReWrite) {
 		let fileName =
-			config.generateDirs.html_pages + 'index.' + config.html.file_suffix
+			config.generateDirs.html_pages +
+			`${name}_index.` +
+			config.html.file_suffix
 		file_utils.writeLineToFile(line, fileName, isReWrite)
 	},
 	writeToFiles(commonData) {
 		console.log(clc.blue('start genetating web index html template....'))
+		//获取所有有登录的表 TODO:写多个index
+		let login_tables = G.util.getHasSomeCommentTable(
+			commonData,
+			'func',
+			'login'
+		)
 		this.writeToFile(
 			`
 ${file_utils.fileTypeHtml()}
