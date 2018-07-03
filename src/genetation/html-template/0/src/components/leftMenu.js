@@ -4,10 +4,11 @@ Vue.component('g-left-menu', {
 		list: {
 			default: []
 		},
-		active: ''
+		active: '',
+		endName: '管理'
 	},
-	data: function () { },
-	mounted: function () { },
+	data: function() {},
+	mounted: function() {},
 	methods: {},
 	template: `
 <div class="g-left-menu">
@@ -20,9 +21,9 @@ Vue.component('g-left-menu', {
 		</div>
 		<div class="items">
 			<div class="item" :class="{'active':active==item.name}" v-for="item in list" @click="()=>{location.href=item.href}">
-				<i class="lock icon"></i>
+				<i class="icon" :class="item.icon"></i>
 				<span class="title">
-					{{item.name}}管理
+					{{item.name}}{{endName}}
 				</span>
 			</div>
 		</div>

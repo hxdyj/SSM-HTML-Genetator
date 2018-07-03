@@ -13,7 +13,7 @@ var G = {
 	http: function(url, data, isText = false) {
 		return new Promise((res, rej) => {
 			if (arguments.length == 1) {
-				fetch('http://localhost:3000/' + url)
+				fetch(GetVar.http.local + url)
 					.then(resp => {
 						if (isText) {
 							resp.text().then(data => {
@@ -30,7 +30,7 @@ var G = {
 						alert('请求数据发生错误')
 					})
 			} else {
-				fetch('http://localhost:8080/System/' + url, getForm(data))
+				fetch(GetVar.http.server + url, getForm(data))
 					.then(resp => {
 						if (isText) {
 							resp.text().then(data => {

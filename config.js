@@ -1,4 +1,5 @@
 module.exports = {
+	debug: true,
 	connect: {
 		host: 'wingblog.top',
 		user: 'tbarchives',
@@ -9,11 +10,13 @@ module.exports = {
 	serviceRequireBasePath: '../entity/',
 	outputDir: '/generate-output',
 	http: {
-		server: 'http://localhost:8080/System/'
+		server: 'http://localhost:8080/System/',
+		local: 'http://localhost:3000/'
 	},
 	generateDirs: {
 		ssm_controller: '/ssm_controller/',
-		html: '/html/'
+		html: '/html/',
+		html_pages: '/html/pages/'
 	},
 	ssm: {
 		packegeName: 'com.system'

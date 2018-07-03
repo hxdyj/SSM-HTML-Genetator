@@ -6,7 +6,7 @@ function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 	if (method == RULE.field.not_in_param.search) {
 		result += 'Integer page,Integer pageRow,'
 	}
-	commentMap.forEach(function (val, key) {
+	commentMap.forEach(function(val, key) {
 		//if this method not in val.not_in_param, don't append it.
 		//将not_in_param属性中不包含method的字段添加到对应的方法中
 		if (!_.includes(val.not_in_param, method)) {
@@ -22,7 +22,7 @@ function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 		isUpload
 			? ', HttpServletRequest request)throws IllegalStateException, IOException'
 			: ')'
-		}`
+	}`
 }
 
 // tid--->Tid   while o.setFile(path) use this function.
@@ -61,7 +61,7 @@ function fieldsCommentMapToMethodContent(
 		method == RULE.field.not_in_param.edit
 			? `${mapper}.selectByPrimaryKey(id)`
 			: `new ${tableName}()`
-		};
+	};
 	`
 	if (method == RULE.field.not_in_param.search) {
 		first = `
@@ -78,7 +78,7 @@ function fieldsCommentMapToMethodContent(
 	isUpload = false
 	uploadKey = null
 	let middle = ''
-	commentMap.forEach(function (val, key) {
+	commentMap.forEach(function(val, key) {
 		//if this method not in val.not_in_param, append it.
 		if (!_.includes(val.not_in_param, method)) {
 			let lineStr = ''
@@ -116,7 +116,7 @@ function fieldsCommentMapToMethodContent(
 	let footer = `
 		${mapper}.${
 		method == RULE.field.not_in_param.edit ? 'updateByPrimaryKey' : 'insert'
-		}(o);
+	}(o);
 
 		`
 
@@ -244,15 +244,15 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
 	public String add${fieldsCommentMapToJavaParamsStr(
-					val._commentMap,
-					RULE.field.not_in_param.add
-				)}{
+		val._commentMap,
+		RULE.field.not_in_param.add
+	)}{
 		${fieldsCommentMapToMethodContent(
-					val._commentMap,
-					RULE.field.not_in_param.add,
-					index,
-					mapper
-				)}
+			val._commentMap,
+			RULE.field.not_in_param.add,
+			index,
+			mapper
+		)}
 	}`
 			)
 
@@ -265,15 +265,15 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
 	public String edit${fieldsCommentMapToJavaParamsStr(
-					val._commentMap,
-					RULE.field.not_in_param.edit
-				)}{
+		val._commentMap,
+		RULE.field.not_in_param.edit
+	)}{
 		${fieldsCommentMapToMethodContent(
-					val._commentMap,
-					RULE.field.not_in_param.edit,
-					index,
-					mapper
-				)}
+			val._commentMap,
+			RULE.field.not_in_param.edit,
+			index,
+			mapper
+		)}
 	}
 			`
 			)
@@ -286,15 +286,15 @@ public class ${index}Controller {
 	@ResponseBody
 	@RequestMapping(value="search.do")
 	public String search${fieldsCommentMapToJavaParamsStr(
-					val._commentMap,
-					RULE.field.not_in_param.search
-				)}{
+		val._commentMap,
+		RULE.field.not_in_param.search
+	)}{
 		${fieldsCommentMapToMethodContent(
-					val._commentMap,
-					RULE.field.not_in_param.search,
-					index,
-					mapper
-				)}
+			val._commentMap,
+			RULE.field.not_in_param.search,
+			index,
+			mapper
+		)}
 	}
 `
 			)
@@ -319,7 +319,7 @@ public class ${index}Controller {
 						loginParams,
 						item =>
 							`c.and${firstWordUpper(item.feild_name)}EqualTo(${
-							item.feild_name
+								item.feild_name
 							});`
 					),
 					'\n\t\t'
@@ -347,7 +347,6 @@ public class ${index}Controller {
 				_.includes(val.tableComment.func, 'register')
 			) {
 				let registerParams = getFormParams(val, 'register_form')
-				val
 				let registerUniqueObj = _.filter(
 					registerParams,
 					item => item.login_id
@@ -365,7 +364,7 @@ public class ${index}Controller {
 						registerParams,
 						item =>
 							`o.set${firstWordUpper(item.feild_name)}(${
-							item.feild_name
+								item.feild_name
 							});`
 					),
 					'\n\t\t\t'
@@ -379,7 +378,7 @@ public class ${index}Controller {
 		${index}Example e = new ${index}Example();
 		Criteria c = e.createCriteria();
 		c.and${firstWordUpper(registerUniqueObj.feild_name)}EqualTo(${
-					registerUniqueObj.feild_name
+						registerUniqueObj.feild_name
 					});
 		List<${index}> list = ${mapper}.selectByExample(e);
 		if(list.isEmpty()){

@@ -18,7 +18,7 @@ function getRegisterFormParams(table) {
 module.exports = {
 	writeToFile(name, line, isReWrite) {
 		let fileName =
-			config.generateDirs.html +
+			config.generateDirs.html_pages +
 			`${name}_register.` +
 			config.html.file_suffix
 		file_utils.writeLineToFile(line, fileName, isReWrite)
@@ -44,13 +44,14 @@ ${file_utils.fileTypeHtml()}
 
 <!-- Site Properties -->
 <title>${config.html.html_title}</title>
-<link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
-<link rel="stylesheet" type="text/css" href="./css/login.css">
-<script src="./js/jquery.min.js"></script>
-<script src="./js/config.js"></script>
-<script src="./js/semantic.min.js"></script>
-<script src="./js/vue.min.js"></script>
-<script src="./js/lodash.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+<link rel="stylesheet" type="text/css" href="../css/login.css">
+<script src="../js/jquery.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/get.var.js"></script>
+<script src="../js/semantic.min.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/lodash.min.js"></script>
 
 <style type="text/css">
 body>.grid {

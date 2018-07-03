@@ -4,7 +4,7 @@ function copyDirToOutPutPath(dirs) {
 		shell.cp(
 			'-R',
 			__dirname + '/src/' + item,
-			config.basePath + config.outputDir + '/html/'
+			config.basePath + config.outputDir + config.generateDirs.html
 		)
 	})
 }
@@ -13,5 +13,6 @@ module.exports = commonData => {
 	require('./generate/index').writeToFiles(commonData)
 	require('./generate/module').writeToFiles(commonData)
 	require('./generate/menu.json').writeToFiles(commonData)
+	require('./generate/get.var').writeToFiles(commonData)
 	copyDirToOutPutPath(['components', 'css', 'img', 'js', 'json'])
 }

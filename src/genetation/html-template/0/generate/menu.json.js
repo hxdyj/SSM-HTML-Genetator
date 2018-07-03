@@ -8,6 +8,7 @@ module.exports = {
 		let list_leftMenu = JSON.stringify(
 			_.map(commonData.tablesDesc, (val, key) => {
 				let obj = {}
+				obj.icon = 'user'
 				obj.name = val.tableComment.cn_name || key
 				obj.href = key.toLowerCase() + '.' + config.html.file_suffix
 				return obj

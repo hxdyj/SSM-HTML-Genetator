@@ -1,7 +1,9 @@
 module.exports = {
 	writeToFile(name, line, isReWrite) {
 		let fileName =
-			config.generateDirs.html + `${name}.` + config.html.file_suffix
+			config.generateDirs.html_pages +
+			`${name}.` +
+			config.html.file_suffix
 		file_utils.writeLineToFile(line, fileName, isReWrite)
 	},
 	writeToFiles(commonData) {
@@ -74,13 +76,16 @@ module.exports = {
 			)
 			let addModal_inputHtml = _.join(
 				_.map(addModal_showFeild, item => {
-					debugger
 					if (item.file_type) {
 						if (item.file_type == 'img') {
 							return `
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
-					<g-upload ref="${key + '_g_upload_ref_' + item.feild_name}" :id="'${key}-g-upload-${item.feild_name}'"></g-upload>
+					<g-upload ref="${key +
+						'_g_upload_ref_' +
+						item.feild_name}" :id="'${key}-g-upload-${
+								item.feild_name
+							}'"></g-upload>
 				</div>
 
 							`
@@ -90,8 +95,8 @@ module.exports = {
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
 					<input type="text" v-model="addModel.${
-							item.feild_name
-							}" placeholder="${item.cn_name || item.feild_name}">
+						item.feild_name
+					}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
 					}
 				}),
@@ -133,12 +138,11 @@ module.exports = {
 					<label>${item.cn_name || item.feild_name}</label>
 					<input type="text" v-model="editModel.${
 						item.feild_name
-						}" placeholder="${item.cn_name || item.feild_name}">
+					}" placeholder="${item.cn_name || item.feild_name}">
 				</div>`
 				),
 				''
 			)
-			debugger
 			this.writeToFile(
 				key.toLowerCase(),
 				`
@@ -150,8 +154,8 @@ ${file_utils.fileTypeHtml()}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/base.css">
+    <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
     <title>${config.html.html_title}</title>
 </head>
 
@@ -181,7 +185,7 @@ ${file_utils.fileTypeHtml()}
             </div>
             <div class="index-content-right">
                 <g-breadcrumb :two="'${value.tableComment.cn_name ||
-				key.toLowerCase()}'"></g-breadcrumb>
+					key.toLowerCase()}'"></g-breadcrumb>
                 <div class="table-contain">
                     <div class="g-table">
                         <div class="table-all">
@@ -238,20 +242,21 @@ ${file_utils.fileTypeHtml()}
     </div>
 
 </body>
-<script src="./js/vue.min.js"></script>
-<script src="./js/jquery.min.js"></script>
-<script src="./js/lodash.min.js"></script>
-<script src="./js/semantic.min.js"></script>
-<script src="./js/moment.min.js"></script>
-<script src="./js/Uri.js"></script>
-<script src="./js/config.js"></script>
-<script src="./components/modal.js"></script>
-<script src="./components/header.js"></script>
-<script src="./components/leftMenu.js"></script>
-<script src="./components/breadcrumb.js"></script>
-<script src="./components/toast.js"></script>
-<script src="./components/loading.js"></script>
-<script src="./components/upload.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/lodash.min.js"></script>
+<script src="../js/semantic.min.js"></script>
+<script src="../js/moment.min.js"></script>
+<script src="../js/Uri.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/get.var.js"></script>
+<script src="../components/modal.js"></script>
+<script src="../components/header.js"></script>
+<script src="../components/leftMenu.js"></script>
+<script src="../components/breadcrumb.js"></script>
+<script src="../components/toast.js"></script>
+<script src="../components/loading.js"></script>
+<script src="../components/upload.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -303,13 +308,13 @@ ${file_utils.fileTypeHtml()}
 					}
 					this.list = resp.data
 					console.log('%c%s','color:#00A29A;font-weight:600','${
-				value.tableComment._name
-				}--LIST:',this.list)
+						value.tableComment._name
+					}--LIST:',this.list)
 				})
 			},
 			del(item){
 				this.$refs.loading.loading(G.http('${
-				value.tableComment._name
+					value.tableComment._name
 				}/del.do',{id:item.id}).then(resp=>{
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('删除成功')
@@ -320,7 +325,7 @@ ${file_utils.fileTypeHtml()}
 			},
 			add(){
 				this.$refs.loading.loading(G.http('${
-				value.tableComment._name
+					value.tableComment._name
 				}/add.do',this.addModel).then(resp=>{
 					this.$refs.addModel.hide()
 					this.addModel = {
@@ -336,7 +341,7 @@ ${file_utils.fileTypeHtml()}
 			},
 			edit(){
 				this.$refs.loading.loading(G.http('${
-				value.tableComment._name
+					value.tableComment._name
 				}/edit.do',this.editModel).then(resp=>{
 					this.$refs.editModel.hide()
 					this.editModel = {

@@ -1,7 +1,7 @@
 module.exports = {
 	writeToFile(line, isReWrite) {
 		let fileName =
-			config.generateDirs.html + 'index.' + config.html.file_suffix
+			config.generateDirs.html_pages + 'index.' + config.html.file_suffix
 		file_utils.writeLineToFile(line, fileName, isReWrite)
 	},
 	writeToFiles(commonData) {
@@ -16,8 +16,8 @@ ${file_utils.fileTypeHtml()}
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
-	<link rel="stylesheet" type="text/css" href="./css/base.css">
+	<link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
 	<title>${config.html.html_title}</title>
 </head>
 
@@ -42,20 +42,21 @@ ${file_utils.fileTypeHtml()}
 	</div>
 
 </body>
-<script src="./js/jquery.min.js"></script>
-<script src="./js/lodash.min.js"></script>
-<script src="./js/semantic.min.js"></script>
-<script src="./js/moment.min.js"></script>
-<script src="./js/Uri.js"></script>
-<script src="./js/vue.min.js"></script>
-<script src="./js/config.js"></script>
-<script src="./components/modal.js"></script>
-<script src="./components/header.js"></script>
-<script src="./components/leftMenu.js"></script>
-<script src="./components/breadcrumb.js"></script>
-<script src="./components/toast.js"></script>
-<script src="./components/loading.js"></script>
-<script src="./components/upload.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/lodash.min.js"></script>
+<script src="../js/semantic.min.js"></script>
+<script src="../js/moment.min.js"></script>
+<script src="../js/Uri.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/get.var.js"></script>
+<script src="../components/modal.js"></script>
+<script src="../components/header.js"></script>
+<script src="../components/leftMenu.js"></script>
+<script src="../components/breadcrumb.js"></script>
+<script src="../components/toast.js"></script>
+<script src="../components/loading.js"></script>
+<script src="../components/upload.js"></script>
 
 <script>
 	var app = new Vue({

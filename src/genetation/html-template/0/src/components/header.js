@@ -8,12 +8,12 @@ Vue.component('g-header', {
 			default: false
 		}
 	},
-	data: function () {
+	data: function() {
 		return {
 			searchStr: ''
 		}
 	},
-	mounted: function () {
+	mounted: function() {
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
