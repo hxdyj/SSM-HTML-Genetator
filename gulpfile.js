@@ -19,7 +19,7 @@ function compileSass() {
 gulp.task('compile', function() {
 	shelljs.exec('cnpm start')
 	compileSass()
-	var watcher = gulp.watch('src/genetation/**/*.!(json)')
+	var watcher = gulp.watch('src/genetation/**/!(*.json|get.var.js)')
 	watcher.on('change', function(event) {
 		console.log('ReCompiled Temaplate....')
 		shelljs.exec('cnpm start')

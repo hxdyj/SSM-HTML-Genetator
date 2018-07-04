@@ -1,3 +1,9 @@
+//获取表里拥有某个功能的字段数组
+let getTableHasSomeCommentFeild = (table, param) => {
+	let params = new Map([...table._commentMap].filter(([k, v]) => v[param]))
+	return [...params.values()]
+}
+
 module.exports = {
 	// tid--->Tid
 	firstWordUpper: word => {
@@ -21,15 +27,19 @@ module.exports = {
 			)
 		}
 	},
-	//获取表里拥有某个功能的字段数组
-	getTableHasSomeCommentFeild: (table, param) => {
-		let params = new Map(
-			[...table._commentMap].filter(([k, v]) => v[param])
-		)
-		return [...params.values()]
-	},
+	getTableHasSomeCommentFeild,
 	//获取表里拥有某个功能的字段是否包含某个值
 	getTableFeildHasSomeVal: (table, param, val) => {
 		return _.includes(table.tableComment[param], val)
+	},
+	//获取表里拥有某个功能的字段是否等于某个值
+	getTableFeildEqualSomeVal: (table, param, val) => {
+		let tmp = getTableHasSomeCommentFeild(table, param)
+		tmp = _.filter(tmp, item => item[param] == val)[0]
+		let result = null
+		if (tmp) {
+			result = tmp.feild_name
+		}
+		return result
 	}
 }

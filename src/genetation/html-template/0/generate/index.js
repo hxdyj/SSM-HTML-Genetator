@@ -14,8 +14,11 @@ module.exports = {
 			'func',
 			'login'
 		)
-		this.writeToFile(
-			`
+
+		_.forEach(login_tables, loginTableObj => {
+			this.writeToFile(
+				loginTableObj.tableComment._name,
+				`
 ${file_utils.fileTypeHtml()}
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +94,8 @@ ${file_utils.fileTypeHtml()}
 
 </html>
 		`,
-			true
-		)
+				true
+			)
+		})
 	}
 }

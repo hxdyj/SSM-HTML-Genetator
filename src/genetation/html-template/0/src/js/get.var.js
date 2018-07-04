@@ -7,15 +7,16 @@ var GetVar = {
 	headerParams:{
 		
 		admin:{
-			avatar:'http://localhost:8080/System/system_pic/default_user_icon.jpg',
-			pass:'请设置密码',
-			name:'请设置姓名',
+			avatar:'null',
+			pass:'null',
+			name:'null',
 		},
 		user:{
-			avatar:'http://localhost:8080/System/system_pic/default_user_icon.jpg',
-			pass:'请设置密码',
-			name:'请设置姓名',
+			avatar:'img',
+			pass:'pass',
+			name:'name',
 		},
-	}
+	},
+	file_suffix:'html'
 }
 		

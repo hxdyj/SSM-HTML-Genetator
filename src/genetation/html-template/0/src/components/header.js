@@ -10,10 +10,37 @@ Vue.component('g-header', {
 	},
 	data: function() {
 		return {
-			searchStr: ''
+			searchStr: '',
+			userInfo: JSON.parse(localStorage.getItem('userInfo') || {}),
+			headerParams: {
+				avatar: '',
+				pass: '',
+				name: ''
+			}
 		}
 	},
 	mounted: function() {
+		this.headerParams = {
+			avatar: this.userInfo[
+				GetVar.headerParams[this.userInfo._login_type].avatar
+			],
+			pass: this.userInfo[
+				GetVar.headerParams[this.userInfo._login_type].pass
+			],
+			name: this.userInfo[
+				GetVar.headerParams[this.userInfo._login_type].name
+			]
+		}
+
+		//未设置头像的设置默认头像
+		if (this.headerParams.avatar) {
+			this.headerParams.avatar =
+				GetVar.http.server + 'system_pic/default_user_icon.jpg'
+		} else {
+			this.headerParams.avatar =
+				GetVar.http.server + 'pic/' + this.headerParams.avatar
+		}
+
 		$('.g-header-user').popup({
 			on: 'click',
 			position: 'bottom right'
@@ -22,12 +49,16 @@ Vue.component('g-header', {
 	methods: {
 		search() {
 			this.$emit(headerE.search, this.searchStr)
+		},
+		goHome() {
+			location.href =
+				this.userInfo._login_type + '_index.' + GetVar.file_suffix
 		}
 	},
 	template: `
 <div class="ui top attached teal inverted menu g-header">
 	<div class="item">
-		<img src="../img/300.jpg" @click="()=>{location.href='index.html'}">
+		<img src="../img/300.jpg" @click="goHome()">
 	</div>
 	<div class="item">
 		<div class="ui medium header g-header-title">人才市场档案管理系统</div>
@@ -42,14 +73,15 @@ Vue.component('g-header', {
   <div class="right menu g-header-actions">
 		<div class="item">
 			<a class="ui label g-header-user teal inverted">
-				<img class="ui right spaced avatar image" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1760172527,1473711532&fm=27&gp=0.jpg">
-				<span class="g-header-username">Elliot<span>
+				<img class="ui right spaced avatar image" :src="headerParams.avatar">
+				<span class="g-header-username">{{headerParams.name}}<span>
 			</a>
 			<div class="ui popup bottom left transition hidden g-header-userinfo-actions">
 
-				<img class="ui avatar image" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1760172527,1473711532&fm=27&gp=0.jpg">
+				<!--<img class="ui avatar image" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1760172527,1473711532&fm=27&gp=0.jpg">-->
+				<img class="ui avatar image" :src="headerParams.avatar">
 				<div class="g-header-action-username">
-					<h3 class="ui header">Elliot</h3>
+					<h3 class="ui header">{{headerParams.name}}</h3>
 				</div>
 				<div class="g-header-action-menus">
 					<div class="ui basic icon buttons">

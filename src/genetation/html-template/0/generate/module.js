@@ -8,14 +8,7 @@ module.exports = {
 	},
 	writeToFiles(commonData) {
 		console.log(clc.blue('start genetating web module html template....'))
-		let list_leftMenu = JSON.stringify(
-			_.map(commonData.tablesDesc, (val, key) => {
-				let obj = {}
-				obj.name = val.tableComment.cn_name || key
-				obj.href = key.toLowerCase() + '.' + config.html.file_suffix
-				return obj
-			})
-		)
+
 		_.forEach(commonData.tablesDesc, (value, key, map) => {
 			//获取可以在table展示的字段
 			let showFeild = _.filter(
@@ -43,11 +36,20 @@ module.exports = {
 
 			//表格列
 			let tableTds = _.join(
-				_.map(
-					showFeild,
-					item => `
-\t\t\t\t\t\t\t\t\t\t\t<td>{{item.${item.feild_name}}}</td>`
-				),
+				_.map(showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+							\t\t\t\t\t\t\t\t\t\t\t<td><div style="height:4rem;"><img :src="GetVar.http.server+'pic/'+item.${
+								item.feild_name
+							}" style="height: 100%;"/></div></td>`
+						}
+					} else {
+						return `
+							\t\t\t\t\t\t\t\t\t\t\t<td>{{item.${item.feild_name}}}</td>`
+					}
+					return ''
+				}),
 				''
 			)
 
@@ -82,8 +84,8 @@ module.exports = {
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
 					<g-upload ref="${key +
-						'_g_upload_ref_' +
-						item.feild_name}" :id="'${key}-g-upload-${
+						'_g_upload_ref_add_modal_' +
+						item.feild_name}" :id="'${key}-g-upload-add-modal-${
 								item.feild_name
 							}'"></g-upload>
 				</div>
@@ -103,6 +105,36 @@ module.exports = {
 				''
 			)
 
+			let addMethodFileHtml = _.join(
+				_.map(addModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+							this.addModel['${item.feild_name}'] = this.$refs.${key +
+								'_g_upload_ref_add_modal_' +
+								item.feild_name}.getFile()
+							`
+						}
+					} else {
+						return ''
+					}
+				}),
+				''
+			)
+			let addMethodFileResetHtml = _.join(
+				_.map(addModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+							this.$refs.${key + '_g_upload_ref_add_modal_' + item.feild_name}.clearFile()
+							`
+						}
+					} else {
+						return ''
+					}
+				}),
+				''
+			)
 			//过滤修改弹框的字段
 			let editModal_showFeild = _.filter(
 				[...value._commentMap.values()],
@@ -131,18 +163,86 @@ module.exports = {
 				''
 			)
 			let editModal_inputHtml = _.join(
-				_.map(
-					editModal_showFeild,
-					item => `
+				_.map(editModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
 				<div class="field">
 					<label>${item.cn_name || item.feild_name}</label>
-					<input type="text" v-model="editModel.${
-						item.feild_name
-					}" placeholder="${item.cn_name || item.feild_name}">
-				</div>`
-				),
+					<g-upload ref="${key +
+						'_g_upload_ref_edit_modal_' +
+						item.feild_name}" :id="'${key}-g-upload-edit-modal-${
+								item.feild_name
+							}'"></g-upload>
+				</div>
+
+							`
+						}
+					} else {
+						return `
+					<div class="field">
+						<label>${item.cn_name || item.feild_name}</label>
+						<input type="text" v-model="editModel.${
+							item.feild_name
+						}" placeholder="${item.cn_name || item.feild_name}">
+					</div>`
+					}
+				}),
 				''
 			)
+
+			let editMethodFileHtml = _.join(
+				_.map(editModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+							let _file = this.$refs.${key +
+								'_g_upload_ref_edit_modal_' +
+								item.feild_name}.getFile()
+							if(_file){
+									this.editModel['${item.feild_name}'] = _file
+							}
+							`
+						}
+					} else {
+						return ''
+					}
+				}),
+				''
+			)
+			let editMethodFileSetDefaultHtml = _.join(
+				_.map(editModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+ 								this.$refs.${key +
+									'_g_upload_ref_edit_modal_' +
+									item.feild_name}.setHttpImg(this.editModel.${
+								item.feild_name
+							})
+							`
+						}
+					} else {
+						return ''
+					}
+				}),
+				''
+			)
+			let editMethodFileResetHtml = _.join(
+				_.map(editModal_showFeild, item => {
+					if (item.file_type) {
+						if (item.file_type == 'img') {
+							return `
+							this.$refs.${key + '_g_upload_ref_edit_modal_' + item.feild_name}.clearFile()
+							`
+						}
+					} else {
+						return ''
+					}
+				}),
+				''
+			)
+
 			this.writeToFile(
 				key.toLowerCase(),
 				`
@@ -265,6 +365,7 @@ ${file_utils.fileTypeHtml()}
 			list_leftMenu:[],
 			page:1,
 			seachStr:null,
+			GetVar:GetVar,
 			list:{
 				list:[]
 			},
@@ -324,6 +425,7 @@ ${file_utils.fileTypeHtml()}
 				}))
 			},
 			add(){
+				${addMethodFileHtml}
 				this.$refs.loading.loading(G.http('${
 					value.tableComment._name
 				}/add.do',this.addModel).then(resp=>{
@@ -331,6 +433,7 @@ ${file_utils.fileTypeHtml()}
 					this.addModel = {
 						${addModal_vueModel}
 					}
+					${addMethodFileResetHtml}
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('添加成功')
 					})
@@ -340,6 +443,7 @@ ${file_utils.fileTypeHtml()}
 				}))
 			},
 			edit(){
+				${editMethodFileHtml}
 				this.$refs.loading.loading(G.http('${
 					value.tableComment._name
 				}/edit.do',this.editModel).then(resp=>{
@@ -348,7 +452,7 @@ ${file_utils.fileTypeHtml()}
 						${editModal_vueModel}
 						id:''
 					}
-
+					${editMethodFileResetHtml}
 					return this.getModulePage().then(()=>{
 						this.$refs.toast.show('修改成功')
 					})
@@ -366,15 +470,19 @@ ${file_utils.fileTypeHtml()}
 					${editModal_vueSelectItem}
 				}
 				this.editModel.id = item.id
-                this.$refs.editModel.show()
+				${editMethodFileSetDefaultHtml}
+				this.$refs.editModel.show()
+
 			},
 			changePage(page){
 				if(page<1||(page==1 && this.page==1)){
 					this.$refs.toast.show('已到首页')
+					return
 				}
 
 				if(page>this.list.lastPage||(page==this.list.lastPage && this.page==this.list.lastPage)){
 					this.$refs.toast.show('已到尾页')
+					return
 				}
 
 				if(page>=1&&page<=this.list.lastPage){

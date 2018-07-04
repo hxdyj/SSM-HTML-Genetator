@@ -16,10 +16,30 @@ module.exports = {
 		_.forEach(login_tables, item => {
 			headerParams += `
 \t\t${item.tableComment._name}:{`
+			let avatar =
+				G.util.getTableFeildEqualSomeVal(
+					item,
+					'header_func',
+					'avatar'
+				) || null
+			let pass =
+				G.util.getTableFeildEqualSomeVal(item, 'header_func', 'pass') ||
+				null
+
+			let name =
+				G.util.getTableFeildEqualSomeVal(item, 'header_func', 'name') ||
+				null
 
 			headerParams +=
 				`
-			avatar:'${G.util.getTableHasSomeCommentFeild(item, 'avatar')[0] ||
+			avatar:'${avatar}'` + ','
+			headerParams +=
+				`
+			pass:'${pass}'` + ','
+			headerParams +=
+				`
+			name:'${name}'` + ','
+			/* avatar:'${G.util.getTableHasSomeCommentFeild(item, 'avatar')[0] ||
 				config.http.server + 'system_pic/default_user_icon.jpg'}'` + ','
 			headerParams +=
 				`
@@ -28,7 +48,7 @@ module.exports = {
 			headerParams +=
 				`
 			name:'${G.util.getTableHasSomeCommentFeild(item, 'name')[0] || '请设置姓名'}'` +
-				','
+				',' */
 			headerParams += '\n\t\t},'
 		})
 		this.writeToFile(
@@ -40,7 +60,8 @@ var GetVar = {
 	},
 	headerParams:{
 		${headerParams}
-	}
+	},
+	file_suffix:'${config.html.file_suffix}'
 }
 		`,
 			true

@@ -212,8 +212,11 @@ var app = new Vue({
 						'或'
 					)}错误")
 				} else {
+					data[0]._login_type = '${loginTableObj.tableComment._name}'
 					localStorage.setItem('userInfo', JSON.stringify(data[0]))
-					location.href = 'index.${config.html.file_suffix}'
+					location.href = '${loginTableObj.tableComment._name}_index.${
+				config.html.file_suffix
+			}'
 				}
 			})
 		}`}
