@@ -26,7 +26,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 	if (method == 'add') {
 		methodMiddle += `${tableName} o = new ${tableName}();`
 		let uniqueId = null
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
@@ -40,7 +40,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 				if (val.java_type != RULE.field.java_type.upload.key) {
 					methodMiddle += `
 		if(${key}!=null){
-			o.set${G.util.firstWordUpper(key)}(id);
+			o.set${G.util.firstWordUpper(key)}(${key});
 		}
 					`
 				} else {
@@ -58,7 +58,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		Criteria c = e.createCriteria();
 		c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
 			uniqueId.feild_name
-		});
+			});
 		List<${tableName}> list = ${mapper}.selectByExample(e);
 		if(list.isEmpty()){
 			${mapper}.insert(o);
@@ -72,7 +72,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 	if (method == 'edit') {
 		methodMiddle += `${tableName} o = ${mapper}.selectByPrimaryKey(id);`
 		let uniqueId = null
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
@@ -86,7 +86,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 				if (val.java_type != RULE.field.java_type.upload.key) {
 					methodMiddle += `
 		if(${key}!=null){
-			o.set${G.util.firstWordUpper(key)}(id);
+			o.set${G.util.firstWordUpper(key)}(${key});
 		}
 					`
 				} else {
@@ -100,13 +100,16 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		})
 		if (uniqueId) {
 			methodMiddle += `
-		${tableName}Example e = new ${tableName}Example();
-		Criteria c = e.createCriteria();
-		c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
+		List<${tableName}> list = null;
+		if(${uniqueId.feild_name}!=null){
+			${tableName}Example e = new ${tableName}Example();
+			Criteria c = e.createCriteria();
+			c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
 				uniqueId.feild_name
-			});
-		List<${tableName}> list = ${mapper}.selectByExample(e);
-		if(list.isEmpty()){
+				});
+			list = ${mapper}.selectByExample(e);
+		}
+		if(list!=null&&list.isEmpty()){
 			${mapper}.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
@@ -132,7 +135,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
 			if (!_.includes(val.not_in_param, method)) {
@@ -160,7 +163,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
 			if (!_.includes(val.not_in_param, method)) {
@@ -192,7 +195,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 
 			//if this method not in val.not_in_param, don't append it.
@@ -201,17 +204,22 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 				let type = val.java_type
 				if (type == RULE.field.java_type.upload.key) {
 					type = RULE.field.java_type.upload.value
+					hasUpload = true
 				}
-				//将upload的字段从login排除出去
-				if (val.java_type != RULE.field.java_type.upload.key) {
-					//包含
-					if (val.login_form) {
-						methodParams += `${type} ${key},`
+				//包含
+				if (val.register_form) {
+					methodParams += `${type} ${key},`
+					if (val.java_type != RULE.field.java_type.upload.key) {
 						tempMiddle += `
 			o.set${G.util.firstWordUpper(key)}(${key});
-			`
+						`
+					} else {
+						tempMiddle += `
+			o.set${G.util.firstWordUpper(key)}(UploadUtils.upload(request, ${key}, "/pic"));
+						`
 					}
 				}
+
 			}
 		})
 		if (uniqueId) {
@@ -234,9 +242,9 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 
 	return [
 		`(${methodParams.substring(0, methodParams.length - 1)}${
-			hasUpload
-				? ', HttpServletRequest request)throws IllegalStateException, IOException'
-				: ')'
+		hasUpload
+			? ', HttpServletRequest request)throws IllegalStateException, IOException'
+			: ')'
 		}`,
 		methodMiddle
 	]
@@ -334,29 +342,29 @@ public class ${index}Controller {
 		${getFuncVals('search', val._commentMap, index, mapper)[1]}
 	}
 	${
-		isLoginTable
-			? `
+				isLoginTable
+					? `
 	@ResponseBody
 	@RequestMapping("login.do")
 	public String login${getFuncVals('login', val._commentMap, index, mapper)[0]}{
 		${getFuncVals('login', val._commentMap, index, mapper)[1]}
 	}
 	`
-			: ''
-	}
+					: ''
+				}
 	${
-		isRegisterTable
-			? `
+				isRegisterTable
+					? `
 	@ResponseBody
 	@RequestMapping("register.do")
 	public String register${
-		getFuncVals('register', val._commentMap, index, mapper)[0]
-	}{
+					getFuncVals('register', val._commentMap, index, mapper)[0]
+					}{
 		${getFuncVals('register', val._commentMap, index, mapper)[1]}
 	}
 	`
-			: ''
-	}
+					: ''
+				}
 }
 				`,
 				true
