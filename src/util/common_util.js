@@ -11,7 +11,7 @@ module.exports = {
 			word.substring(0, 1).toUpperCase() + word.substring(1, word.length)
 		)
 	},
-	//获取拥有某个属性的表
+	//获取拥有某个属性的表的数组
 	getHasSomeCommentTable: (commonData, param, val) => {
 		if (!val) {
 			return _.filter(

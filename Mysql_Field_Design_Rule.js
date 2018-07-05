@@ -12,11 +12,6 @@ module.exports = {
 				key: 'upload',
 				value: 'MultipartFile'
 			}
-		},
-		not_in_param: {
-			add: 'add',
-			edit: 'edit',
-			search: 'search'
 		}
 	}
 }

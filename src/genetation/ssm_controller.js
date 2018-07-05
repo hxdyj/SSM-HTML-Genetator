@@ -24,6 +24,26 @@ function fieldsCommentMapToJavaParamsStr(commentMap, method) {
 			: ')'
 	}`
 }
+//生成方法的参数 ---> (Integer id,String title)
+function fieldsCommentMapToJavaParamsStrIn(commentMap, param) {
+	let result = ''
+	let isUpload = false
+	commentMap.forEach(function(val, key) {
+		if (val[param]) {
+			let type = val.java_type
+			if (type == RULE.field.java_type.upload.key) {
+				type = RULE.field.java_type.upload.value
+				isUpload = true
+			}
+			result += `${type} ${key},`
+		}
+	})
+	return `(${result.substring(0, result.length - 1)}${
+		isUpload
+			? ', HttpServletRequest request)throws IllegalStateException, IOException'
+			: ')'
+	}`
+}
 
 // Integer-->and[filedName]EqualTo([filedName]);  String-->and[filedName]Like("%"+[filedName]+"%");
 function fieldTypeGetSearchType(val) {
@@ -108,14 +128,34 @@ function fieldsCommentMapToMethodContent(
 		if(${uploadKey}!=null){path = UploadUtils.upload(request, ${uploadKey}, "/pic");}
 		`
 	}
+	let addUniqueObj =
+		_.filter([...commentMap.values()], item => item.login_id)[0] || null
+	let footer = ''
+	if (method == RULE.field.not_in_param.edit) {
+		footer = `
+		${mapper}.updateByPrimaryKey(o);`
+	} else {
+		if (addUniqueObj) {
+			//存在唯一的标识
+			footer = `
+		${tableName}Example e = new ${tableName}Example();
+		Criteria c = e.createCriteria();
+		c.and${G.util.firstWordUpper(addUniqueObj.feild_name)}EqualTo(${
+				addUniqueObj.feild_name
+			});
+		List<${tableName}> list = ${mapper}.selectByExample(e);
+		if(list.isEmpty()){
+			${mapper}.insert(o);
+			return Util.getResult(1, "success","");
+		}else{
+			return Util.getResult(0, "error","用户已存在");
+		}
 
-	let footer = `
-		${mapper}.${
-		method == RULE.field.not_in_param.edit ? 'updateByPrimaryKey' : 'insert'
-	}(o);
-
-		`
-
+			`
+		} else {
+			footer = `${mapper}.insert(o);`
+		}
+	}
 	let result = `
 		return Util.getResult(1, "success","");`
 
@@ -130,10 +170,12 @@ function fieldsCommentMapToMethodContent(
 		return Util.getResult(1, "",list);
 			`
 	}
+	if (addUniqueObj) {
+		result = ''
+	}
 	return first + middle + footer + result
 }
 
-//获取登录的参数
 function getFormParams(table, type) {
 	let params = new Map([...table._commentMap].filter(([k, v]) => v[type]))
 	return [...params.values()]
@@ -347,22 +389,22 @@ public class ${index}Controller {
 					registerParams,
 					item => item.login_id
 				)[0]
-				let funcParams = _.join(
-					_.map(
-						registerParams,
-						item => `${item.java_type} ${item.feild_name}`
-					),
-					', '
+				let funcParams = fieldsCommentMapToJavaParamsStrIn(
+					val._commentMap,
+					'register_form'
 				)
-
 				let funcJurgePart = _.join(
-					_.map(
-						registerParams,
-						item =>
-							`o.set${G.util.firstWordUpper(item.feild_name)}(${
+					_.map(registerParams, item => {
+						if (item.java_type == 'upload') {
+							return `o.set${G.util.firstWordUpper(
 								item.feild_name
-							});`
-					),
+							)}(path);`
+						} else {
+							return `o.set${G.util.firstWordUpper(
+								item.feild_name
+							)}(${item.feild_name});`
+						}
+					}),
 					'\n\t\t\t'
 				)
 				this.writeToFile(
@@ -370,12 +412,14 @@ public class ${index}Controller {
 					`
 	@ResponseBody
 	@RequestMapping("register.do")
-	public String register(${funcParams}){
+	public String register${funcParams}
 		${index}Example e = new ${index}Example();
 		Criteria c = e.createCriteria();
 		c.and${G.util.firstWordUpper(registerUniqueObj.feild_name)}EqualTo(${
 						registerUniqueObj.feild_name
 					});
+		String path = "";
+		if(img!=null){path = UploadUtils.upload(request, img, "/pic");}
 		List<${index}> list = ${mapper}.selectByExample(e);
 		if(list.isEmpty()){
 			${index} o = new ${index}();

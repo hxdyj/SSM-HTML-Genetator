@@ -40,9 +40,13 @@ module.exports = {
 					if (item.file_type) {
 						if (item.file_type == 'img') {
 							return `
-							\t\t\t\t\t\t\t\t\t\t\t<td><div style="height:4rem;"><img :src="GetVar.http.server+'pic/'+item.${
+							\t\t\t\t\t\t\t\t\t\t\t<td><div style="height:4rem;" v-show="item.${
 								item.feild_name
-							}" style="height: 100%;"/></div></td>`
+							}"><img :src="GetVar.http.server+'pic/'+item.${
+								item.feild_name
+							}" style="height: 100%;"/></div><span v-show="!item.${
+								item.feild_name
+							}">无</span></td>`
 						}
 					} else {
 						return `
@@ -429,14 +433,19 @@ ${file_utils.fileTypeHtml()}
 				this.$refs.loading.loading(G.http('${
 					value.tableComment._name
 				}/add.do',this.addModel).then(resp=>{
-					this.$refs.addModel.hide()
-					this.addModel = {
-						${addModal_vueModel}
+					if(resp.code==1){
+						this.$refs.addModel.hide()
+						this.addModel = {
+							${addModal_vueModel}
+						}
+						${addMethodFileResetHtml}
+						return this.getModulePage().then(()=>{
+							this.$refs.toast.show('添加成功')
+						})
+					}else{
+						this.$refs.toast.show('添加失败'+resp.msg)
 					}
-					${addMethodFileResetHtml}
-					return this.getModulePage().then(()=>{
-						this.$refs.toast.show('添加成功')
-					})
+
 
 				}).catch(err=>{
 					this.$refs.toast.show('添加失败')

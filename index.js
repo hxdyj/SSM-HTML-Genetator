@@ -16,7 +16,7 @@ function generating() {
 		//获取所有表及其详细信息
 		let commonData = await mysql_utils.getTablesDesc(mysql)
 		//生成ssm controller 文件
-		require('./src/genetation/ssm_controller').writeToFiles(commonData)
+		require('./src/genetation/ssm_controller.1').writeToFiles(commonData)
 
 		//生成前端模板
 		let HtmlGenerate = require('./src/genetation/html_deal')

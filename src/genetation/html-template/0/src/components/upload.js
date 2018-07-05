@@ -16,7 +16,10 @@ Vue.component('g-upload', {
 	mounted: function() {
 		let ele = $('#g_upload_input_' + this.id)
 		ele.change(() => {
-			imgEle.attr('src', URL.createObjectURL(ele[0].files[0]))
+			$('.g-upload-pre-img-' + this.id).attr(
+				'src',
+				URL.createObjectURL(ele[0].files[0])
+			)
 		})
 	},
 	methods: {
@@ -25,10 +28,12 @@ Vue.component('g-upload', {
 		},
 		setHttpImg(name) {
 			this.httpImg = true
-			$('.g-upload-pre-img-' + this.id).attr(
-				'src',
-				GetVar.http.server + 'pic/' + name
-			)
+			let ele = $('.g-upload-pre-img-' + this.id)
+			ele.attr('src', GetVar.http.server + 'pic/' + name)
+			if (!ele.complete) {
+				this.httpImg = false
+				//ele.attr('src', GetVar.http.server + 'system_pic/no_img.png')
+			}
 		},
 		clearFile() {
 			this.file = ''
