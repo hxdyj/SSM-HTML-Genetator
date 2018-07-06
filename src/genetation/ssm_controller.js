@@ -1,58 +1,10 @@
 const RULE = require('../../Mysql_Field_Design_Rule')
-//生成方法的参数 ---> (Integer id,String title)
-function fieldsCommentMapToJavaParamsStr(commentMap, method) {
-	let result = ''
-	let isUpload = false
-	if (method == RULE.field.not_in_param.search) {
-		result += 'Integer page,Integer pageRow,'
-	}
-	commentMap.forEach(function(val, key) {
-		//if this method not in val.not_in_param, don't append it.
-		//将not_in_param属性中不包含method的字段添加到对应的方法中
-		if (!_.includes(val.not_in_param, method)) {
-			let type = val.java_type
-			if (type == RULE.field.java_type.upload.key) {
-				type = RULE.field.java_type.upload.value
-				isUpload = true
-			}
-			result += `${type} ${key},`
-		}
-	})
-	return `(${result.substring(0, result.length - 1)}${
-		isUpload
-			? ', HttpServletRequest request)throws IllegalStateException, IOException'
-			: ')'
-	}`
-}
-//生成方法的参数 ---> (Integer id,String title)
-function fieldsCommentMapToJavaParamsStrIn(commentMap, param) {
-	let result = ''
-	let isUpload = false
-	commentMap.forEach(function(val, key) {
-		if (val[param]) {
-			let type = val.java_type
-			if (type == RULE.field.java_type.upload.key) {
-				type = RULE.field.java_type.upload.value
-				isUpload = true
-			}
-			result += `${type} ${key},`
-		}
-	})
-	return `(${result.substring(0, result.length - 1)}${
-		isUpload
-			? ', HttpServletRequest request)throws IllegalStateException, IOException'
-			: ')'
-	}`
-}
-
-// Integer-->and[filedName]EqualTo([filedName]);  String-->and[filedName]Like("%"+[filedName]+"%");
 function fieldTypeGetSearchType(val) {
 	if (val.java_type == 'Integer') {
 		return `
 		if(${val.feild_name}!=null){
 			c.and${G.util.firstWordUpper(val.feild_name)}EqualTo(${val.feild_name});
 		}
-
 		`
 	}
 	if (val.java_type == 'String') {
@@ -65,22 +17,121 @@ function fieldTypeGetSearchType(val) {
 
 	return ''
 }
-//生成方法的内容 ---> Chat o = new Chat();o.setFile(path);
-function fieldsCommentMapToMethodContent(
-	commentMap,
-	method,
-	tableName,
-	mapper
-) {
-	let first = `
-		${tableName} o = ${
-		method == RULE.field.not_in_param.edit
-			? `${mapper}.selectByPrimaryKey(id)`
-			: `new ${tableName}()`
-	};
-	`
-	if (method == RULE.field.not_in_param.search) {
-		first = `
+function getFuncVals(method, commentMap, tableName, mapper) {
+	let methodParams = ''
+	let methodMiddle = ''
+	let hasUpload = false
+
+	if (method == 'add') {
+		methodMiddle += `${tableName} o = new ${tableName}();`
+		let uniqueId = null
+		commentMap.forEach(function(val, key) {
+			if (val.login_id) uniqueId = val
+			//if this method not in val.not_in_param, don't append it.
+			//将not_in_param属性中不包含method的字段添加到对应的方法中
+			if (!_.includes(val.not_in_param, method)) {
+				let type = val.java_type
+				if (type == RULE.field.java_type.upload.key) {
+					type = RULE.field.java_type.upload.value
+					hasUpload = true
+				}
+				methodParams += `${type} ${key},`
+				if (val.java_type != RULE.field.java_type.upload.key) {
+					methodMiddle += `
+		if(${key}!=null){
+			o.set${G.util.firstWordUpper(key)}(${key});
+		}
+					`
+				} else {
+					methodMiddle += `
+		if(${key}!=null){
+			o.set${G.util.firstWordUpper(key)}(UploadUtils.upload(request, ${key}, "/pic"));
+		}
+					`
+				}
+			}
+		})
+
+		methodMiddle += `
+		${tableName}Example e = new ${tableName}Example();
+		Criteria c = e.createCriteria();
+		c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
+			uniqueId.feild_name
+		});
+		List<${tableName}> list = ${mapper}.selectByExample(e);
+		if(list.isEmpty()){
+			${mapper}.insert(o);
+			return Util.getResult(1, "注册成功","");
+		}else{
+			return Util.getResult(0, "用户已存在","");
+		}
+
+		`
+	}
+	if (method == 'edit') {
+		methodMiddle += `
+		${tableName} o = ${mapper}.selectByPrimaryKey(id);
+		${tableName} o_back = ${mapper}.selectByPrimaryKey(id);
+		`
+		let uniqueId = null
+		commentMap.forEach(function(val, key) {
+			if (val.login_id) uniqueId = val
+			//if this method not in val.not_in_param, don't append it.
+			//将not_in_param属性中不包含method的字段添加到对应的方法中
+			if (!_.includes(val.not_in_param, method)) {
+				let type = val.java_type
+				if (type == RULE.field.java_type.upload.key) {
+					type = RULE.field.java_type.upload.value
+					hasUpload = true
+				}
+				methodParams += `${type} ${key},`
+				if (val.java_type != RULE.field.java_type.upload.key) {
+					methodMiddle += `
+		if(${key}!=null){
+			o.set${G.util.firstWordUpper(key)}(${key});
+		}
+					`
+				} else {
+					methodMiddle += `
+		if(${key}!=null){
+			o.set${G.util.firstWordUpper(key)}(UploadUtils.upload(request, ${key}, "/pic"));
+		}
+					`
+				}
+			}
+		})
+
+		if (uniqueId) {
+			methodMiddle += `
+		List<${tableName}> list = null;
+		if(${uniqueId.feild_name}!=null){
+			${tableName}Example e = new ${tableName}Example();
+			Criteria c = e.createCriteria();
+			c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
+				uniqueId.feild_name
+			});
+			list = ${mapper}.selectByExample(e);
+		}
+		if((list!=null&&list.isEmpty())||!o_back.get${G.util.firstWordUpper(
+			uniqueId.feild_name
+		)}().equals(${uniqueId.feild_name})){
+			${mapper}.updateByPrimaryKey(o);
+			return Util.getResult(1, "修改成功","");
+		}else{
+			return Util.getResult(0, "用户已存在","");
+		}
+		`
+		} else {
+			methodMiddle += `
+		${mapper}.updateByPrimaryKey(o);
+		return Util.getResult(1, "修改成功","");
+			`
+		}
+	}
+
+	if (method == 'search') {
+		methodParams += 'Integer page,Integer pageRow,'
+		methodMiddle += `
 		if(page==null) {
 			return Util.getResult(1, "", ${mapper}.selectByExample(null));
 		}
@@ -88,98 +139,133 @@ function fieldsCommentMapToMethodContent(
 
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
-
 		`
-	}
-	isUpload = false
-	uploadKey = null
-	let middle = ''
-	commentMap.forEach(function(val, key) {
-		//if this method not in val.not_in_param, append it.
-		if (!_.includes(val.not_in_param, method)) {
-			let lineStr = ''
-			let type = val.java_type
-			let fieldIsUpload = type == RULE.field.java_type.upload.key
-			if (fieldIsUpload) {
-				isUpload = true
-				uploadKey = key
-			}
-			if (method == RULE.field.not_in_param.search) {
-				lineStr = fieldTypeGetSearchType(val)
-			} else {
-				if (val.java_type != 'upload') {
-					lineStr = `
-		if(${key}!=null){
-			o.set${G.util.firstWordUpper(key)}(${key});
-		}`
-				} else {
-					lineStr = `
-		if(${key}!=null){
-			o.set${G.util.firstWordUpper(key)}(path);
-		}`
+		commentMap.forEach(function(val, key) {
+			//if this method not in val.not_in_param, don't append it.
+			//将not_in_param属性中不包含method的字段添加到对应的方法中
+			if (!_.includes(val.not_in_param, method)) {
+				let type = val.java_type
+				if (type == RULE.field.java_type.upload.key) {
+					type = RULE.field.java_type.upload.value
+				}
+				//将upload的字段从search排除出去
+				if (val.java_type != RULE.field.java_type.upload.key) {
+					methodParams += `${type} ${key},`
+					methodMiddle += fieldTypeGetSearchType(val)
 				}
 			}
-			middle += lineStr
-		}
-	})
-	if (isUpload) {
-		first += `
-		String path = "";
-		if(${uploadKey}!=null){path = UploadUtils.upload(request, ${uploadKey}, "/pic");}
-		`
-	}
-	let addUniqueObj =
-		_.filter([...commentMap.values()], item => item.login_id)[0] || null
-	let footer = ''
-	if (method == RULE.field.not_in_param.edit) {
-		footer = `
-		${mapper}.updateByPrimaryKey(o);`
-	} else {
-		if (addUniqueObj) {
-			//存在唯一的标识
-			footer = `
-		${tableName}Example e = new ${tableName}Example();
-		Criteria c = e.createCriteria();
-		c.and${G.util.firstWordUpper(addUniqueObj.feild_name)}EqualTo(${
-				addUniqueObj.feild_name
-			});
-		List<${tableName}> list = ${mapper}.selectByExample(e);
-		if(list.isEmpty()){
-			${mapper}.insert(o);
-			return Util.getResult(1, "success","");
-		}else{
-			return Util.getResult(0, "error","用户已存在");
-		}
-
-			`
-		} else {
-			footer = `${mapper}.insert(o);`
-		}
-	}
-	let result = `
-		return Util.getResult(1, "success","");`
-
-	if (method == RULE.field.not_in_param.search) {
-		footer = ''
-		result = `
-
+		})
+		methodMiddle += `
 		PageHelper.startPage(page, pageRow);
 		List<${tableName}> alllist = ${tableName.toLowerCase()}Mapper.selectByExample(e);
 		PageInfo list = new PageInfo(alllist);
-
 		return Util.getResult(1, "",list);
+		`
+	}
+
+	if (method == 'login') {
+		methodMiddle += `
+		${tableName}Example e = new ${tableName}Example();
+		Criteria c = e.createCriteria();
+		`
+		commentMap.forEach(function(val, key) {
+			//if this method not in val.not_in_param, don't append it.
+			//将not_in_param属性中不包含method的字段添加到对应的方法中
+			if (!_.includes(val.not_in_param, method)) {
+				let type = val.java_type
+				if (type == RULE.field.java_type.upload.key) {
+					type = RULE.field.java_type.upload.value
+				}
+				//将upload的字段从login排除出去
+				if (val.java_type != RULE.field.java_type.upload.key) {
+					//包含
+					if (val.login_form) {
+						methodParams += `${type} ${key},`
+						methodMiddle += `
+		c.and${G.util.firstWordUpper(key)}EqualTo(${key});
 			`
+					}
+				}
+			}
+		})
+
+		methodMiddle += `
+		return JSON.toJSONString(${mapper}.selectByExample(e));
+		`
 	}
-	if (addUniqueObj) {
-		result = ''
+	if (method == 'register') {
+		let uniqueId = null
+		let tempMiddle = ''
+		methodMiddle += `
+		${tableName}Example e = new ${tableName}Example();
+		Criteria c = e.createCriteria();
+		`
+		commentMap.forEach(function(val, key) {
+			if (val.login_id) uniqueId = val
+
+			//if this method not in val.not_in_param, don't append it.
+			//将not_in_param属性中不包含method的字段添加到对应的方法中
+			if (!_.includes(val.not_in_param, method)) {
+				let type = val.java_type
+				if (type == RULE.field.java_type.upload.key) {
+					type = RULE.field.java_type.upload.value
+					hasUpload = true
+				}
+				//包含
+				if (val.register_form) {
+					methodParams += `${type} ${key},`
+					if (val.java_type != RULE.field.java_type.upload.key) {
+						tempMiddle += `
+			o.set${G.util.firstWordUpper(key)}(${key});
+						`
+					} else {
+						tempMiddle += `
+			o.set${G.util.firstWordUpper(key)}(UploadUtils.upload(request, ${key}, "/pic"));
+						`
+					}
+				}
+			}
+		})
+		if (uniqueId) {
+			methodMiddle += `
+		c.andNumEqualTo(num);
+		List<User> list = userMapper.selectByExample(e);
+		if(list.isEmpty()){
+			User o = new User();
+		`
+		} else {
+			methodMiddle += `
+			User o = new User();
+
+		`
+		}
+		methodMiddle += tempMiddle
+		if (uniqueId) {
+			methodMiddle += `
+			userMapper.insert(o);
+			return "1";//注册成功
+		}else{
+			return "0";//注册失败
+		}
+			`
+		} else {
+			methodMiddle += `
+		userMapper.insert(o);
+		return "1";//注册成功
+			`
+		}
 	}
-	return first + middle + footer + result
+
+	return [
+		`(${methodParams.substring(0, methodParams.length - 1)}${
+			hasUpload
+				? ', HttpServletRequest request)throws IllegalStateException, IOException'
+				: ')'
+		}`,
+		methodMiddle
+	]
 }
 
-function getFormParams(table, type) {
-	let params = new Map([...table._commentMap].filter(([k, v]) => v[type]))
-	return [...params.values()]
-}
 module.exports = {
 	writeToFile(tableName, line, isReWrite) {
 		let fileName =
@@ -192,17 +278,20 @@ module.exports = {
 			/* ----------- forEach Start ----------- */
 			let lowerIndex = index.toLowerCase()
 			let mapper = lowerIndex + 'Mapper'
-			/* -------------------------------------------------PACKAGE--------------------------------------------------------- */
-
-			//write globle and package name
-			this.writeToFile(
-				index,
-				`package ${config.ssm.packegeName}.controller;`,
-				true
+			let isLoginTable = G.util.getTableFeildHasSomeVal(
+				val,
+				'func',
+				'login'
+			)
+			let isRegisterTable = G.util.getTableFeildHasSomeVal(
+				val,
+				'func',
+				'register'
 			)
 			this.writeToFile(
 				index,
 				`
+package ${config.ssm.packegeName}.controller;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,15 +304,6 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
-
-			`
-			)
-			/* -------------------------------------------------MODEL & EXAMPLE--------------------------------------------------------- */
-
-			//write mapper and model and example
-			this.writeToFile(
-				index,
-				`
 import ${config.ssm.packegeName}.util.UploadUtils;
 import ${config.ssm.packegeName}.util.Result;
 import ${config.ssm.packegeName}.util.Util;
@@ -231,25 +311,11 @@ import ${config.ssm.packegeName}.mapper.${index}Mapper;
 import ${config.ssm.packegeName}.model.${index};
 import ${config.ssm.packegeName}.model.${index}Example;
 import ${config.ssm.packegeName}.model.${index}Example.Criteria;
-			`
-			)
-			/* -------------------------------------------------TOP--------------------------------------------------------- */
-			//write top
-			this.writeToFile(
-				index,
-				`
 @Controller
 @RequestMapping("${lowerIndex}")
 public class ${index}Controller {
 	@Autowired
 	private ${index}Mapper ${mapper} = null;
-			`
-			)
-			/* -------------------------------------------------GET ID | ALL | DEL--------------------------------------------------------- */
-			//write rest interface of static param function
-			this.writeToFile(
-				index,
-				`
 	@ResponseBody
 	@RequestMapping("get/id.do")
 	public String getbyid(Integer id){
@@ -271,207 +337,52 @@ public class ${index}Controller {
 		${mapper}.deleteByPrimaryKey(id);
 
 		return Util.getResult(1, "success","");
-	}`
-			)
-			/* -------------------------------------------------ADD--------------------------------------------------------- */
-			//write add function
-			this.writeToFile(
-				index,
-				`
+	}
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add${fieldsCommentMapToJavaParamsStr(
-		val._commentMap,
-		RULE.field.not_in_param.add
-	)}{
-		${fieldsCommentMapToMethodContent(
-			val._commentMap,
-			RULE.field.not_in_param.add,
-			index,
-			mapper
-		)}
-	}`
-			)
-
-			/* -------------------------------------------------EDIT--------------------------------------------------------- */
-			//write edit function
-			this.writeToFile(
-				index,
-				`
+	public String add${getFuncVals('add', val._commentMap, index, mapper)[0]}{
+		${getFuncVals('add', val._commentMap, index, mapper)[1]}
+	}
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit${fieldsCommentMapToJavaParamsStr(
-		val._commentMap,
-		RULE.field.not_in_param.edit
-	)}{
-		${fieldsCommentMapToMethodContent(
-			val._commentMap,
-			RULE.field.not_in_param.edit,
-			index,
-			mapper
-		)}
+	public String edit${getFuncVals('edit', val._commentMap, index, mapper)[0]}{
+		${getFuncVals('edit', val._commentMap, index, mapper)[1]}
 	}
-			`
-			)
-			/* -------------------------------------------------SEARCH--------------------------------------------------------- */
 
-			//write search function
-			this.writeToFile(
-				index,
-				`
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search${fieldsCommentMapToJavaParamsStr(
-		val._commentMap,
-		RULE.field.not_in_param.search
-	)}{
-		${fieldsCommentMapToMethodContent(
-			val._commentMap,
-			RULE.field.not_in_param.search,
-			index,
-			mapper
-		)}
+	public String search${getFuncVals('search', val._commentMap, index, mapper)[0]}{
+		${getFuncVals('search', val._commentMap, index, mapper)[1]}
 	}
-`
-			)
-			/* -------------------------------------------------LOGIN--------------------------------------------------------- */
-
-			//判断表是否包含登录功能
-			if (
-				val.tableComment.func &&
-				_.includes(val.tableComment.func, 'login')
-			) {
-				let loginParams = getFormParams(val, 'login_form')
-				let funcParams = _.join(
-					_.map(
-						loginParams,
-						item => `${item.java_type} ${item.feild_name}`
-					),
-					', '
-				)
-
-				let funcJurgePart = _.join(
-					_.map(
-						loginParams,
-						item =>
-							`c.and${G.util.firstWordUpper(
-								item.feild_name
-							)}EqualTo(${item.feild_name});`
-					),
-					'\n\t\t'
-				)
-				this.writeToFile(
-					index,
-					`
+	${
+		isLoginTable
+			? `
 	@ResponseBody
 	@RequestMapping("login.do")
-	public String login(${funcParams}){
-		${index}Example e = new ${index}Example();
-		Criteria c = e.createCriteria();
-		${funcJurgePart}
-		return JSON.toJSONString(${mapper}.selectByExample(e));
+	public String login${getFuncVals('login', val._commentMap, index, mapper)[0]}{
+		${getFuncVals('login', val._commentMap, index, mapper)[1]}
 	}
-				`
-				)
-			}
-
-			/* -------------------------------------------------REGISTER--------------------------------------------------------- */
-
-			//判断表是否包含注册功能
-			if (
-				val.tableComment.func &&
-				_.includes(val.tableComment.func, 'register')
-			) {
-				let registerParams = getFormParams(val, 'register_form')
-				let registerUniqueObj = _.filter(
-					registerParams,
-					item => item.login_id
-				)[0]
-				let funcParams = fieldsCommentMapToJavaParamsStrIn(
-					val._commentMap,
-					'register_form'
-				)
-				let funcJurgePart = _.join(
-					_.map(registerParams, item => {
-						if (item.java_type == 'upload') {
-							return `o.set${G.util.firstWordUpper(
-								item.feild_name
-							)}(path);`
-						} else {
-							return `o.set${G.util.firstWordUpper(
-								item.feild_name
-							)}(${item.feild_name});`
-						}
-					}),
-					'\n\t\t\t'
-				)
-				this.writeToFile(
-					index,
-					`
+	`
+			: ''
+	}
+	${
+		isRegisterTable
+			? `
 	@ResponseBody
 	@RequestMapping("register.do")
-	public String register${funcParams}
-		${index}Example e = new ${index}Example();
-		Criteria c = e.createCriteria();
-		c.and${G.util.firstWordUpper(registerUniqueObj.feild_name)}EqualTo(${
-						registerUniqueObj.feild_name
-					});
-		String path = "";
-		if(img!=null){path = UploadUtils.upload(request, img, "/pic");}
-		List<${index}> list = ${mapper}.selectByExample(e);
-		if(list.isEmpty()){
-			${index} o = new ${index}();
-			${funcJurgePart}
-			${mapper}.insert(o);
-			return "1";//注册成功
-
-		}else{
-			return "0";//注册失败
-		}
+	public String register${
+		getFuncVals('register', val._commentMap, index, mapper)[0]
+	}{
+		${getFuncVals('register', val._commentMap, index, mapper)[1]}
 	}
-				`
-				)
-			}
-
-			/*
-
-			@ResponseBody
-	@RequestMapping("register.do")
-	public String ref(String num,String name,Integer tid){
-		UserExample e = new UserExample();
-		Criteria c = e.createCriteria();
-		c.andNumEqualTo(num);
-		List<User> list = userm.selectByExample(e);
-		if(list.isEmpty()){
-			User u = new User();
-			u.setNum(num);
-			u.setName(name);
-			u.setPass(num);
-			u.setTid(tid);
-			Integer uid = userm.insert(u);
-			Score s = new Score();
-			s.setUid(uid);
-			sserm.insert(s);
-			return "1";//注册成功
-
-		}else{
-			return "0";//注册失败，有相同的学号
-		}
-
-
+	`
+			: ''
 	}
-
-			*/
-			/* -------------------------------------------------END--------------------------------------------------------- */
-
-			//End
-			this.writeToFile(
-				index,
-				`
 }
-			`
+				`,
+				true
 			)
 
 			/* ----------- forEach End ----------- */

@@ -433,17 +433,17 @@ ${file_utils.fileTypeHtml()}
 				this.$refs.loading.loading(G.http('${
 					value.tableComment._name
 				}/add.do',this.addModel).then(resp=>{
+					this.$refs.addModel.hide()
 					if(resp.code==1){
-						this.$refs.addModel.hide()
 						this.addModel = {
 							${addModal_vueModel}
 						}
 						${addMethodFileResetHtml}
 						return this.getModulePage().then(()=>{
-							this.$refs.toast.show('添加成功')
+							this.$refs.toast.show(resp.msg)
 						})
 					}else{
-						this.$refs.toast.show('添加失败'+resp.msg)
+						this.$refs.toast.show(resp.msg)
 					}
 
 
@@ -457,14 +457,19 @@ ${file_utils.fileTypeHtml()}
 					value.tableComment._name
 				}/edit.do',this.editModel).then(resp=>{
 					this.$refs.editModel.hide()
-					this.editModel = {
-						${editModal_vueModel}
-						id:''
+					if(resp.code==1){
+						this.editModel = {
+							${editModal_vueModel}
+							id:''
+						}
+						${editMethodFileResetHtml}
+						return this.getModulePage().then(()=>{
+							this.$refs.toast.show(resp.msg)
+						})
+					}else{
+						this.$refs.toast.show(resp.msg)
 					}
-					${editMethodFileResetHtml}
-					return this.getModulePage().then(()=>{
-						this.$refs.toast.show('修改成功')
-					})
+
 
 
 				}).catch(err=>{

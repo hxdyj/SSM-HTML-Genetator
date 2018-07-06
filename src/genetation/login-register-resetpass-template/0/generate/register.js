@@ -37,12 +37,14 @@ ${file_utils.fileTypeHtml()}
 <title>${config.html.html_title}</title>
 <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
 <link rel="stylesheet" type="text/css" href="../css/login.css">
+<link rel="stylesheet" type="text/css" href="../css/base.css">
 <script src="../js/jquery.min.js"></script>
 <script src="../js/config.js"></script>
 <script src="../js/get.var.js"></script>
 <script src="../js/semantic.min.js"></script>
 <script src="../js/vue.min.js"></script>
 <script src="../js/lodash.min.js"></script>
+<script src="../components/upload.js"></script>
 
 <style type="text/css">
 body>.grid {
@@ -90,18 +92,34 @@ body>.grid {
 						icon: 'lock'
 					})
 				}
-				this.writeToFile(
-					registerTableObj.tableComment._name,
-					`
-				<div class="field">
-					<div class="ui left icon input">
-						<i class="${data.icon} icon"></i>
-						<input type="text" v-model="${data.vModel}" name="text" placeholder="${
-						data.placeholder
-					}">
+				if (item.java_type == 'upload') {
+					this.writeToFile(
+						registerTableObj.tableComment._name,
+						`
+					<div class="field">
+						<label>${item.cn_name || item.feild_name}</label>
+						<g-upload ref="${registerTableObj.tableComment._name +
+							'_g_upload_ref_edit_modal_' +
+							item.feild_name}" :id="'${
+							registerTableObj.tableComment._name
+						}-g-upload-edit-modal-${item.feild_name}'"></g-upload>
 					</div>
-				</div>`
-				)
+						`
+					)
+				} else {
+					this.writeToFile(
+						registerTableObj.tableComment._name,
+						`
+					<div class="field">
+						<div class="ui left icon input">
+							<i class="${data.icon} icon"></i>
+							<input type="text" v-model="${data.vModel}" name="text" placeholder="${
+							data.placeholder
+						}">
+						</div>
+					</div>`
+					)
+				}
 			})
 
 			this.writeToFile(
@@ -132,7 +150,7 @@ var app = new Vue({
 				this.writeToFile(
 					registerTableObj.tableComment._name,
 					`
-			${item.feild_name}:null,`
+			${item.feild_name}:'',`
 				)
 			})
 
@@ -151,6 +169,22 @@ var app = new Vue({
 	},
 	methods: {
 		register() {
+			${_.join(
+				_.map(registerParams, item => {
+					if (item.java_type == 'upload') {
+						return `
+			this.feild['${item.feild_name}'] = this.$refs.${registerTableObj.tableComment
+							._name +
+							'_g_upload_ref_edit_modal_' +
+							item.feild_name}.getFile()`
+					} else {
+						return ''
+					}
+				}),
+				''
+			)}
+
+
 			if (${_.join(
 				_.map(registerParams, item => '!this.feild.' + item.feild_name),
 				'||'
@@ -165,15 +199,9 @@ var app = new Vue({
 				return
 			}
 
-			${`G.http('${registerTableObj.tableComment._name}/register.do', {
-			${_.join(
-				_.map(
-					registerParams,
-					item => `	${item.feild_name}:app.feild.${item.feild_name}`
-				),
-				',\n\t\t\t'
-			)},
-			},true).then(data => {
+			${`G.http('${
+				registerTableObj.tableComment._name
+			}/register.do',this.feild,true).then(data => {
 				if (data==1) {
 					alert("注册成功")
 					location.href = '${registerTableObj.tableComment._name}_login.${

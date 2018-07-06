@@ -30,7 +30,7 @@ Vue.component('g-upload', {
 			this.httpImg = true
 			let ele = $('.g-upload-pre-img-' + this.id)
 			ele.attr('src', GetVar.http.server + 'pic/' + name)
-			if (!ele.complete) {
+			if (!ele[0].complete) {
 				this.httpImg = false
 				//ele.attr('src', GetVar.http.server + 'system_pic/no_img.png')
 			}
