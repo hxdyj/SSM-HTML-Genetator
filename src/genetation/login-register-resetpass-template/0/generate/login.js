@@ -51,7 +51,7 @@ ${file_utils.fileTypeHtml()}
 ${
 					isVerify
 						? `
-<script src="./js/gVerify.js"></script>`
+<script src="../js/gVerify.js"></script>`
 						: ''
 				}
 

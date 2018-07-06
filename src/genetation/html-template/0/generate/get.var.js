@@ -39,24 +39,51 @@ module.exports = {
 			headerParams +=
 				`
 			name:'${name}'` + ','
-			/* avatar:'${G.util.getTableHasSomeCommentFeild(item, 'avatar')[0] ||
-				config.http.server + 'system_pic/default_user_icon.jpg'}'` + ','
-			headerParams +=
-				`
-			pass:'${G.util.getTableHasSomeCommentFeild(item, 'pass')[0] || '请设置密码'}'` +
-				','
-			headerParams +=
-				`
-			name:'${G.util.getTableHasSomeCommentFeild(item, 'name')[0] || '请设置姓名'}'` +
-				',' */
 			headerParams += '\n\t\t},'
 		})
+
 		this.writeToFile(
 			`
 var GetVar = {
 	http:{
 		server:'${config.http.server}',
 		local:'${config.debug ? config.http.local || '' : config.http.server}'
+	},
+	htmlConfig:{
+		html_title:'${
+			config.html.html_title ? config.html.html_title : 'Write By 月森'
+		}',
+		header:{
+			title: '${
+				config.html.header.title
+					? config.html.header.title
+					: config.html.html_title
+						? config.html.html_title
+						: 'Write By 月森'
+			}',
+			img: '${
+				config.html.header.img
+					? config.html.header.img
+					: 'header_logo_img.png'
+			}',
+			userImg:'${
+				config.html.header.userImg
+					? config.html.header.userImg
+					: 'user_default_avatar.png'
+			}'
+		},
+		leftMenu:{
+			content: "${
+				config.html.leftMenu.content
+					? config.html.leftMenu.content
+					: "梦想开始的地方<br>Let's Go..."
+			}",
+			img: '${
+				config.html.leftMenu.img
+					? config.html.leftMenu.img
+					: 'left_menu_default_img.png'
+			}'
+		}
 	},
 	headerParams:{
 		${headerParams}

@@ -7,16 +7,19 @@ Vue.component('g-left-menu', {
 		active: '',
 		endName: '管理'
 	},
-	data: function() {},
+	data: function() {
+		return {
+			htmlConfig: GetVar.htmlConfig
+		}
+	},
 	mounted: function() {},
 	methods: {},
 	template: `
 <div class="g-left-menu">
 	<div class="g-left-menu-contain">
 		<div class="introduce">
-			<div class="bg"></div>
-			<div class="content">
-				任劳任怨<br> 尽职尽责<br> 精益求精<br>
+			<div class="bg" :style="{background:'url(../img/'+htmlConfig.leftMenu.img+')',backgroundSize: 'cover',filter: 'blur(0.6rem)',height: '100%'}"></div>
+			<div class="content" v-html="htmlConfig.leftMenu.content">
 			</div>
 		</div>
 		<div class="items">

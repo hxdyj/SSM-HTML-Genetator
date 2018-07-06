@@ -6,7 +6,9 @@ Vue.component('g-breadcrumb', {
 		}
 	},
 	data: function() {
-		userInfo: JSON.parse(localStorage.getItem('userInfo') || {})
+		return {
+			userInfo: JSON.parse(localStorage.getItem('userInfo') || {})
+		}
 	},
 	mounted: function() {},
 	methods: {
