@@ -14,6 +14,23 @@ module.exports = {
 			'func',
 			'login'
 		)
+		let login_default_table =
+			G.util.getHasSomeCommentTable(
+				commonData,
+				'func',
+				'loginDefault'
+			)[0] || null
+
+		let checkIsLoginHtml = ''
+		if (login_default_table) {
+			checkIsLoginHtml = `
+			if(_.isEmpty(_.values(this.userInfo))){
+				location.href = '${
+					login_default_table.tableComment._name
+				}_login.' + GetVar.file_suffix
+			}
+			`
+		}
 
 		_.forEach(login_tables, loginTableObj => {
 			this.writeToFile(
@@ -73,10 +90,12 @@ ${file_utils.fileTypeHtml()}
 	var app = new Vue({
 		el: '#app',
 		data: {
+			userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
 			message: 'Hello Vue!',
 			list_leftMenu:[]
 		},
 		mounted(){
+			${checkIsLoginHtml}
 			this.getMenus()
 		},
 		methods: {

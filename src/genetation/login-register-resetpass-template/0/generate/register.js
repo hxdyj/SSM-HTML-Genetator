@@ -144,6 +144,7 @@ body>.grid {
 var app = new Vue({
 	el: '#app',
 	data: {
+		userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
 		feild:{`
 			)
 			_.forEach(registerParams, item => {
@@ -165,7 +166,9 @@ var app = new Vue({
 				registerTableObj.tableComment._name,
 				`
 	mounted() {
-
+		if(!_.isEmpty(_.values(this.userInfo)) && _.includes(location.href,this.userInfo._login_type+'_register')){
+			location.href = this.userInfo._login_type + '_index.' + GetVar.file_suffix
+		}
 	},
 	methods: {
 		register() {

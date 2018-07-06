@@ -147,6 +147,7 @@ body>.grid {
 var app = new Vue({
 	el: '#app',
 	data: {
+		userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
 		feild:{`
 			)
 			_.forEach(loginParams, item => {
@@ -169,6 +170,9 @@ var app = new Vue({
 				loginTableObj.tableComment._name,
 				`
 	mounted() {
+		if(!_.isEmpty(_.values(this.userInfo)) && _.includes(location.href,this.userInfo._login_type+'_login')){
+			location.href = this.userInfo._login_type + '_index.' + GetVar.file_suffix
+		}
 		${isVerify ? `this.verifyCode = new GVerify("v_container")` : ''}
 	},
 	methods: {

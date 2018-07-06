@@ -9,6 +9,23 @@ module.exports = {
 	writeToFiles(commonData) {
 		console.log(clc.blue('start genetating web module html template....'))
 
+		let login_default_table =
+			G.util.getHasSomeCommentTable(
+				commonData,
+				'func',
+				'loginDefault'
+			)[0] || null
+		let checkIsLoginHtml = ''
+		if (login_default_table) {
+			checkIsLoginHtml = `
+			if(_.isEmpty(_.values(this.userInfo))){
+				location.href = '${
+					login_default_table.tableComment._name
+				}_login.' + GetVar.file_suffix
+			}
+			`
+		}
+
 		_.forEach(commonData.tablesDesc, (value, key, map) => {
 			//获取可以在table展示的字段
 			let showFeild = _.filter(
@@ -365,6 +382,7 @@ ${file_utils.fileTypeHtml()}
     var app = new Vue({
         el: '#app',
         data: {
+			userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
             message: 'Hello Vue!',
 			list_leftMenu:[],
 			page:1,
@@ -382,6 +400,7 @@ ${file_utils.fileTypeHtml()}
 			}
 		},
 		mounted(){
+			${checkIsLoginHtml}
 			this.$refs.loading.loading([
 				this.getMenus(),
 				this.getModulePage(),
