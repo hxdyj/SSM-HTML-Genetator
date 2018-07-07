@@ -1,5 +1,5 @@
 module.exports = {
-	debug: true,
+	debug: true, //是否为开发环境
 	connect: {
 		host: 'wingblog.top',
 		user: 'tbarchives',
@@ -8,20 +8,25 @@ module.exports = {
 	},
 	basePath: __dirname,
 	serviceRequireBasePath: '../entity/',
+	//这里不要修改
 	outputDir: '/generate-output',
+	//接口地址
 	http: {
 		server: 'http://localhost:8080/System/',
 		local: 'http://localhost:3000/'
 	},
+	//这里的都不要修改
 	generateDirs: {
 		ssm_controller: '/ssm_controller/',
 		html: '/html/',
 		html_pages: '/html/pages/'
 	},
 	ssm: {
+		//包名
 		packegeName: 'com.system'
 	},
 	html: {
+		//网页标题
 		html_title: '',
 		header: {
 			title: '',
