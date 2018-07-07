@@ -6,6 +6,7 @@ global.G = {
 global.shell = require('shelljs')
 global.execSh = require('exec-sh')
 global.config = require('./config') //配置文件
+//if (!config.basePath) config.basePath = __dirname
 global.file_utils = require('./src/util/file_utils') //文件相关操作
 const mysql_utils = require('./src/util/mysql_utils') //数据库相关操作
 console.log(clc.green('start running...'))
@@ -16,10 +17,10 @@ function generating() {
 		//获取所有表及其详细信息
 		let commonData = await mysql_utils.getTablesDesc(mysql)
 		//生成ssm controller 文件
-		require('./src/genetation/ssm_controller').writeToFiles(commonData)
+		require('./src/generation/ssm_controller').writeToFiles(commonData)
 
 		//生成前端模板
-		let HtmlGenerate = require('./src/genetation/html_deal')
+		let HtmlGenerate = require('./src/generation/html_deal')
 		HtmlGenerate.login_register_resetpass(commonData)
 		HtmlGenerate.template(commonData)
 		mysql.end()

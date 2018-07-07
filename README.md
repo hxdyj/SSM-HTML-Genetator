@@ -18,3 +18,7 @@ index.suffix
 -   display
 -   modal
 -   list //have page and search function [note:genetating need recognize img or file.]
+
+# Note:
+
+1.build.sh 的权限 755

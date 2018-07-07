@@ -28,7 +28,7 @@
 		"webpack": "^3.10.0"
 	},
 	"scripts": {
-		"build": "webpack --progress",
+		"build": "node build.js",
 		"start": "node index.js",
 		"fg": "node-dev Mysql_Field_Design_Rule.js"
 	}

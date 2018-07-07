@@ -4,7 +4,7 @@ const webpack = require('webpack')
 let externals = _externals()
 export default {
 	entry: {
-		server: './index.js'
+		generate: './index.js'
 	},
 	target: 'node',
 	plugins: [

@@ -7,6 +7,7 @@ module.exports = {
 
 		console.log(clc.blue('output dir is exist:', isExist))
 		if (!isExist) {
+			console.log(clc.blue('mkdir path:', config.basePath))
 			fs.mkdirSync(path)
 			_.forIn(config.generateDirs, (value, key) => {
 				fs.mkdirSync(path + value)

@@ -1,3 +1,4 @@
+const path = require('path')
 module.exports = {
 	debug: true, //是否为开发环境
 	connect: {
@@ -6,7 +7,7 @@ module.exports = {
 		password: 'tbarchives',
 		database: 'tbarchives'
 	},
-	basePath: __dirname,
+	basePath: path.resolve(__dirname),
 	serviceRequireBasePath: '../entity/',
 	//这里不要修改
 	outputDir: '/generate-output',
