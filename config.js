@@ -19,6 +19,7 @@ module.exports = {
 	//这里的都不要修改
 	generateDirs: {
 		ssm_controller: '/ssm_controller/',
+		mybatis_generate: '/mybatis_generate/',
 		html: '/html/',
 		html_pages: '/html/pages/'
 	},
