@@ -29,6 +29,7 @@
 	},
 	"scripts": {
 		"build": "webpack --progress",
+		"start": "node index.js",
 		"fg": "node-dev Mysql_Field_Design_Rule.js"
 	}
 }

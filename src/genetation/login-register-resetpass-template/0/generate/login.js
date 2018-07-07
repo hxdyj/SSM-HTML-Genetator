@@ -147,7 +147,7 @@ body>.grid {
 var app = new Vue({
 	el: '#app',
 	data: {
-		userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
+		userInfo:JSON.parse(localStorage.getItem('userInfo') || '{}'),
 		feild:{`
 			)
 			_.forEach(loginParams, item => {

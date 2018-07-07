@@ -382,7 +382,7 @@ ${file_utils.fileTypeHtml()}
     var app = new Vue({
         el: '#app',
         data: {
-			userInfo:JSON.parse(localStorage.getItem('userInfo') || {}),
+			userInfo:JSON.parse(localStorage.getItem('userInfo') || '{}'),
             message: 'Hello Vue!',
 			list_leftMenu:[],
 			page:1,
