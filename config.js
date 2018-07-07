@@ -3,6 +3,7 @@ module.exports = {
 	debug: true, //是否为开发环境
 	connect: {
 		host: 'wingblog.top',
+		port: 3306,
 		user: 'tbarchives',
 		password: 'tbarchives',
 		database: 'tbarchives'
