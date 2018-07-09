@@ -30,6 +30,7 @@
 	"scripts": {
 		"build": "./build.sh",
 		"start": "node index.js && ./javaweb-project/mybatic_generate/generate.sh && node create_project.js",
+		"gstart": "node generate.js && ./javaweb-project/mybatic_generate/generate.sh && node create_project.js",
 		"fg": "node-dev Mysql_Field_Design_Rule.js"
 	}
 }
