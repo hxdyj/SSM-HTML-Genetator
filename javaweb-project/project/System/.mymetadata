@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="TbGroup"
+  id="myeclipse.1514608652816"
+  context-root="/TbGroup"
+  j2ee-spec="5.0"
+  archive="TbGroup.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

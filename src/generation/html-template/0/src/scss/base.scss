@@ -1,0 +1,242 @@
+$headerH: 4rem;
+$leftMenuWidth: 16.3rem;
+//layout布局样式
+
+#app {
+	.index-content {
+		display: flex;
+		flex-basis: 1;
+		min-height: calc(100vh - #{$headerH});
+		background: #f7f5f5;
+		.index-content-left {
+			width: $leftMenuWidth;
+			flex-shrink: 0;
+			height: 100%;
+			background: #00b5ad;
+		}
+		.index-content-right {
+			flex-grow: 7;
+			.table-contain {
+				max-height: calc(100vh - #{$headerH + 3rem});
+				overflow: hidden;
+				overflow-y: auto;
+			}
+		}
+	}
+}
+
+//header组件的样式
+.g-header {
+	height: $headerH;
+	margin-top: 0rem !important;
+	.g-header-title {
+		color: white !important;
+	}
+
+	.g-header-search {
+		input {
+			color: white !important;
+			font-size: 1.15rem !important;
+		}
+		.transparent {
+			//background: white !important;
+		}
+
+		.search.icon {
+		}
+
+		.g-header-username {
+			font-size: 1.05rem !important;
+			position: relative;
+			top: 0.21rem;
+		}
+	}
+	.g-header-actions {
+		.g-header-userinfo-actions {
+			width: 20rem !important;
+			top: 3.8rem !important;
+			.avatar {
+				width: 6rem !important;
+				height: 6rem !important;
+				margin-left: 4.6rem;
+			}
+		}
+
+		.g-header-action-username {
+			margin-top: 1rem;
+			text-align: center;
+			width: 100%;
+		}
+
+		.g-header-action-menus {
+			width: 100%;
+			margin-top: 1rem;
+			text-align: center;
+		}
+	}
+}
+
+//左侧菜单页
+
+.g-left-menu {
+	width: 100%;
+	height: 100%;
+	border-right: 0.05rem solid #005652b4;
+	.g-left-menu-contain {
+		min-height: calc(100vh - #{$headerH});
+		max-height: calc(100vh - #{$headerH});
+		.introduce {
+			//background: lighten(#00978f, 1);
+			overflow: hidden;
+			height: 10rem;
+			position: relative;
+			.bg {
+				// background: url('../img/starry_sky.jpg');
+				// background: url('../img/1.jpg');
+			}
+			.content {
+				position: absolute;
+				top: 0;
+				box-sizing: border-box;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				color: white;
+				justify-content: center;
+				align-items: center;
+				line-height: 2rem;
+				font-size: 1.1rem;
+				font-weight: 100;
+				letter-spacing: 0.05rem;
+				padding: 1rem;
+			}
+		}
+		.items {
+			.item {
+				border-top: 0.05rem solid #005652b4;
+				//background: lighten(#005652, 15);
+				height: 3.6rem;
+				width: 100%;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				//color: #ffff21;
+				color: #121212;
+				.icon {
+					margin-left: 10%;
+					font-size: 0.8rem;
+					position: relative;
+					top: -0.23rem;
+				}
+				.title {
+					margin-left: 0.2rem;
+					margin-right: 1rem;
+					font-size: 1rem;
+					font-weight: 500;
+				}
+				&:hover {
+					background: lighten(#005652, 10);
+					color: white;
+				}
+
+				&.active {
+					background: #f7f5f5;
+					color: #141316;
+				}
+				&:last-child {
+					border-bottom: 0.05rem solid #005652b4;
+				}
+			}
+		}
+	}
+}
+//面包屑导航
+.g-breadcrumb {
+	height: 3rem;
+	background: white;
+	display: flex;
+	align-items: center;
+	padding-left: 2rem;
+	border-bottom: 0.1rem solid #e2dfdf;
+}
+//全局table组件
+.g-table {
+	display: flex;
+	justify-content: center;
+	.table-all {
+		margin-top: 4rem;
+		max-width: 90% !important;
+		min-width: 90% !important;
+		.table-page {
+			margin-top: 2rem;
+			margin-bottom: 2rem;
+			display: flex;
+			justify-content: center;
+		}
+	}
+	.icon {
+		cursor: pointer;
+		color: #4987cc;
+		&:hover {
+			color: #515ef9;
+		}
+	}
+}
+
+.modal.ui {
+	padding: 1rem;
+}
+.g-toast {
+	position: fixed;
+	top: $headerH;
+	height: 3rem;
+	background: rgba(18, 18, 18, 0.9);
+	color: white;
+	font-size: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: calc(100% - #{$leftMenuWidth});
+	left: $leftMenuWidth;
+}
+
+.g-loading {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: hsla(0, 0%, 7%, 0.58);
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.g-upload {
+	width: 100%;
+	height: 8rem;
+	border: 0.1rem dashed #ccc;
+	border-radius: 0.8rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	.upload {
+		color: #497ec4;
+		font-size: 3rem;
+	}
+
+	.upload-input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		cursor: pointer;
+	}
+}
