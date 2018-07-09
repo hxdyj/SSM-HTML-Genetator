@@ -1,5 +1,6 @@
 const execSh = require('exec-sh')
 const config = require('./config')
+execSh('cd ../../')
 //# 删除controller
 execSh('rm -rf javaweb-project/project/System/src/com/system/controller')
 execSh('mkdir -p javaweb-project/project/System/src/com/system/controller')
