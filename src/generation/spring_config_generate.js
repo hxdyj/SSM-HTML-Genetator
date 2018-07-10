@@ -1,4 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+module.exports = {
+	writeToFile(line, isReWrite) {
+		let fileName =
+			config.generateDirs.mybatis_generate +
+			'ApplicationContext-spring.xml'
+		file_utils.writeLineToFile(line, fileName, isReWrite)
+	},
+	writeToFiles(commonData) {
+		this.writeToFile(
+			`<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
@@ -19,13 +28,15 @@
 			<value>com.mysql.jdbc.Driver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:mysql://wingblog.top:3306/tbarchives?characterEncoding=utf8&amp;useUnicode=true</value>
+			<value>jdbc:mysql://${config.connect.host}:${config.connect.port}/${
+				config.connect.database
+			}?characterEncoding=utf8&amp;useUnicode=true</value>
 		</property>
 		<property name="username">
-			<value>tbarchives</value>
+			<value>${config.connect.user}</value>
 		</property>
 		<property name="password">
-			<value>tbarchives</value>
+			<value>${config.connect.password}</value>
 		</property>
 		<property name="validationQuery">
 			<value>select 1</value>
@@ -85,4 +96,8 @@
 
 	<bean id="indexFilter" class="com.system.filter.IndexFilter"></bean>
 </beans>
-		
+		`,
+			true
+		)
+	}
+}
