@@ -15,42 +15,42 @@ import java.util.List;
 import com.system.util.UploadUtils;
 import com.system.util.Result;
 import com.system.util.Util;
-import com.system.mapper.UserMapper;
-import com.system.model.User;
-import com.system.model.UserExample;
-import com.system.model.UserExample.Criteria;
+import com.system.mapper.BorrowMapper;
+import com.system.model.Borrow;
+import com.system.model.BorrowExample;
+import com.system.model.BorrowExample.Criteria;
 @Controller
-@RequestMapping("user")
-public class UserController {
+@RequestMapping("borrow")
+public class BorrowController {
 	@Autowired
-	private UserMapper userMapper = null;
+	private BorrowMapper borrowMapper = null;
 	@ResponseBody
 	@RequestMapping("get/id.do")
 	public String getbyid(Integer id){
 
-		return Util.getResult(1, "success",userMapper.selectByPrimaryKey(id));
+		return Util.getResult(1, "success",borrowMapper.selectByPrimaryKey(id));
 	}
 
 	@ResponseBody
 	@RequestMapping("get/all.do")
 	public String getall(Integer id){
 
-		return Util.getResult(1, "success",userMapper.selectByExample(null));
+		return Util.getResult(1, "success",borrowMapper.selectByExample(null));
 	}
 
 	@ResponseBody
 	@RequestMapping("del.do")
 	public String del(Integer id){
 
-		userMapper.deleteByPrimaryKey(id);
+		borrowMapper.deleteByPrimaryKey(id);
 
 		return Util.getResult(1, "success","");
 	}
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String num,String name,String register_date,String level,String address,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
-		User o = new User();
+	public String add(Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
+		Borrow o = new Borrow();
 		if(id!=null){
 			o.setId(id);
 		}
@@ -59,12 +59,16 @@ public class UserController {
 			o.setNum(num);
 		}
 					
+		if(user_num!=null){
+			o.setUser_num(user_num);
+		}
+					
 		if(name!=null){
 			o.setName(name);
 		}
 					
-		if(register_date!=null){
-			o.setRegister_date(register_date);
+		if(borrow_date!=null){
+			o.setBorrow_date(borrow_date);
 		}
 					
 		if(level!=null){
@@ -75,21 +79,17 @@ public class UserController {
 			o.setAddress(address);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
-		}
-					
-			userMapper.insert(o);
+			borrowMapper.insert(o);
 			return Util.getResult(1, "添加成功","");
 			
 	}
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String num,String name,String register_date,String level,String address,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String edit(Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
 		
-		User o = userMapper.selectByPrimaryKey(id);
-		User o_back = userMapper.selectByPrimaryKey(id);
+		Borrow o = borrowMapper.selectByPrimaryKey(id);
+		Borrow o_back = borrowMapper.selectByPrimaryKey(id);
 		
 		if(id!=null){
 			o.setId(id);
@@ -99,12 +99,16 @@ public class UserController {
 			o.setNum(num);
 		}
 					
+		if(user_num!=null){
+			o.setUser_num(user_num);
+		}
+					
 		if(name!=null){
 			o.setName(name);
 		}
 					
-		if(register_date!=null){
-			o.setRegister_date(register_date);
+		if(borrow_date!=null){
+			o.setBorrow_date(borrow_date);
 		}
 					
 		if(level!=null){
@@ -115,25 +119,21 @@ public class UserController {
 			o.setAddress(address);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
-		}
-					
-		userMapper.updateByPrimaryKey(o);
+		borrowMapper.updateByPrimaryKey(o);
 		return Util.getResult(1, "修改成功","");
 			
 	}
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String register_date,String level,String address){
+	public String search(Integer page,Integer pageRow,Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
 		
 		if(page==null) {
-			return Util.getResult(1, "", userMapper.selectByExample(null));
+			return Util.getResult(1, "", borrowMapper.selectByExample(null));
 		}
 		if(pageRow==null)pageRow=10;
 
-		UserExample e = new UserExample();
+		BorrowExample e = new BorrowExample();
 		Criteria c = e.createCriteria();
 		
 		if(id!=null){
@@ -144,12 +144,16 @@ public class UserController {
 			c.andNumLike("%"+num+"%");
 		}
 		
+		if(user_num!=null){
+			c.andUser_numLike("%"+user_num+"%");
+		}
+		
 		if(name!=null){
 			c.andNameLike("%"+name+"%");
 		}
 		
-		if(register_date!=null){
-			c.andRegister_dateLike("%"+register_date+"%");
+		if(borrow_date!=null){
+			c.andBorrow_dateLike("%"+borrow_date+"%");
 		}
 		
 		if(level!=null){
@@ -161,7 +165,7 @@ public class UserController {
 		}
 		
 		PageHelper.startPage(page, pageRow);
-		List<User> alllist = userMapper.selectByExample(e);
+		List<Borrow> alllist = borrowMapper.selectByExample(e);
 		PageInfo list = new PageInfo(alllist);
 		return Util.getResult(1, "",list);
 		

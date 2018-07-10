@@ -15,48 +15,48 @@ import java.util.List;
 import com.system.util.UploadUtils;
 import com.system.util.Result;
 import com.system.util.Util;
-import com.system.mapper.AdminMapper;
-import com.system.model.Admin;
-import com.system.model.AdminExample;
-import com.system.model.AdminExample.Criteria;
+import com.system.mapper.UseradminMapper;
+import com.system.model.Useradmin;
+import com.system.model.UseradminExample;
+import com.system.model.UseradminExample.Criteria;
 @Controller
-@RequestMapping("admin")
-public class AdminController {
+@RequestMapping("useradmin")
+public class UseradminController {
 	@Autowired
-	private AdminMapper adminMapper = null;
+	private UseradminMapper useradminMapper = null;
 	@ResponseBody
 	@RequestMapping("get/id.do")
 	public String getbyid(Integer id){
 
-		return Util.getResult(1, "success",adminMapper.selectByPrimaryKey(id));
+		return Util.getResult(1, "success",useradminMapper.selectByPrimaryKey(id));
 	}
 
 	@ResponseBody
 	@RequestMapping("get/all.do")
 	public String getall(Integer id){
 
-		return Util.getResult(1, "success",adminMapper.selectByExample(null));
+		return Util.getResult(1, "success",useradminMapper.selectByExample(null));
 	}
 
 	@ResponseBody
 	@RequestMapping("del.do")
 	public String del(Integer id){
 
-		adminMapper.deleteByPrimaryKey(id);
+		useradminMapper.deleteByPrimaryKey(id);
 
 		return Util.getResult(1, "success","");
 	}
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,Integer num,String pass,String name){
-		Admin o = new Admin();
+	public String add(Integer id,String login_id,String pass,String name){
+		Useradmin o = new Useradmin();
 		if(id!=null){
 			o.setId(id);
 		}
 					
-		if(num!=null){
-			o.setNum(num);
+		if(login_id!=null){
+			o.setLogin_id(login_id);
 		}
 					
 		if(pass!=null){
@@ -67,33 +67,33 @@ public class AdminController {
 			o.setName(name);
 		}
 					
-		AdminExample e = new AdminExample();
-		Criteria c = e.createCriteria();
-		c.andNumEqualTo(num);
-		List<Admin> list = adminMapper.selectByExample(e);
-		if(list.isEmpty()){
-			adminMapper.insert(o);
-			return Util.getResult(1, "注册成功","");
-		}else{
-			return Util.getResult(0, "用户已存在","");
-		}
-
-		
+			UseradminExample e = new UseradminExample();
+			Criteria c = e.createCriteria();
+			c.andLogin_idEqualTo(login_id);
+			List<Useradmin> list = useradminMapper.selectByExample(e);
+			if(list.isEmpty()){
+				useradminMapper.insert(o);
+				return Util.getResult(1, "添加成功","");
+			}else{
+				return Util.getResult(0, "用户已存在","");
+			}
+	
+			
 	}
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,Integer num,String pass,String name){
+	public String edit(Integer id,String login_id,String pass,String name){
 		
-		Admin o = adminMapper.selectByPrimaryKey(id);
-		Admin o_back = adminMapper.selectByPrimaryKey(id);
+		Useradmin o = useradminMapper.selectByPrimaryKey(id);
+		Useradmin o_back = useradminMapper.selectByPrimaryKey(id);
 		
 		if(id!=null){
 			o.setId(id);
 		}
 					
-		if(num!=null){
-			o.setNum(num);
+		if(login_id!=null){
+			o.setLogin_id(login_id);
 		}
 					
 		if(pass!=null){
@@ -104,15 +104,15 @@ public class AdminController {
 			o.setName(name);
 		}
 					
-		List<Admin> list = null;
-		if(num!=null){
-			AdminExample e = new AdminExample();
+		List<Useradmin> list = null;
+		if(login_id!=null){
+			UseradminExample e = new UseradminExample();
 			Criteria c = e.createCriteria();
-			c.andNumEqualTo(num);
-			list = adminMapper.selectByExample(e);
+			c.andLogin_idEqualTo(login_id);
+			list = useradminMapper.selectByExample(e);
 		}
-		if((list!=null&&list.isEmpty())||!o_back.getNum().equals(num)){
-			adminMapper.updateByPrimaryKey(o);
+		if((list!=null&&list.isEmpty())||!o_back.getLogin_id().equals(login_id)){
+			useradminMapper.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
 			return Util.getResult(0, "用户已存在","");
@@ -122,22 +122,22 @@ public class AdminController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,Integer num,String pass,String name){
+	public String search(Integer page,Integer pageRow,Integer id,String login_id,String pass,String name){
 		
 		if(page==null) {
-			return Util.getResult(1, "", adminMapper.selectByExample(null));
+			return Util.getResult(1, "", useradminMapper.selectByExample(null));
 		}
 		if(pageRow==null)pageRow=10;
 
-		AdminExample e = new AdminExample();
+		UseradminExample e = new UseradminExample();
 		Criteria c = e.createCriteria();
 		
 		if(id!=null){
 			c.andIdEqualTo(id);
 		}
 		
-		if(num!=null){
-			c.andNumEqualTo(num);
+		if(login_id!=null){
+			c.andLogin_idLike("%"+login_id+"%");
 		}
 		
 		if(pass!=null){
@@ -149,7 +149,7 @@ public class AdminController {
 		}
 		
 		PageHelper.startPage(page, pageRow);
-		List<Admin> alllist = adminMapper.selectByExample(e);
+		List<Useradmin> alllist = useradminMapper.selectByExample(e);
 		PageInfo list = new PageInfo(alllist);
 		return Util.getResult(1, "",list);
 		
@@ -157,16 +157,16 @@ public class AdminController {
 	
 	@ResponseBody
 	@RequestMapping("login.do")
-	public String login(Integer num,String pass){
+	public String login(String login_id,String pass){
 		
-		AdminExample e = new AdminExample();
+		UseradminExample e = new UseradminExample();
 		Criteria c = e.createCriteria();
 		
-		c.andNumEqualTo(num);
+		c.andLogin_idEqualTo(login_id);
 			
 		c.andPassEqualTo(pass);
 			
-		return JSON.toJSONString(adminMapper.selectByExample(e));
+		return JSON.toJSONString(useradminMapper.selectByExample(e));
 		
 	}
 	

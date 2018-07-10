@@ -25,7 +25,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 	if (method == 'add') {
 		methodMiddle += `${tableName} o = new ${tableName}();`
 		let uniqueId = null
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
@@ -51,22 +51,29 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 				}
 			}
 		})
-
-		methodMiddle += `
-		${tableName}Example e = new ${tableName}Example();
-		Criteria c = e.createCriteria();
-		c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
-			uniqueId.feild_name
-		});
-		List<${tableName}> list = ${mapper}.selectByExample(e);
-		if(list.isEmpty()){
+		if (uniqueId) {
+			methodMiddle += `
+			${tableName}Example e = new ${tableName}Example();
+			Criteria c = e.createCriteria();
+			c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
+				uniqueId.feild_name
+				});
+			List<${tableName}> list = ${mapper}.selectByExample(e);
+			if(list.isEmpty()){
+				${mapper}.insert(o);
+				return Util.getResult(1, "添加成功","");
+			}else{
+				return Util.getResult(0, "用户已存在","");
+			}
+	
+			`
+		} else {
+			methodMiddle += `
 			${mapper}.insert(o);
-			return Util.getResult(1, "注册成功","");
-		}else{
-			return Util.getResult(0, "用户已存在","");
+			return Util.getResult(1, "添加成功","");
+			`
 		}
 
-		`
 	}
 	if (method == 'edit') {
 		methodMiddle += `
@@ -74,7 +81,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName} o_back = ${mapper}.selectByPrimaryKey(id);
 		`
 		let uniqueId = null
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
@@ -109,12 +116,12 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 			Criteria c = e.createCriteria();
 			c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
 				uniqueId.feild_name
-			});
+				});
 			list = ${mapper}.selectByExample(e);
 		}
 		if((list!=null&&list.isEmpty())||!o_back.get${G.util.firstWordUpper(
-			uniqueId.feild_name
-		)}().equals(${uniqueId.feild_name})){
+					uniqueId.feild_name
+				)}().equals(${uniqueId.feild_name})){
 			${mapper}.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
@@ -140,7 +147,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
 			if (!_.includes(val.not_in_param, method)) {
@@ -168,7 +175,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			//if this method not in val.not_in_param, don't append it.
 			//将not_in_param属性中不包含method的字段添加到对应的方法中
 			if (!_.includes(val.not_in_param, method)) {
@@ -200,7 +207,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 		${tableName}Example e = new ${tableName}Example();
 		Criteria c = e.createCriteria();
 		`
-		commentMap.forEach(function(val, key) {
+		commentMap.forEach(function (val, key) {
 			if (val.login_id) uniqueId = val
 
 			//if this method not in val.not_in_param, don't append it.
@@ -258,9 +265,9 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 
 	return [
 		`(${methodParams.substring(0, methodParams.length - 1)}${
-			hasUpload
-				? ', HttpServletRequest request)throws IllegalStateException, IOException'
-				: ')'
+		hasUpload
+			? ', HttpServletRequest request)throws IllegalStateException, IOException'
+			: ')'
 		}`,
 		methodMiddle
 	]
@@ -357,29 +364,29 @@ public class ${index}Controller {
 		${getFuncVals('search', val._commentMap, index, mapper)[1]}
 	}
 	${
-		isLoginTable
-			? `
+				isLoginTable
+					? `
 	@ResponseBody
 	@RequestMapping("login.do")
 	public String login${getFuncVals('login', val._commentMap, index, mapper)[0]}{
 		${getFuncVals('login', val._commentMap, index, mapper)[1]}
 	}
 	`
-			: ''
-	}
+					: ''
+				}
 	${
-		isRegisterTable
-			? `
+				isRegisterTable
+					? `
 	@ResponseBody
 	@RequestMapping("register.do")
 	public String register${
-		getFuncVals('register', val._commentMap, index, mapper)[0]
-	}{
+					getFuncVals('register', val._commentMap, index, mapper)[0]
+					}{
 		${getFuncVals('register', val._commentMap, index, mapper)[1]}
 	}
 	`
-			: ''
-	}
+					: ''
+				}
 }
 				`,
 				true

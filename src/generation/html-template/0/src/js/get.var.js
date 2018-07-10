@@ -18,15 +18,20 @@ var GetVar = {
 	},
 	headerParams:{
 		
-		admin:{
+		bookadmin:{
 			avatar:'null',
 			pass:'null',
 			name:'null',
 		},
-		user:{
-			avatar:'img',
-			pass:'pass',
-			name:'name',
+		borrowadmin:{
+			avatar:'null',
+			pass:'null',
+			name:'null',
+		},
+		useradmin:{
+			avatar:'null',
+			pass:'null',
+			name:'null',
 		},
 	},
 	file_suffix:'html'
