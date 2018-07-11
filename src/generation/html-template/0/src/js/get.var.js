@@ -5,14 +5,14 @@ var GetVar = {
 		local:'http://localhost:8080/System/'
 	},
 	htmlConfig:{
-		html_title:'Write By 月森',
+		html_title:'图书管理后台系统',
 		header:{
-			title: 'Write By 月森',
+			title: '图书管理后台系统',
 			img: 'header_logo_img.png',
 			userImg:'user_default_avatar.png'
 		},
 		leftMenu:{
-			content: "梦想开始的地方<br>Let's Go...",
+			content: " ",
 			img: 'left_menu_default_img.png'
 		}
 	},

@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <!-- Site Properties -->
-<title></title>
+<title>图书管理后台系统</title>
 <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
 <link rel="stylesheet" type="text/css" href="../css/login.css">
 <script src="../js/jquery.min.js"></script>

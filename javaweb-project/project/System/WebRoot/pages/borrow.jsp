@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
-    <title></title>
+    <title>图书管理后台系统</title>
 </head>
 
 <body>

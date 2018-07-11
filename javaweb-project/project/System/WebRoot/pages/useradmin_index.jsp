@@ -9,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/base.css">
-	<title></title>
+	<title>图书管理后台系统</title>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
 				<g-breadcrumb></g-breadcrumb>
 				<div style="display:flex;justify-content:center;margin-top:16rem;color:#c1c1c1;">
 					<h2>
-						欢迎您登录
+						欢迎您登录图书管理后台系统
 					</h2>
 				</div>
 			</div>

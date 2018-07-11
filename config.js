@@ -30,14 +30,14 @@ module.exports = {
 	},
 	html: {
 		//网页标题
-		html_title: '',
+		html_title: '图书管理后台系统',
 		header: {
 			title: '',
 			img: '', //Menu左侧图标
 			userImg: '' //用户没有头像时的默认图标
 		},
 		leftMenu: {
-			content: '', //support html
+			content: ' ', //support html
 			img: '' //support html
 		},
 		file_suffix: 'jsp', //jsp|html
