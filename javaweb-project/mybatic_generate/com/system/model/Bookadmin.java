@@ -1,9 +1,9 @@
 package com.system.model;
 
-public class Admin {
+public class Bookadmin {
     private Integer id;
 
-    private Integer num;
+    private String loginid;
 
     private String pass;
 
@@ -17,12 +17,12 @@ public class Admin {
         this.id = id;
     }
 
-    public Integer getNum() {
-        return num;
+    public String getLoginid() {
+        return loginid;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setLoginid(String loginid) {
+        this.loginid = loginid == null ? null : loginid.trim();
     }
 
     public String getPass() {

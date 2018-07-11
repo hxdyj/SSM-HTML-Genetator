@@ -49,14 +49,14 @@ public class BorrowadminController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String login_id,String pass,String name){
+	public String add(Integer id,String loginid,String pass,String name){
 		Borrowadmin o = new Borrowadmin();
 		if(id!=null){
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -69,7 +69,7 @@ public class BorrowadminController {
 					
 			BorrowadminExample e = new BorrowadminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			List<Borrowadmin> list = borrowadminMapper.selectByExample(e);
 			if(list.isEmpty()){
 				borrowadminMapper.insert(o);
@@ -83,7 +83,7 @@ public class BorrowadminController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String login_id,String pass,String name){
+	public String edit(Integer id,String loginid,String pass,String name){
 		
 		Borrowadmin o = borrowadminMapper.selectByPrimaryKey(id);
 		Borrowadmin o_back = borrowadminMapper.selectByPrimaryKey(id);
@@ -92,8 +92,8 @@ public class BorrowadminController {
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -105,13 +105,13 @@ public class BorrowadminController {
 		}
 					
 		List<Borrowadmin> list = null;
-		if(login_id!=null){
+		if(loginid!=null){
 			BorrowadminExample e = new BorrowadminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			list = borrowadminMapper.selectByExample(e);
 		}
-		if((list!=null&&list.isEmpty())||!o_back.getLogin_id().equals(login_id)){
+		if((list!=null&&list.isEmpty())||!o_back.getLoginid().equals(loginid)){
 			borrowadminMapper.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
@@ -122,7 +122,7 @@ public class BorrowadminController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String login_id,String pass,String name){
+	public String search(Integer page,Integer pageRow,Integer id,String loginid,String pass,String name){
 		
 		if(page==null) {
 			return Util.getResult(1, "", borrowadminMapper.selectByExample(null));
@@ -136,8 +136,8 @@ public class BorrowadminController {
 			c.andIdEqualTo(id);
 		}
 		
-		if(login_id!=null){
-			c.andLogin_idLike("%"+login_id+"%");
+		if(loginid!=null){
+			c.andLoginidLike("%"+loginid+"%");
 		}
 		
 		if(pass!=null){
@@ -157,12 +157,14 @@ public class BorrowadminController {
 	
 	@ResponseBody
 	@RequestMapping("login.do")
-	public String login(String login_id){
+	public String login(String loginid,String pass){
 		
 		BorrowadminExample e = new BorrowadminExample();
 		Criteria c = e.createCriteria();
 		
-		c.andLogin_idEqualTo(login_id);
+		c.andLoginidEqualTo(loginid);
+			
+		c.andPassEqualTo(pass);
 			
 		return JSON.toJSONString(borrowadminMapper.selectByExample(e));
 		

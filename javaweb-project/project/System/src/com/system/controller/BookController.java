@@ -49,7 +49,7 @@ public class BookController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String num,String name,String publish_date,String publish_name,String level,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String add(Integer id,String num,String name,MultipartFile img,String publishdate,String level,String press, HttpServletRequest request)throws IllegalStateException, IOException{
 		Book o = new Book();
 		if(id!=null){
 			o.setId(id);
@@ -63,20 +63,20 @@ public class BookController {
 			o.setName(name);
 		}
 					
-		if(publish_date!=null){
-			o.setPublish_date(publish_date);
+		if(img!=null){
+			o.setImg(UploadUtils.upload(request, img, "/pic"));
 		}
 					
-		if(publish_name!=null){
-			o.setPublish_name(publish_name);
+		if(publishdate!=null){
+			o.setPublishdate(publishdate);
 		}
 					
 		if(level!=null){
 			o.setLevel(level);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
+		if(press!=null){
+			o.setPress(press);
 		}
 					
 			bookMapper.insert(o);
@@ -86,7 +86,7 @@ public class BookController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String num,String name,String publish_date,String publish_name,String level,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String edit(Integer id,String num,String name,MultipartFile img,String publishdate,String level,String press, HttpServletRequest request)throws IllegalStateException, IOException{
 		
 		Book o = bookMapper.selectByPrimaryKey(id);
 		Book o_back = bookMapper.selectByPrimaryKey(id);
@@ -103,20 +103,20 @@ public class BookController {
 			o.setName(name);
 		}
 					
-		if(publish_date!=null){
-			o.setPublish_date(publish_date);
+		if(img!=null){
+			o.setImg(UploadUtils.upload(request, img, "/pic"));
 		}
 					
-		if(publish_name!=null){
-			o.setPublish_name(publish_name);
+		if(publishdate!=null){
+			o.setPublishdate(publishdate);
 		}
 					
 		if(level!=null){
 			o.setLevel(level);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
+		if(press!=null){
+			o.setPress(press);
 		}
 					
 		bookMapper.updateByPrimaryKey(o);
@@ -126,7 +126,7 @@ public class BookController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String publish_date,String publish_name,String level){
+	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String publishdate,String level,String press){
 		
 		if(page==null) {
 			return Util.getResult(1, "", bookMapper.selectByExample(null));
@@ -148,16 +148,16 @@ public class BookController {
 			c.andNameLike("%"+name+"%");
 		}
 		
-		if(publish_date!=null){
-			c.andPublish_dateLike("%"+publish_date+"%");
-		}
-		
-		if(publish_name!=null){
-			c.andPublish_nameLike("%"+publish_name+"%");
+		if(publishdate!=null){
+			c.andPublishdateLike("%"+publishdate+"%");
 		}
 		
 		if(level!=null){
 			c.andLevelLike("%"+level+"%");
+		}
+		
+		if(press!=null){
+			c.andPressLike("%"+press+"%");
 		}
 		
 		PageHelper.startPage(page, pageRow);

@@ -49,7 +49,7 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String num,String name,String register_date,String level,String address,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String add(Integer id,String num,String name,MultipartFile img,String registerdate,String level,String address, HttpServletRequest request)throws IllegalStateException, IOException{
 		User o = new User();
 		if(id!=null){
 			o.setId(id);
@@ -63,8 +63,12 @@ public class UserController {
 			o.setName(name);
 		}
 					
-		if(register_date!=null){
-			o.setRegister_date(register_date);
+		if(img!=null){
+			o.setImg(UploadUtils.upload(request, img, "/pic"));
+		}
+					
+		if(registerdate!=null){
+			o.setRegisterdate(registerdate);
 		}
 					
 		if(level!=null){
@@ -75,10 +79,6 @@ public class UserController {
 			o.setAddress(address);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
-		}
-					
 			userMapper.insert(o);
 			return Util.getResult(1, "添加成功","");
 			
@@ -86,7 +86,7 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String num,String name,String register_date,String level,String address,MultipartFile img, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String edit(Integer id,String num,String name,MultipartFile img,String registerdate,String level,String address, HttpServletRequest request)throws IllegalStateException, IOException{
 		
 		User o = userMapper.selectByPrimaryKey(id);
 		User o_back = userMapper.selectByPrimaryKey(id);
@@ -103,8 +103,12 @@ public class UserController {
 			o.setName(name);
 		}
 					
-		if(register_date!=null){
-			o.setRegister_date(register_date);
+		if(img!=null){
+			o.setImg(UploadUtils.upload(request, img, "/pic"));
+		}
+					
+		if(registerdate!=null){
+			o.setRegisterdate(registerdate);
 		}
 					
 		if(level!=null){
@@ -115,10 +119,6 @@ public class UserController {
 			o.setAddress(address);
 		}
 					
-		if(img!=null){
-			o.setImg(UploadUtils.upload(request, img, "/pic"));
-		}
-					
 		userMapper.updateByPrimaryKey(o);
 		return Util.getResult(1, "修改成功","");
 			
@@ -126,7 +126,7 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String register_date,String level,String address){
+	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String registerdate,String level,String address){
 		
 		if(page==null) {
 			return Util.getResult(1, "", userMapper.selectByExample(null));
@@ -148,8 +148,8 @@ public class UserController {
 			c.andNameLike("%"+name+"%");
 		}
 		
-		if(register_date!=null){
-			c.andRegister_dateLike("%"+register_date+"%");
+		if(registerdate!=null){
+			c.andRegisterdateLike("%"+registerdate+"%");
 		}
 		
 		if(level!=null){

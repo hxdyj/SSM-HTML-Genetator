@@ -49,7 +49,7 @@ public class BorrowController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
+	public String add(Integer id,String num,String usernum,String name,String borrowdate,String level,String address){
 		Borrow o = new Borrow();
 		if(id!=null){
 			o.setId(id);
@@ -59,16 +59,16 @@ public class BorrowController {
 			o.setNum(num);
 		}
 					
-		if(user_num!=null){
-			o.setUser_num(user_num);
+		if(usernum!=null){
+			o.setUsernum(usernum);
 		}
 					
 		if(name!=null){
 			o.setName(name);
 		}
 					
-		if(borrow_date!=null){
-			o.setBorrow_date(borrow_date);
+		if(borrowdate!=null){
+			o.setBorrowdate(borrowdate);
 		}
 					
 		if(level!=null){
@@ -86,7 +86,7 @@ public class BorrowController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
+	public String edit(Integer id,String num,String usernum,String name,String borrowdate,String level,String address){
 		
 		Borrow o = borrowMapper.selectByPrimaryKey(id);
 		Borrow o_back = borrowMapper.selectByPrimaryKey(id);
@@ -99,16 +99,16 @@ public class BorrowController {
 			o.setNum(num);
 		}
 					
-		if(user_num!=null){
-			o.setUser_num(user_num);
+		if(usernum!=null){
+			o.setUsernum(usernum);
 		}
 					
 		if(name!=null){
 			o.setName(name);
 		}
 					
-		if(borrow_date!=null){
-			o.setBorrow_date(borrow_date);
+		if(borrowdate!=null){
+			o.setBorrowdate(borrowdate);
 		}
 					
 		if(level!=null){
@@ -126,7 +126,7 @@ public class BorrowController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String num,String user_num,String name,String borrow_date,String level,String address){
+	public String search(Integer page,Integer pageRow,Integer id,String num,String usernum,String name,String borrowdate,String level,String address){
 		
 		if(page==null) {
 			return Util.getResult(1, "", borrowMapper.selectByExample(null));
@@ -144,16 +144,16 @@ public class BorrowController {
 			c.andNumLike("%"+num+"%");
 		}
 		
-		if(user_num!=null){
-			c.andUser_numLike("%"+user_num+"%");
+		if(usernum!=null){
+			c.andUsernumLike("%"+usernum+"%");
 		}
 		
 		if(name!=null){
 			c.andNameLike("%"+name+"%");
 		}
 		
-		if(borrow_date!=null){
-			c.andBorrow_dateLike("%"+borrow_date+"%");
+		if(borrowdate!=null){
+			c.andBorrowdateLike("%"+borrowdate+"%");
 		}
 		
 		if(level!=null){

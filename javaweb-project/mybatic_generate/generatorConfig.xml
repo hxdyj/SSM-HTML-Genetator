@@ -11,8 +11,8 @@
 		</commentGenerator>
 		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://wingblog.top:3306/tbarchives" userId="tbarchives"
-			password="tbarchives">
+			connectionURL="jdbc:mysql://wingblog.top:3306/tbsimplebook" userId="tbsimplebook"
+			password="tbsimplebook">
 		</jdbcConnection>
 		<!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver" connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
 			userId="yycg" password="yycg"> </jdbcConnection> -->
@@ -44,8 +44,12 @@
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 			
-			<table tableName="admin" ></table>
+			<table tableName="book" ></table>
+			<table tableName="bookadmin" ></table>
+			<table tableName="borrow" ></table>
+			<table tableName="borrowadmin" ></table>
 			<table tableName="user" ></table>
+			<table tableName="useradmin" ></table>
 			<!-- <table tableName="proback" >
 			<columnOverride column="detail" jdbcType="VARCHAR" />
 			</table> -->

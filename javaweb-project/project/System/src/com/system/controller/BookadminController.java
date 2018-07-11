@@ -49,14 +49,14 @@ public class BookadminController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String login_id,String pass,String name){
+	public String add(Integer id,String loginid,String pass,String name){
 		Bookadmin o = new Bookadmin();
 		if(id!=null){
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -69,7 +69,7 @@ public class BookadminController {
 					
 			BookadminExample e = new BookadminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			List<Bookadmin> list = bookadminMapper.selectByExample(e);
 			if(list.isEmpty()){
 				bookadminMapper.insert(o);
@@ -83,7 +83,7 @@ public class BookadminController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String login_id,String pass,String name){
+	public String edit(Integer id,String loginid,String pass,String name){
 		
 		Bookadmin o = bookadminMapper.selectByPrimaryKey(id);
 		Bookadmin o_back = bookadminMapper.selectByPrimaryKey(id);
@@ -92,8 +92,8 @@ public class BookadminController {
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -105,13 +105,13 @@ public class BookadminController {
 		}
 					
 		List<Bookadmin> list = null;
-		if(login_id!=null){
+		if(loginid!=null){
 			BookadminExample e = new BookadminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			list = bookadminMapper.selectByExample(e);
 		}
-		if((list!=null&&list.isEmpty())||!o_back.getLogin_id().equals(login_id)){
+		if((list!=null&&list.isEmpty())||!o_back.getLoginid().equals(loginid)){
 			bookadminMapper.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
@@ -122,7 +122,7 @@ public class BookadminController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String login_id,String pass,String name){
+	public String search(Integer page,Integer pageRow,Integer id,String loginid,String pass,String name){
 		
 		if(page==null) {
 			return Util.getResult(1, "", bookadminMapper.selectByExample(null));
@@ -136,8 +136,8 @@ public class BookadminController {
 			c.andIdEqualTo(id);
 		}
 		
-		if(login_id!=null){
-			c.andLogin_idLike("%"+login_id+"%");
+		if(loginid!=null){
+			c.andLoginidLike("%"+loginid+"%");
 		}
 		
 		if(pass!=null){
@@ -157,12 +157,12 @@ public class BookadminController {
 	
 	@ResponseBody
 	@RequestMapping("login.do")
-	public String login(String login_id,String pass){
+	public String login(String loginid,String pass){
 		
 		BookadminExample e = new BookadminExample();
 		Criteria c = e.createCriteria();
 		
-		c.andLogin_idEqualTo(login_id);
+		c.andLoginidEqualTo(loginid);
 			
 		c.andPassEqualTo(pass);
 			

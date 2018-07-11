@@ -1,12 +1,12 @@
 const path = require('path')
 module.exports = {
-	debug: true, //是否为开发环境
+	debug: false, //是否为开发环境
 	connect: {
 		host: 'wingblog.top',
 		port: 3306,
-		user: 'tbarchives',
-		password: 'tbarchives',
-		database: 'tbarchives'
+		user: 'tbsimplebook',
+		password: 'tbsimplebook',
+		database: 'tbsimplebook'
 	},
 	basePath: path.resolve(__dirname),
 	serviceRequireBasePath: '../entity/',
@@ -40,7 +40,7 @@ module.exports = {
 			content: '', //support html
 			img: '' //support html
 		},
-		file_suffix: 'html', //jsp|html
+		file_suffix: 'jsp', //jsp|html
 		login_register_resetpass_temp_id: 0, //0|1|2...   login and register and resetpass page generate template
 		web_temp_id: 0 //0|1|2...   other page generate template
 	}

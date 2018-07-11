@@ -49,14 +49,14 @@ public class UseradminController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String login_id,String pass,String name){
+	public String add(Integer id,String loginid,String pass,String name){
 		Useradmin o = new Useradmin();
 		if(id!=null){
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -69,7 +69,7 @@ public class UseradminController {
 					
 			UseradminExample e = new UseradminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			List<Useradmin> list = useradminMapper.selectByExample(e);
 			if(list.isEmpty()){
 				useradminMapper.insert(o);
@@ -83,7 +83,7 @@ public class UseradminController {
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String login_id,String pass,String name){
+	public String edit(Integer id,String loginid,String pass,String name){
 		
 		Useradmin o = useradminMapper.selectByPrimaryKey(id);
 		Useradmin o_back = useradminMapper.selectByPrimaryKey(id);
@@ -92,8 +92,8 @@ public class UseradminController {
 			o.setId(id);
 		}
 					
-		if(login_id!=null){
-			o.setLogin_id(login_id);
+		if(loginid!=null){
+			o.setLoginid(loginid);
 		}
 					
 		if(pass!=null){
@@ -105,13 +105,13 @@ public class UseradminController {
 		}
 					
 		List<Useradmin> list = null;
-		if(login_id!=null){
+		if(loginid!=null){
 			UseradminExample e = new UseradminExample();
 			Criteria c = e.createCriteria();
-			c.andLogin_idEqualTo(login_id);
+			c.andLoginidEqualTo(loginid);
 			list = useradminMapper.selectByExample(e);
 		}
-		if((list!=null&&list.isEmpty())||!o_back.getLogin_id().equals(login_id)){
+		if((list!=null&&list.isEmpty())||!o_back.getLoginid().equals(loginid)){
 			useradminMapper.updateByPrimaryKey(o);
 			return Util.getResult(1, "修改成功","");
 		}else{
@@ -122,7 +122,7 @@ public class UseradminController {
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String login_id,String pass,String name){
+	public String search(Integer page,Integer pageRow,Integer id,String loginid,String pass,String name){
 		
 		if(page==null) {
 			return Util.getResult(1, "", useradminMapper.selectByExample(null));
@@ -136,8 +136,8 @@ public class UseradminController {
 			c.andIdEqualTo(id);
 		}
 		
-		if(login_id!=null){
-			c.andLogin_idLike("%"+login_id+"%");
+		if(loginid!=null){
+			c.andLoginidLike("%"+loginid+"%");
 		}
 		
 		if(pass!=null){
@@ -157,12 +157,12 @@ public class UseradminController {
 	
 	@ResponseBody
 	@RequestMapping("login.do")
-	public String login(String login_id,String pass){
+	public String login(String loginid,String pass){
 		
 		UseradminExample e = new UseradminExample();
 		Criteria c = e.createCriteria();
 		
-		c.andLogin_idEqualTo(login_id);
+		c.andLoginidEqualTo(loginid);
 			
 		c.andPassEqualTo(pass);
 			

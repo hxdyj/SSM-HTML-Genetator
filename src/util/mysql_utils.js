@@ -42,6 +42,7 @@ module.exports = {
 			let commentMap = new Map()
 			_.forEach(desc[0], item => {
 				if (!item.COLUMN_COMMENT) item.COLUMN_COMMENT = '{}'
+				debugger
 				let commentObj = JSON.parse(item.COLUMN_COMMENT)
 				commentObj.feild_name = item.COLUMN_NAME
 				//use it while field java_type exit,otherwise read mysql type and transform to java type
