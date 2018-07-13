@@ -37,10 +37,10 @@ module.exports = {
 			userImg: '' //用户没有头像时的默认图标
 		},
 		leftMenu: {
-			content: '', //support html
+			content: ' ', //support html
 			img: '' //support html
 		},
-		file_suffix: 'html', //jsp|html
+		file_suffix: 'jsp', //jsp|html
 		login_register_resetpass_temp_id: 0, //0|1|2...   login and register and resetpass page generate template
 		web_temp_id: 0 //0|1|2...   other page generate template
 	}

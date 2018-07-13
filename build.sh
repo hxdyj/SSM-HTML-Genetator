@@ -13,3 +13,6 @@ cp -r src/generation/html-template/0/src dist/src/generation/html-template/0
 rm -rf dist/src/generation/html-template/0/src/gulpfile.js
 rm -rf dist/src/generation/html-template/0/src/index.html
 rm -rf dist/src/generation/html-template/0/src/scss
+cp -r create_project.js dist
+cp -r javaweb-project dist
+

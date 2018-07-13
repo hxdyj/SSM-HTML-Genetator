@@ -51,22 +51,28 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 				}
 			}
 		})
+		if (uniqueId) {
+			methodMiddle += `
+			${tableName}Example e = new ${tableName}Example();
+			Criteria c = e.createCriteria();
+			c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
+				uniqueId.feild_name
+			});
+			List<${tableName}> list = ${mapper}.selectByExample(e);
+			if(list.isEmpty()){
+				${mapper}.insert(o);
+				return Util.getResult(1, "添加成功","");
+			}else{
+				return Util.getResult(0, "用户已存在","");
+			}
 
-		methodMiddle += `
-		${tableName}Example e = new ${tableName}Example();
-		Criteria c = e.createCriteria();
-		c.and${G.util.firstWordUpper(uniqueId.feild_name)}EqualTo(${
-			uniqueId.feild_name
-		});
-		List<${tableName}> list = ${mapper}.selectByExample(e);
-		if(list.isEmpty()){
+			`
+		} else {
+			methodMiddle += `
 			${mapper}.insert(o);
-			return Util.getResult(1, "注册成功","");
-		}else{
-			return Util.getResult(0, "用户已存在","");
+			return Util.getResult(1, "添加成功","");
+			`
 		}
-
-		`
 	}
 	if (method == 'edit') {
 		methodMiddle += `

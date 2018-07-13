@@ -19,6 +19,10 @@ function generating() {
 		require('./src/generation/ssm_controller').writeToFiles(commonData)
 		//生成 mybatis_generate 文件
 		require('./src/generation/mybatis_generate').writeToFiles(commonData)
+		//生成 mybatis_generate 文件
+		require('./src/generation/spring_config_generate').writeToFiles(
+			commonData
+		)
 
 		//生成前端模板
 		let HtmlGenerate = require('./src/generation/html_deal')

@@ -29,7 +29,11 @@ module.exports = {
 			let tableName = item[tables[1][0].name]
 			let desc = await connect.query(
 				`select * from information_schema.columns where table_name='${tableName}' and table_schema='${
+<<<<<<< HEAD
 					config.connect.database
+=======
+				config.connect.database
+>>>>>>> 514a10f950532b7a5aea75f325a324f702b3b840
 				}'`
 			) //获取表的结构
 			let className = this.getClassNameOfTableName(tableName)
@@ -42,6 +46,7 @@ module.exports = {
 			let commentMap = new Map()
 			_.forEach(desc[0], item => {
 				if (!item.COLUMN_COMMENT) item.COLUMN_COMMENT = '{}'
+				debugger
 				let commentObj = JSON.parse(item.COLUMN_COMMENT)
 				commentObj.feild_name = item.COLUMN_NAME
 				//use it while field java_type exit,otherwise read mysql type and transform to java type
@@ -73,7 +78,7 @@ module.exports = {
 			//获取表的注释
 			let tableCommentStr = (await connect.query(
 				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
-					config.connect.database
+				config.connect.database
 				}' AND table_name='${tableName}'`
 			))[0][0].table_comment
 			if (!tableCommentStr) tableCommentStr = '{}'
