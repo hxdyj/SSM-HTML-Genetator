@@ -4,9 +4,9 @@ module.exports = {
 	connect: {
 		host: 'wingblog.top',
 		port: 3306,
-		user: 'tbarchives',
-		database: 'tbarchives',
-		password: 'tbarchives'
+		user: 'history',
+		database: 'history',
+		password: '123456'
 	},
 	basePath: path.resolve(__dirname),
 	serviceRequireBasePath: '../entity/',
