@@ -1,3 +1,3 @@
 
-		[{"icon":"user","name":"图书","href":"book.jsp"},{"icon":"user","name":"图书管理员","href":"bookadmin.jsp"},{"icon":"user","name":"借书记录","href":"borrow.jsp"},{"icon":"user","name":"借书记录管理员","href":"borrowadmin.jsp"},{"icon":"user","name":"用户","href":"user.jsp"},{"icon":"user","name":"用户管理员","href":"useradmin.jsp"}]
+		[{"icon":"user","name":"管理员","href":"admin.html"},{"icon":"user","name":"用户","href":"user.html"}]
 		

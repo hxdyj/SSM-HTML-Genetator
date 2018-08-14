@@ -49,85 +49,137 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value="add.do",method = RequestMethod.POST)
-	public String add(Integer id,String num,String name,MultipartFile img,String registerdate,String level,String address, HttpServletRequest request)throws IllegalStateException, IOException{
+	public String add(Integer id,Integer num,String pass,String name,MultipartFile img,String school,String birth,String nation,String health,String politic,String edu, HttpServletRequest request)throws IllegalStateException, IOException{
 		User o = new User();
 		if(id!=null){
 			o.setId(id);
 		}
-
+					
 		if(num!=null){
 			o.setNum(num);
 		}
-
+					
+		if(pass!=null){
+			o.setPass(pass);
+		}
+					
 		if(name!=null){
 			o.setName(name);
 		}
-
+					
 		if(img!=null){
 			o.setImg(UploadUtils.upload(request, img, "/pic"));
 		}
-
-		if(registerdate!=null){
-			o.setRegisterdate(registerdate);
+					
+		if(school!=null){
+			o.setSchool(school);
 		}
-
-		if(level!=null){
-			o.setLevel(level);
+					
+		if(birth!=null){
+			o.setBirth(birth);
 		}
-
-		if(address!=null){
-			o.setAddress(address);
+					
+		if(nation!=null){
+			o.setNation(nation);
 		}
+					
+		if(health!=null){
+			o.setHealth(health);
+		}
+					
+		if(politic!=null){
+			o.setPolitic(politic);
+		}
+					
+		if(edu!=null){
+			o.setEdu(edu);
+		}
+					
+			UserExample e = new UserExample();
+			Criteria c = e.createCriteria();
+			c.andNumEqualTo(num);
+			List<User> list = userMapper.selectByExample(e);
+			if(list.isEmpty()){
+				userMapper.insert(o);
+				return Util.getResult(1, "添加成功","");
+			}else{
+				return Util.getResult(0, "用户已存在","");
+			}
 
-			userMapper.insert(o);
-			return Util.getResult(1, "添加成功","");
-
+			
 	}
 
 	@ResponseBody
 	@RequestMapping(value="edit.do",method = RequestMethod.POST)
-	public String edit(Integer id,String num,String name,MultipartFile img,String registerdate,String level,String address, HttpServletRequest request)throws IllegalStateException, IOException{
-
+	public String edit(Integer id,Integer num,String pass,String name,MultipartFile img,String school,String birth,String nation,String health,String politic,String edu, HttpServletRequest request)throws IllegalStateException, IOException{
+		
 		User o = userMapper.selectByPrimaryKey(id);
 		User o_back = userMapper.selectByPrimaryKey(id);
-
+		
 		if(id!=null){
 			o.setId(id);
 		}
-
+					
 		if(num!=null){
 			o.setNum(num);
 		}
-
+					
+		if(pass!=null){
+			o.setPass(pass);
+		}
+					
 		if(name!=null){
 			o.setName(name);
 		}
-
+					
 		if(img!=null){
 			o.setImg(UploadUtils.upload(request, img, "/pic"));
 		}
-
-		if(registerdate!=null){
-			o.setRegisterdate(registerdate);
+					
+		if(school!=null){
+			o.setSchool(school);
 		}
-
-		if(level!=null){
-			o.setLevel(level);
+					
+		if(birth!=null){
+			o.setBirth(birth);
 		}
-
-		if(address!=null){
-			o.setAddress(address);
+					
+		if(nation!=null){
+			o.setNation(nation);
 		}
-
-		userMapper.updateByPrimaryKey(o);
-		return Util.getResult(1, "修改成功","");
-
+					
+		if(health!=null){
+			o.setHealth(health);
+		}
+					
+		if(politic!=null){
+			o.setPolitic(politic);
+		}
+					
+		if(edu!=null){
+			o.setEdu(edu);
+		}
+					
+		List<User> list = null;
+		if(num!=null){
+			UserExample e = new UserExample();
+			Criteria c = e.createCriteria();
+			c.andNumEqualTo(num);
+			list = userMapper.selectByExample(e);
+		}
+		if((list!=null&&list.isEmpty())||!o_back.getNum().equals(num)){
+			userMapper.updateByPrimaryKey(o);
+			return Util.getResult(1, "修改成功","");
+		}else{
+			return Util.getResult(0, "用户已存在","");
+		}
+		
 	}
 
 	@ResponseBody
 	@RequestMapping(value="search.do")
-	public String search(Integer page,Integer pageRow,Integer id,String num,String name,String registerdate,String level,String address){
-
+	public String search(Integer page,Integer pageRow,Integer id,Integer num,String pass,String name,String school,String birth,String nation,String health,String politic,String edu){
+		
 		if(page==null) {
 			return Util.getResult(1, "", userMapper.selectByExample(null));
 		}
@@ -135,37 +187,109 @@ public class UserController {
 
 		UserExample e = new UserExample();
 		Criteria c = e.createCriteria();
-
+		
 		if(id!=null){
 			c.andIdEqualTo(id);
 		}
-
+		
 		if(num!=null){
-			c.andNumLike("%"+num+"%");
+			c.andNumEqualTo(num);
 		}
-
+		
+		if(pass!=null){
+			c.andPassLike("%"+pass+"%");
+		}
+		
 		if(name!=null){
 			c.andNameLike("%"+name+"%");
 		}
-
-		if(registerdate!=null){
-			c.andRegisterdateLike("%"+registerdate+"%");
+		
+		if(school!=null){
+			c.andSchoolLike("%"+school+"%");
 		}
-
-		if(level!=null){
-			c.andLevelLike("%"+level+"%");
+		
+		if(birth!=null){
+			c.andBirthLike("%"+birth+"%");
 		}
-
-		if(address!=null){
-			c.andAddressLike("%"+address+"%");
+		
+		if(nation!=null){
+			c.andNationLike("%"+nation+"%");
 		}
-
+		
+		if(health!=null){
+			c.andHealthLike("%"+health+"%");
+		}
+		
+		if(politic!=null){
+			c.andPoliticLike("%"+politic+"%");
+		}
+		
+		if(edu!=null){
+			c.andEduLike("%"+edu+"%");
+		}
+		
 		PageHelper.startPage(page, pageRow);
 		List<User> alllist = userMapper.selectByExample(e);
 		PageInfo list = new PageInfo(alllist);
 		return Util.getResult(1, "",list);
-
+		
 	}
-
-
+	
+	@ResponseBody
+	@RequestMapping("login.do")
+	public String login(Integer num,String pass){
+		
+		UserExample e = new UserExample();
+		Criteria c = e.createCriteria();
+		
+		c.andNumEqualTo(num);
+			
+		c.andPassEqualTo(pass);
+			
+		return JSON.toJSONString(userMapper.selectByExample(e));
+		
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("register.do")
+	public String register(Integer num,String pass,String name,MultipartFile img,String school,String birth,String nation,String health,String politic,String edu, HttpServletRequest request)throws IllegalStateException, IOException{
+		
+		UserExample e = new UserExample();
+		Criteria c = e.createCriteria();
+		
+		c.andNumEqualTo(num);
+		List<User> list = userMapper.selectByExample(e);
+		if(list.isEmpty()){
+			User o = new User();
+		
+			o.setNum(num);
+						
+			o.setPass(pass);
+						
+			o.setName(name);
+						
+			o.setImg(UploadUtils.upload(request, img, "/pic"));
+						
+			o.setSchool(school);
+						
+			o.setBirth(birth);
+						
+			o.setNation(nation);
+						
+			o.setHealth(health);
+						
+			o.setPolitic(politic);
+						
+			o.setEdu(edu);
+						
+			userMapper.insert(o);
+			return "1";//注册成功
+		}else{
+			return "0";//注册失败
+		}
+			
+	}
+	
 }
+				

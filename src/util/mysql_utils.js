@@ -29,11 +29,7 @@ module.exports = {
 			let tableName = item[tables[1][0].name]
 			let desc = await connect.query(
 				`select * from information_schema.columns where table_name='${tableName}' and table_schema='${
-<<<<<<< HEAD
 					config.connect.database
-=======
-				config.connect.database
->>>>>>> 514a10f950532b7a5aea75f325a324f702b3b840
 				}'`
 			) //获取表的结构
 			let className = this.getClassNameOfTableName(tableName)
@@ -78,7 +74,7 @@ module.exports = {
 			//获取表的注释
 			let tableCommentStr = (await connect.query(
 				`SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema='${
-				config.connect.database
+					config.connect.database
 				}' AND table_name='${tableName}'`
 			))[0][0].table_comment
 			if (!tableCommentStr) tableCommentStr = '{}'

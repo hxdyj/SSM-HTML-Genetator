@@ -29,8 +29,7 @@
 	},
 	"scripts": {
 		"build": "./build.sh",
-		"start": "node index.js && node deal_mybatis_generate_config.js && ./javaweb-project/mybatic_generate/generate.sh && node create_project.js",
-		"gstart": "node generate.js && ./javaweb-project/mybatic_generate/generate.sh && node create_project.js",
+		"start": "node index.js && node deal_mybatis_generate_config.js",
 		"fg": "node-dev Mysql_Field_Design_Rule.js"
 	}
 }

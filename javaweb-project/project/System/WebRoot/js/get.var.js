@@ -2,12 +2,12 @@
 var GetVar = {
 	http:{
 		server:'http://localhost:8080/System/',
-		local:'http://localhost:8080/System/'
+		local:'http://localhost:3000/'
 	},
 	htmlConfig:{
-		html_title:'图书管理后台系统',
+		html_title:'Write By 月森',
 		header:{
-			title: '图书管理后台系统',
+			title: 'Write By 月森',
 			img: 'header_logo_img.png',
 			userImg:'user_default_avatar.png'
 		},
@@ -18,22 +18,17 @@ var GetVar = {
 	},
 	headerParams:{
 		
-		bookadmin:{
+		admin:{
 			avatar:'null',
-			pass:'pass',
-			name:'name',
+			pass:'null',
+			name:'null',
 		},
-		borrowadmin:{
-			avatar:'null',
-			pass:'pass',
-			name:'name',
-		},
-		useradmin:{
-			avatar:'null',
+		user:{
+			avatar:'img',
 			pass:'pass',
 			name:'name',
 		},
 	},
-	file_suffix:'jsp'
+	file_suffix:'html'
 }
 		

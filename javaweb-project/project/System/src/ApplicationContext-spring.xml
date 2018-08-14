@@ -19,13 +19,13 @@
 			<value>com.mysql.jdbc.Driver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:mysql://wingblog.top:3306/tbsimplebook?characterEncoding=utf8&amp;useUnicode=true</value>
+			<value>jdbc:mysql://wingblog.top:3306/tbarchives?characterEncoding=utf8&amp;useUnicode=true</value>
 		</property>
 		<property name="username">
-			<value>tbsimplebook</value>
+			<value>tbarchives</value>
 		</property>
 		<property name="password">
-			<value>tbsimplebook</value>
+			<value>tbarchives</value>
 		</property>
 		<property name="validationQuery">
 			<value>select 1</value>
@@ -58,6 +58,7 @@
 		<!-- 所有配置的mapper文件 -->
 		<property name="mapperLocations" value="classpath*:com/system/**/*.xml" />
 	</bean>
+
 	<!-- 配置事务管理器 -->
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
@@ -84,4 +85,4 @@
 
 	<bean id="indexFilter" class="com.system.filter.IndexFilter"></bean>
 </beans>
-
+		

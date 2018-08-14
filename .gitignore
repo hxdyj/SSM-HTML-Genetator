@@ -5,3 +5,6 @@ node_modules
 .sass-cache
 dist
 db.sql
+generatorConfig.xml
+ApplicationContext-spring.xml
+pages
