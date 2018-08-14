@@ -11,8 +11,8 @@
 		</commentGenerator>
 		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://wingblog.top:3306/history" userId="history"
-			password="123456">
+			connectionURL="jdbc:mysql://wingblog.top:3306/tbarchives" userId="tbarchives"
+			password="tbarchives">
 		</jdbcConnection>
 		<!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver" connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
 			userId="yycg" password="yycg"> </jdbcConnection> -->
@@ -44,11 +44,8 @@
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
 			
-			<table tableName="comment" ></table>
-			<table tableName="culture" ></table>
-			<table tableName="news" ></table>
+			<table tableName="admin" ></table>
 			<table tableName="user" ></table>
-			<table tableName="word" ></table>
 			<!-- <table tableName="proback" >
 			<columnOverride column="detail" jdbcType="VARCHAR" />
 			</table> -->

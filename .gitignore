@@ -1,10 +1,12 @@
 node_modules
+ApplicationContext-spring.xml
+pages
+javaweb-project/mybatis_generate/generatorConfig.xml
+src/generation/html-template/0/src/js/get.var.js
+src/generation/html-template/0/src/json/memu.json
 *output/
-*origin/
 .DS_Store
 .sass-cache
 dist
 db.sql
-generatorConfig.xml
-ApplicationContext-spring.xml
-pages
+
