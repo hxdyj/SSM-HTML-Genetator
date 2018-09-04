@@ -18,13 +18,13 @@ var GetVar = {
 	},
 	headerParams:{
 		
-		admin:{
+		user:{
 			avatar:'null',
-			pass:'null',
+			pass:'pass',
 			name:'null',
 		},
-		user:{
-			avatar:'img',
+		useradmin:{
+			avatar:'null',
 			pass:'pass',
 			name:'name',
 		},
