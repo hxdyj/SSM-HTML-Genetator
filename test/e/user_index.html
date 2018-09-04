@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="../bower_components/swiper/dist/css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<style>
+		.swiper-slide {
+			height: 430px
+		}
+
+		.top-menu {
+			position: absolute;
+			top: 8px;
+			left: 20vw;
+		}
+	</style>
+	<title>我的知识库</title>
+</head>
+
+<body>
+	<div id="app">
+		<g-loading ref="loading"></g-loading>
+		<g-toast ref="toast"></g-toast>
+		<g-header></g-header>
+		<div class="ui buttons top-menu">
+			<div class="ui button" :class="{active:selectMenu==0}" @click="goto('user_index.html')">我的知识</div>
+			<div class="ui button">新建知识</div>
+			<div class="ui button">知识分类</div>
+			<div class="ui button">分享社区</div>
+		</div>
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" v-for="item in banners" :style="{background:'url('+server+'pic/'+item.img+')',backgroundPosition:'center',backgroundSize:'cover'}">
+
+				</div>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+		<div style="width: 100%;background: #f7f5f5;height: calc(100vh - 430px - 4rem);padding: 2rem;box-sizing: border-box">
+			<h2>我的最新知识</h2>
+			<div class="ui cards">
+				<div class="card">
+					<div class="content">
+						<div class="header">Elliot Fu</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Elliot Fu is a film-maker from New York.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Veronika Ossi</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Jenny Hess</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Jenny is a student studying Media Management at the New School
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Elliot Fu</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Elliot Fu is a film-maker from New York.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Veronika Ossi</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Jenny Hess</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Jenny is a student studying Media Management at the New School
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Elliot Fu</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Elliot Fu is a film-maker from New York.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Veronika Ossi</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="content">
+						<div class="header">Jenny Hess</div>
+						<div class="meta">Friend</div>
+						<div class="description">
+							Jenny is a student studying Media Management at the New School
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/lodash.min.js"></script>
+<script src="../js/semantic.min.js"></script>
+<script src="../js/moment.min.js"></script>
+<script src="../js/Uri.js"></script>
+<script src="../js/vue.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/get.var.js"></script>
+<script src="../components/header.js"></script>
+<script src="../components/toast.js"></script>
+<script src="../components/loading.js"></script>
+<script src="../components/modal.js"></script>
+<script src="../bower_components/swiper/dist/js/swiper.min.js"></script>
+
+<script>
+	var app = new Vue({
+		el: '#app',
+		data: {
+			selectMenu: 0,
+			server: GetVar.http.server,
+			banners: [],
+			userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
+			message: 'Hello Vue!',
+		},
+		mounted() {
+			this.$refs.loading.loading(this.getBanners())
+		},
+		methods: {
+			goto(url) {
+				location.href = url
+			},
+			toast() {
+				this.$refs.toast.show('Hahaha')
+			},
+			getBanners() {
+
+				return G.http('banner/get/all.do', {}).then(resp => {
+
+					this.banners = resp.data
+					this.$nextTick().then(() => {
+						var mySwiper = new Swiper('.swiper-container', {
+							autoplay: true,//可选选项，自动滑动
+							pagination: {
+								el: '.swiper-pagination',
+							},
+						})
+					})
+					console.log('%c%s', 'color:#00A29A;font-weight:600', 'banner--LIST:', this.banners)
+				})
+			}
+		}
+	})
+</script>
+
+</html>

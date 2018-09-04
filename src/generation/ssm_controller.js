@@ -118,7 +118,7 @@ function getFuncVals(method, commentMap, tableName, mapper) {
 			});
 			list = ${mapper}.selectByExample(e);
 		}
-		if((list!=null&&list.isEmpty())||!o_back.get${G.util.firstWordUpper(
+		if((list!=null&&!list.isEmpty())||!o_back.get${G.util.firstWordUpper(
 			uniqueId.feild_name
 		)}().equals(${uniqueId.feild_name})){
 			${mapper}.updateByPrimaryKey(o);

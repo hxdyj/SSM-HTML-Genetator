@@ -5,9 +5,9 @@ var GetVar = {
 		local:'http://localhost:3000/'
 	},
 	htmlConfig:{
-		html_title:'Write By 月森',
+		html_title:'我的知识库',
 		header:{
-			title: 'Write By 月森',
+			title: '我的知识库',
 			img: 'header_logo_img.png',
 			userImg:'user_default_avatar.png'
 		},
@@ -19,9 +19,9 @@ var GetVar = {
 	headerParams:{
 		
 		user:{
-			avatar:'null',
+			avatar:'img',
 			pass:'pass',
-			name:'null',
+			name:'name',
 		},
 		useradmin:{
 			avatar:'null',

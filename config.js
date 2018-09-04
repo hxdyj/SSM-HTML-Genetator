@@ -30,7 +30,7 @@ module.exports = {
 	},
 	html: {
 		//网页标题
-		html_title: '',
+		html_title: '我的知识库',
 		header: {
 			title: '',
 			img: '', //Menu左侧图标
