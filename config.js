@@ -2,11 +2,11 @@ const path = require('path')
 module.exports = {
 	debug: true, //是否为开发环境
 	connect: {
-		host: 'wingblog.top',
+		host: '123',
 		port: 3306,
 		user: 'root',
 		database: 'tbknowledge',
-		password: 'Sl123456'
+		password: 'tbknowledge'
 	},
 	basePath: path.resolve(__dirname),
 	serviceRequireBasePath: '../entity/',
