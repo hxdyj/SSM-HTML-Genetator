@@ -22,3 +22,4 @@ index.suffix
 # Note:
 
 1.build.sh 的权限 755
+2.
